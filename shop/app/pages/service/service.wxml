@@ -1,0 +1,26 @@
+<!--pages/my/my.wxml-->
+<view class="container">
+  <view class="item-view">
+    <view bindtap="toInfo" data-index="{{index}}" wx:for="{{itemList}}" wx:key="*this">
+      <!-- <view class="item" style="{{index < itemList.length-1 ? 'border-bottom: 1rpx solid #ddd;' : ''}}"> -->
+      <view class="item" style="border-bottom: 1rpx solid #ddd">
+        <view class="item-name">
+          <!-- <image src="{{item.image}}"></image> -->
+          <text>{{item.name}}</text>
+        </view>
+        <image class="item-go" src="/images/address_right.png"></image>
+      </view>
+    </view>
+    <!-- <button class="btn_no_style" hover-class='none' plain="true" style='border:none' open-type='contact'>
+      <view class="item">
+        <view class="item-name">
+          <image src="/images/tongzhi.png"></image>
+          <text>联系客服</text>
+        </view>
+        <image class="item-go" src="/images/address_right.png"></image>
+      </view>
+    </button> -->
+  </view>
+</view>
+
+<view class="call" bindtap="call">电话联系</view>

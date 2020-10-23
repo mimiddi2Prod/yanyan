@@ -1,0 +1,77 @@
+<!--pages/activity/activity.wxml-->
+<view class="brand-detail">
+  <image src="{{image}}" style="width:750rpx" mode="widthFix"></image>
+  <!-- <view class="brand-title">
+    <text>{{brand_name}}</text>
+  </view> -->
+  <view class="brand-desc">
+    <text>{{text}}</text>
+  </view>
+</view>
+
+<view class="good-grid" wx:for="{{goodsList}}" wx:key="{{item.id}}">
+  <view class="bb">
+    <block wx:for="{{item.waterfallList}}" wx:for-index="index" wx:for-item="item" wx:key="{{item.id}}">
+      <navigator url="../goods/goods?id={{item.id}}" class="itemm" hover-class="none">
+       <view class="grayTxt" wx:if="{{item.stock <= 0}}"><text>补货中</text></view>
+        <image class="imgg {{item.stock <= 0 ? 'grayImg' : ''}}" src="{{item.image[0]}}" mode="aspectFit" lazy-load="true"></image>
+        <view class="namee {{item.stock > 0 ? 'black' : 'gray'}}">{{item.name}}</view>
+        <view class="descc {{item.stock > 0 ? 'descc-color' : 'gray'}}">{{item.describe}}</view>
+        <view class="pricee">
+          <view>
+            <text wx:if="{{item.isPanic}}" style="color:red;font-size:20rpx;">限时</text>
+            <text wx:if="{{item.isPanic}}" style="color:red"><text style="font-size:22rpx;">￥</text>{{item.panic_buying_price}}</text>
+            <text style="{{item.isPanic ? 'text-decoration:line-through;font-size:24rpx;' : 'font-weight: 600;color:#F5BF4C'}};"><text style="font-size:22rpx;">￥</text>{{item.price}}</text>
+          </view>
+          <image src="/images/add.png" style="width:50rpx;height:50rpx;" catchtap="addToCart" data-id="{{item.id}}" wx:if="{{item.stock > 0}}"></image>
+          <view class='goods-add-cart-nor gray' style="font-size:26rpx" wx:else>售罄</view>
+        </view>
+      </navigator>
+    </block>
+  </view>
+</view>
+
+<view class="warmText">
+    <text>没有更多数据了~</text>
+  </view>
+
+<view class='dialog-login' wx:if="{{showLoginDialog}}">
+  <view class='dialog-body'>
+    <view class='title'>请登录以获取更好的服务</view>
+    <view class='contents'>
+      <button type="primary" open-type="getUserInfo" bindgetuserinfo="getUserInfo">微信登录</button>
+      <button bindtap='loginDialog'>取消</button>
+    </view>
+  </view>
+</view>
+
+<!-- 悬浮购物车 -->
+<navigator class="footer" hover-class="none" url="../cart/cart" open-type="switchTab">
+  <view class="footer-icon">
+    <image class="cart-icon" src="/images/shop-nor.png"></image>
+    <view wx:if="{{checkedAllNumber > 0}}">{{checkedAllNumber}}</view>
+  </view>
+</navigator>
+<!-- <scroll-view class="good-grid">
+  <view class="b">
+    <block wx:for="{{goods}}" wx:for-item="goodsList" wx:key="*this">
+      <block wx:for="{{goodsList}}" wx:for-index="index" wx:for-item="item" wx:key="{{item.id}}">
+        <navigator url="../goods/goods?id={{item.id}}" class="item">
+        
+          <image class="img" src="{{item.image[0]}}" lazy-load="true" mode="aspectFill"></image>
+          <view class="name">{{item.name}}</view>
+          <view class="desc">{{item.describe}}</view>
+          <view class="price">
+            <text>￥{{item.price}}</text>
+            <text>立即购买</text>
+          </view>
+        </navigator>
+      </block>
+    </block>
+  </view>
+
+  <view class="warmText">
+    <image wx:if="{{warmText.length <= 0 && !canPullData}}" class="load" src="/images/loading.gif"></image>
+    <text>{{warmText}}</text>
+  </view>
+</scroll-view> -->

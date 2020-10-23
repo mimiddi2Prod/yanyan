@@ -1,0 +1,89 @@
+<!--pages/my/address.wxml-->
+<!-- 模态框 catchtouchmove阻止弹窗后滚动穿透 -->
+<form bindsubmit="saveAddress">
+  <view class="modal" catchtouchmove="ture" wx:if="{{showModal}}">
+    <view class="modal-bg"></view>
+    <view class="modal-container">
+      <view class="modal-title">编辑地址</view>
+
+      <view class="modal-name">
+        <input placeholder='姓名' name="userName" value="{{editAddress.userName}}" bindinput="getName"></input>
+      </view>
+
+      <view class="modal-tel">
+        <input type='number' placeholder='电话' name="telNumber" value='{{editAddress.telNumber}}' bindinput="gettel"></input>
+      </view>
+
+      <navigator url="../map/map" class="item" hover-class="none">
+        <!-- <picker mode="region" bindchange="bindRegionChange" name="region" value="{{region}}">
+          <view class="region">
+            <view wx:if="{{region.length <= 0}}" space='ensp' style="color:#808080">选择城市</view>
+            <view wx:else>
+              <text space='ensp'>{{region[0]}} </text>
+              <text space='ensp'>{{region[1]}} </text>
+              <text space='ensp'>{{region[2]}} </text>
+            </view>
+          </view>
+        </picker> -->
+        <view class="{{editAddress.adres ? '' : 'adres'}}">{{editAddress.adres ? editAddress.adres : '收货地址'}}</view>
+        <image class="item-go" src="/images/address_right.png"></image>
+      </navigator>
+
+      <view>
+        <textarea placeholder='详细地址、楼号、房号等' name="detailInfo" value='{{editAddress.detailInfo}}'  bindinput="getDetailInfo"></textarea>
+      </view>
+
+      <button form-type='submit'>保存</button>
+
+      <image src="/images/clear_input.png" mode="cover" bindtap='showModal'></image>
+    </view>
+  </view>
+</form>
+<!-- 模态框 -->
+
+<!-- 地址1 -->
+<view class="address">
+  <view class="addressList" wx:for="{{addressList}}" wx:key="*this" bindtap='selectAddress' data-index='{{index}}'>
+    <view class="addressInfo">
+      <view class="a">
+        <text space='ensp'>{{item.userName}}，</text>
+        <text space='ensp'>{{item.telNumber}}</text>
+      </view>
+      <view class="b">
+        <!-- <text space='ensp'>{{item.provinceName}} </text>
+        <text space='ensp'>{{item.cityName}} </text>
+        <text space='ensp'>{{item.countyName}} </text> -->
+        <text space='ensp'>{{item.adres}}</text>
+        <text space='ensp'>{{item.detailInfo}} </text>
+      </view>
+    </view>
+
+    <view class="addressEdit">
+      <view wx:if="{{item.isDefault}}">
+        <image src="/images/choose-active.png"></image>
+        <text>已设为默认</text>
+      </view>
+      <view wx:else>
+        <image catchtap='setDefault' data-index='{{index}}' src="/images/choose-nor.png"></image>
+        <text catchtap='setDefault' data-index='{{index}}'>设为默认</text>
+      </view>
+
+      <view>
+        <text catchtap='showModal' data-index='{{index}}'>编辑</text>
+        <text catchtap='delAddress' data-index='{{index}}'>删除</text>
+      </view>
+
+    </view>
+
+  </view>
+</view>
+
+<view style="opacity: 0;height:40rpx">
+  1
+</view>
+
+<view class="addbtn">
+  <button bindtap='showModal' data-index='-1'>新建地址</button>
+  <!-- <button bindtap='getWxAddress' wx:if="{{!toAuthGetAddress}}">微信地址</button>
+  <button wx:else open-type='openSetting'>微信地址</button> -->
+</view>

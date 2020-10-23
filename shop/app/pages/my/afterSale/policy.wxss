@@ -1,0 +1,9 @@
+/* pages/my/afterSale/policy.wxss */
+.container{
+  padding: 20rpx 20rpx 20rpx 0
+}
+
+.li{
+  line-height: 1.6;
+  margin-left: -20rpx;
+}

@@ -1,0 +1,182 @@
+/* pages/my/address.wxss */
+
+page {
+  background-color: #f9f9f9;
+}
+
+/* 模态框 */
+
+.modal {
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  z-index: 3;
+}
+
+.modal-bg {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  background-color: #3e3e3e;
+  opacity: 0.8;
+}
+
+.modal-container {
+  position: absolute;
+  width: 80%;
+  height: auto;
+  top:4%;
+  left: 10%;
+  background-color: #fff;
+  border-radius: 8rpx;
+}
+
+.modal-container>view{
+  padding: 20rpx;
+  border-bottom: 1rpx solid #f4f4f4;
+}
+
+.modal-container>navigator{
+  padding: 20rpx;
+  border-bottom: 1rpx solid #f4f4f4;
+}
+
+.region{
+  margin: 20rpx 0;
+}
+
+.modal-container>view>textarea{
+  width: 100%;
+  height: 100rpx;
+}
+
+.modal-container>button{
+  margin: 20rpx;
+  /* color: #fff; */
+  border: 1rpx solid #434343;
+  /* background-color: #434343; */
+  background: #F5BF4C;
+  color: #000;
+  font-size: 28rpx;
+}
+
+.modal-title{
+  font-size: 32rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.modal-container>image{
+  width:60rpx;
+  height:60rpx;
+  position: absolute;
+  top:-20rpx;
+  right: -20rpx;
+  border-radius: 50%;
+}
+
+.address>view:first-child {
+  background-color: #fff;
+  padding: 20rpx;
+  margin-top: 1rpx;
+}
+
+.addressList {
+  background-color: #fff;
+  padding: 20rpx;
+  margin-top: 20rpx;
+}
+
+.address>view:last-child{
+  margin-bottom: 120rpx;
+}
+
+.addressInfo {
+  border-bottom: 1rpx solid #f4f4f4;
+  padding: 20rpx 0;
+}
+
+.addressInfo>view {
+  /* width: 70%; */
+}
+
+.addressEdit {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 20rpx;
+}
+
+/* .active{
+  color: red;
+} */
+
+.addressEdit>view{
+  display: flex;
+  flex-direction: row;
+  align-items: center
+}
+
+.addressEdit>view>image {
+  width: 26rpx;
+  height: 26rpx;
+  margin-right: 10rpx;
+}
+
+.addressEdit>view:last-child>text:first-child {
+  margin-right: 30rpx;
+  color: #434343;
+}
+
+.addressEdit>view:last-child>text:last-child {
+  color: #434343;
+}
+
+.addbtn {
+  position: fixed;
+  bottom: 20rpx;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+  justify-content: space-around;
+}
+
+.addbtn button {
+  width: 42%;
+  font-size: 26rpx;
+  background-color: #fff;
+}
+
+.addbtn button:first-child {
+  border: 1rpx solid #434343;
+  background-color: #434343;
+  color: #fff;
+}
+
+.addbtn button:last-child {
+  /* border: 1rpx solid #434343; */
+  /* background-color: #434343; */
+  /* color: #fff; */
+  background: #F5BF4C;
+  color: #000;
+}
+
+.item{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 30rpx 0;
+}
+
+.item-go{
+  width: 50rpx;
+  height: 50rpx;
+}
+
+.adres{
+   color:#808080
+}

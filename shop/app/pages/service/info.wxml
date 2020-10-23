@@ -1,0 +1,10 @@
+<!--pages/service/info.wxml-->
+<!-- <view>
+  {{name}}
+</view> -->
+
+<view class="content" wx:for="{{text}}" wx:key="*this">
+  <view>{{item.q}}</view>
+  <view wx:for="{{item.a}}" wx:for-item="aItem">{{aItem}}</view>
+</view>
+

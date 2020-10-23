@@ -1,0 +1,36 @@
+<!--pages/brandDetail/brandDetail.wxml-->
+<view class="brand-detail">
+  <image src="{{image}}" mode="aspectFill"></image>
+  <!-- <view class="brand-title">
+    <text>{{brand_name}}</text>
+  </view> -->
+  <view class="brand-desc">
+    <text>{{desc}}</text>
+  </view>
+</view>
+
+<scroll-view class="good-grid">
+  <view class="b">
+    <block wx:for="{{goods}}" wx:for-item="goodsList" wx:key="*this">
+      <block wx:for="{{goodsList}}" wx:for-index="index" wx:for-item="item" wx:key="{{item.id}}">
+        <navigator url="../goods/goods?id={{item.id}}" class="item">
+          <!-- <image class="rank" wx:if="{{item.qcl == 1}}" src="/images/A.png"></image>
+        <image class="rank" wx:if="{{item.qcl == 2}}" src="/images/B.png"></image>
+        <image class="rank" wx:if="{{item.qcl == 3}}" src="/images/C.png"></image> -->
+          <image class="img" src="{{item.image[0]}}" lazy-load="true" mode="aspectFill"></image>
+          <view class="name">{{item.name}}</view>
+          <view class="desc">{{item.describe}}</view>
+          <view class="price">
+            <text>￥{{item.price}}</text>
+            <text>立即购买</text>
+          </view>
+        </navigator>
+      </block>
+    </block>
+  </view>
+
+  <view class="warmText">
+    <image wx:if="{{warmText.length <= 0 && !canPullData}}" class="load" src="/images/loading.gif"></image>
+    <text>{{warmText}}</text>
+  </view>
+</scroll-view>

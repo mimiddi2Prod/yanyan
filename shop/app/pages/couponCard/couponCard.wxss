@@ -1,0 +1,42 @@
+/* pages/couponCard/couponCard.wxss */
+
+page {
+  font-size: 28rpx;
+  padding: 15rpx;
+  width: 720rpx;
+  background-color: rgb(245, 245, 245);
+}
+
+.card {
+  margin: 20rpx;
+  border-radius: 10rpx;
+  padding: 20rpx;
+}
+
+.cbg {
+  background-color: #fff;
+}
+
+.nbg {
+  background-color: #ddd;
+}
+
+.content {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.logo {
+  width: 100rpx;
+  height: 100rpx;
+  border-radius: 50%;
+  border: 1rpx solid #fdfdfd;
+  margin-right: 20rpx;
+}
+
+.other {
+  font-size: 20rpx;
+  justify-content: space-between;
+  margin-top: 10rpx;
+}

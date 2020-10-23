@@ -1,0 +1,33 @@
+<!--pages/my/afterSale/saleType.wxml-->
+<view class="goods">
+  <image src='{{orderDetail.imageO}}' mode="aspectFill"></image>
+  <view>
+    <view>{{orderDetail.name}}</view>
+    <!-- <view>{{orderDetail.param_1}}，{{orderDetail.param_2}}</view> -->
+  </view>
+</view>
+
+<view class="saleType">
+  <view class="item-view">
+    <navigator url="{{item.url}}?id={{index}}" wx:for="{{itemList}}" wx:key="*this" hover-class='none'>
+      <view class="item" style="{{index < itemList.length-1 ? 'border-bottom: 1rpx solid #ddd;' : ''}}">
+        <view class="item-name">
+          <!-- <image src="{{item.image}}"></image> -->
+          <view>
+            <text>{{item.name}}</text>
+            <text>{{item.desc}}</text>
+          </view>
+        </view>
+        <image class="item-go" src="/images/address_right.png"></image>
+      </view>
+    </navigator>
+  </view>
+
+</view>
+
+<view class="msg">
+  退款提醒：因商品破损原因退款，请将商品与包装盒拍照上传
+</view>
+<view class="msg" style="margin:0">
+  岩岩将在24小时内确认退款
+</view>

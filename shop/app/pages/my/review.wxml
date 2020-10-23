@@ -1,0 +1,28 @@
+<!--pages/my/review.wxml-->
+<!-- <view class="goodsInfo">
+  <view>
+    <image class="goods-img" src="{{goodsImg}}" mode="cover"></image>
+    <view class="goods-name">
+      <view>
+        <view>
+          <text>{{name}}</text>
+        </view>
+        <text>{{param_1}}，{{param_2}}</text>
+      </view>
+    </view>
+  </view>
+</view> -->
+<view class="container">
+  <textarea bindinput='input' placeholder="请填写您的建议和反馈" maxlength="-1" auto-height="true"></textarea>
+</view>
+<view class="loadImg">
+  <view>上传照片</view>
+  <view class="border" bindtap='chooseImg'>
+    <em class="img-r abs"></em>
+    <em class="img-c abs"></em>
+  </view>
+  <image class="img" wx:for="{{imgList}}" wx:key="*this" src="{{item.tempFilePath}}" bindtap='delImg' data-index="{{index}}" mode="cover"></image>
+</view>
+<view class="container">
+  <button bindtap='submit'>提交</button>
+</view>

@@ -1,0 +1,13 @@
+/* pages/service/info.wxss */
+.content{
+  padding: 20rpx;
+}
+
+.content>view:nth-child(n){
+  font-size: 28rpx;
+}
+
+.content>view:first-child{
+  font-size: 32rpx
+}
+

@@ -1,0 +1,54 @@
+<view class="container">
+  <view class="cate-nav">
+    <scroll-view scroll-x="true" class="cate-nav-body" style="width: 750rpx;" scroll-left="{{scrollLeft}}">
+      <view wx:for="{{navList.subCategory}}" class="item {{ id == item.id ? 'active' : ''}}" data-id="{{item.id}}" data-index="{{index}}" bindtap="switchCate">
+        <view class="name">{{item.name}}</view>
+      </view>
+    </scroll-view>
+  </view>
+  <!-- <scroll-view scroll-y="true" scroll-top="{{scrollTop}}" style="height:{{scrollHeight}};"> -->
+  <scroll-view scroll-y="true">
+
+    <!-- <view class="cate-item">
+      <view class="b">
+        <navigator class="item {{(index + 1) % 2 == 0 ? 'item-b' : ''}}" url="/pages/goods/goods?id={{item.id}}" wx:for="{{goodsList}}" wx:for-item="item" wx:for-index="index">
+          <image class="img" src="{{item.image[0]}}" lazy-load="true" mode="aspectFill"></image>
+          <text class="name desc">{{item.name}}</text>
+          <view class="price">
+            <text>￥{{item.price}}</text>
+            <text>立即购买</text>
+          </view>
+        </navigator>
+      </view>
+    </view>
+
+    <view class="warmText">
+      <text>{{warmText}}</text>
+    </view> -->
+
+    <view class="good-grid">
+      <view class="b">
+        <block wx:for="{{goodsList}}" wx:for-index="index" wx:for-item="item" wx:key="{{item.id}}">
+          <navigator url="../goods/goods?id={{item.id}}" class="item">
+            <!-- <image class="rank" wx:if="{{item.qcl == 1}}" src="/images/A.png"></image>
+        <image class="rank" wx:if="{{item.qcl == 2}}" src="/images/B.png"></image>
+        <image class="rank" wx:if="{{item.qcl == 3}}" src="/images/C.png"></image> -->
+            <!-- <image class="img" src="{{item.image[0]}}" background-size="cover"></image> -->
+            <image class="img" src="{{item.image[0]}}" lazy-load="true" mode="aspectFill"></image>
+            <view class="name">{{item.name}}</view>
+            <view class="desc">{{item.describe}}</view>
+            <view class="price">
+              <text>￥{{item.price}}</text>
+              <text>立即购买</text>
+            </view>
+          </navigator>
+        </block>
+      </view>
+
+      <view class="warmText">
+        <image wx:if="{{warmText.length <= 0 && !canPullData}}" class="load" src="/images/loading.gif"></image>
+        <text>{{warmText}}</text>
+      </view>
+    </view>
+  </scroll-view>
+</view>

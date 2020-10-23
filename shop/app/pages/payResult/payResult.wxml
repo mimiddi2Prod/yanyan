@@ -1,0 +1,71 @@
+<!--pages/payResult/payResult.wxml-->
+<!-- <view class="modal" catchtouchmove="ture" wx:if="{{showModal}}">
+  <view class="modal-bg"></view>
+  <view class="modal-container"  style="top:{{winTop}}rpx">
+    <view class="modal-banner">
+      <image src="{{image}}" mode="aspectFill" bindtap="getCouponCard"></image>
+    </view>
+    <image src="../../images/icon_close.png" mode="cover" bindtap='showModal'></image>
+  </view>
+</view> -->
+
+<view class="bg">
+  <view class="result">
+    <view class="title">{{payInfo.state == 0 ? "支付失败" : "支付成功"}}</view>
+
+    <block wx:if="{{payInfo.state == 0}}">
+      <view class="desc">
+        <text>请在<text class="em">1小时</text>内完成付款</text>
+      </view>
+      <view class="desc">
+        <text>否则订单会被系统取消</text>
+      </view>
+    </block>
+
+    <block wx:if="{{payInfo.state == 1}}">
+      <view class="desc">
+        <text>请等待商家配送</text>
+      </view>
+      <!-- <view class="desc">
+        <text>物流信息可能有延时</text>
+      </view> -->
+    </block>
+
+    <!-- <view class="btn" wx:if="{{payInfo.state == 0}}">
+      <navigator url="../index/index" open-type='switchTab'>
+        <button>返回首页</button>
+      </navigator>
+      <button bindtap='rePay' style="margin:0">重新支付</button>
+    </view> -->
+
+    <view class="btn">
+      <navigator url="../index/index" open-type='switchTab'>
+        <button>返回首页</button>
+      </navigator>
+      <navigator url="../my/my" open-type='switchTab'>
+        <button>查看订单</button>
+      </navigator>
+    </view>
+  </view>
+
+  <view class="goods">
+    <view>
+      <view>{{payInfo.address.name}}</view>
+      <view>{{payInfo.address.mobile}}</view>
+    </view>
+    <view>
+      <view>{{payInfo.address.full_region}}{{payInfo.address.address}}</view>
+    </view>
+
+    <view>
+      <view>
+        <text wx:if="{{payInfo.state == 0}}">应付：</text>
+        <text wx:if="{{payInfo.state == 1}}">实付：</text>
+        <text wx:if="{{payInfo.state == 2}}">消耗积分：</text>
+      </view>
+      <view>
+        <text>{{payInfo.state == 2 ? '' : '￥'}}{{payInfo.actualPrice}}</text>
+      </view>
+    </view>
+  </view>
+</view>

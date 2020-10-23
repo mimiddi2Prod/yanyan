@@ -1,0 +1,113 @@
+/* pages/my/inform.wxss */
+scroll-view{
+  position: absolute;
+  height: 92%;
+}
+.container{
+  padding:2%;
+  margin-bottom: 10%;
+  background-color: #fff;
+}
+.info{
+  display: flex;
+  flex-direction: row;
+}
+
+.info-reverse{
+  display: flex;
+  flex-direction: row-reverse
+}
+
+.avatar{
+  width: 80rpx;
+  height: 80rpx;
+}
+
+.content {
+  position: relative;
+  float: right;
+  /* width: 66%; */
+  max-width: 66%;
+  margin: 0 20rpx 40rpx 20rpx;
+  padding: 20rpx;
+  background-color: #434343;
+  color: #fff;
+  font-size: 26rpx;
+  border-radius: 18rpx;
+}
+
+.myopacity {
+  animation: myopacity 0.3s;
+}
+
+@keyframes myopacity {
+  from {
+    opacity:0;
+  }
+
+  to {
+    opacity:1
+  }
+}
+
+.content>text{
+  color: #fff;
+   word-break: break-all;
+}
+
+.content:after, .content:before {
+  border: solid transparent;
+  content: ' ';
+  height: 0;
+  right: 99%;
+  position: absolute;
+  width: 0;
+}
+
+.info .content:before {
+  border-width: 20rpx;
+  border-right-color: #434343;
+}
+
+.info-reverse .content:after,.info-reverse .content:before {
+  border: solid transparent;
+  content: ' ';
+  height: 0;
+  left: 99%;
+  position: absolute;
+  width: 0;
+}
+
+.info-reverse .content:before {
+  border-width: 20rpx;
+  border-left-color: #434343;
+}
+
+/* 底部 */
+.foot{
+  position: absolute;
+  bottom: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+  padding:20rpx 20rpx 0 20rpx;
+  background-color: #434343
+}
+
+.foot input{
+  flex: 1;
+  background: #f3f3f3;
+  padding: 10rpx;
+  /* height:54rpx; */
+  border-radius: 8rpx;
+  margin-bottom: 20rpx
+}
+
+.foot button{
+  padding: 6rpx 8rpx;
+  font-size: 24rpx;
+  width: 120rpx;
+  margin-left: 20rpx;
+  margin-bottom: 20rpx
+}

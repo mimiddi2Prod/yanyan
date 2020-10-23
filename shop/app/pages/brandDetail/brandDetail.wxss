@@ -1,0 +1,160 @@
+/* pages/brandDetail/brandDetail.wxss */
+/* page{ */
+  /* background-color: #f9f9f9 */
+/* } */
+
+.brand-detail {
+  margin-bottom: 20rpx;
+  background-color: #fff;
+}
+
+.brand-detail image {
+  width: 100%;
+  height: 360rpx;
+}
+
+.brand-detail .brand-title {
+  position: absolute;
+  top: 0;
+  transform: translateX(-50%);
+  margin-left: 50%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 360rpx;
+}
+
+.brand-detail .brand-title>text{
+  color: #fff;
+  font-size: 36rpx;
+  border-bottom: 2rpx solid #fff;
+  padding: 6rpx;
+}
+
+.brand-detail .brand-desc{
+  padding:20rpx 30rpx;
+}
+
+.brand-detail .brand-desc>text{
+  color: #333;
+}
+
+/* 商品list */
+.good-grid {
+  width: 750rpx;
+  height: auto;
+  overflow: hidden;
+  background: #fff;
+  /* margin-top: 20rpx; */
+}
+
+.good-grid .h {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: center;
+  height: 100rpx;
+  font-size: 33rpx;
+  color: #333;
+}
+
+.h {
+  margin-bottom: 20rpx;
+}
+
+.good-grid .b {
+  width: 750rpx;
+  height: auto;
+  overflow: hidden;
+  padding: 0 20rpx;
+}
+
+.good-grid .b .item {
+  display: block;
+  float: left;
+  width: 345rpx;
+  margin-bottom: 20rpx;
+  height: auto;
+  overflow: hidden;
+  text-align: center;
+}
+
+.good-grid .b .item:nth-child(2n + 1) {
+  margin-right: 20rpx;
+}
+
+.good-grid .item .img {
+  width: 345rpx;
+  height: 345rpx;
+  background: #f8f8f8;
+  margin-bottom: 10rpx;
+}
+
+.good-grid .item .name {
+  width: 100%;
+  overflow: hidden;
+  height: 40rpx;
+  line-height: 40rpx;
+  text-align: center;
+  font-size: 30rpx;
+  color: #333;
+}
+
+.good-grid .item .desc {
+  display: block;
+  height: 30rpx;
+  color: #999;
+  font-size: 24rpx;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.good-grid .item .price {
+  width: 90%;
+  height: 46rpx;
+  line-height: 46rpx;
+  text-align: center;
+  font-size: 30rpx;
+  /* color: #b4282d; */
+  border: 1rpx #ddd dashed;
+  margin: 10rpx 5%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.good-grid .item .price>text {
+  /* color: #b4282d; */
+  color:red;
+  width: 50%;
+  /* margin: 6rpx; */
+}
+
+.good-grid .item .price>text:first-child {
+  border-right: 1rpx dashed #ddd;
+}
+
+.rank{
+  position: absolute;
+  width: 32rpx;
+  height: 32rpx;
+  transform: translate(30%,30%)
+}
+
+.warmText {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20rpx;
+}
+
+.warmText>text {
+  font-size: 24rpx;
+  color: #808080;
+}
+
+.load{
+  width: 60rpx;
+  height:60rpx;
+}

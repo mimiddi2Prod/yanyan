@@ -1,0 +1,113 @@
+<!--pages/my/afterSale/afterSale.wxml-->
+<view class="container">
+  <view class="catalog">
+    <view class="nav">
+      <view class="item {{ currentId == item.id ? 'active' : ''}}" wx:for="{{navList}}" data-id="{{item.id}}" data-index="{{index}}" bindtap="switchCate">{{item.name}}</view>
+    </view>
+  </view>
+  <!-- <view class="weui-navbar__slider" style="left: {{sliderLeft}}px; transform: translateX({{sliderOffset}}px); -webkit-transform: translateX({{sliderOffset}}px);"></view> -->
+  <view class="weui-navbar__slider" style="margin-left: 5%; transform: translateX({{sliderOffset}}px); -webkit-transform: translateX({{sliderOffset}}px);"></view>
+</view>
+
+<swiper style="min-height:{{winHeight}}rpx;" current="{{currentId}}" bindchange="swiper">
+  <swiper-item wx:for="{{orderList}}" style="overflow:scroll;-webkit-overflow-scrolling: touch;" wx:for-index="pageId">
+    <scroll-view scroll-y="true" class="container-list" wx:if="{{item.list.length >= 0}}">
+      <view class="list" wx:for="{{item.list}}" wx:key="*this">
+        <view class="number">订单编号：{{item.tradeId}}</view>
+        <!-- 商品 -->
+        <view bindtap='toGoodsDetail' data-pageid='{{pageId}}' data-orderid='{{index}}' data-isaftersale="false" hover-class='none'>
+          <view class="goods">
+            <view class="goods-info">
+              <image src="{{item.imageO}}" mode="aspectFill"></image>
+              <view>
+                <view>{{item.name}}</view>
+                <!-- <view>{{item.param_1}}，{{item.param_2}}</view> -->
+              </view>
+            </view>
+            <view class="status">
+              <view>x{{item.number}}</view>
+              <view wx:if="{{item.after_sale_state == 0}}">{{item.state == -1 ? '已取消' : ''}}{{item.state == 1 ? '待发货' : ''}}{{item.state == 2 ? '待收货' : ''}}{{item.state == 3 ? '待评价' : ''}}{{item.state == 4 ? '已完成' : ''}}</view>
+              <view wx:if="{{item.after_sale_state != 0}}">{{item.after_sale_state == 1 ? '退款中' : ''}}{{item.after_sale_state == 2 ? '退货退款中' : ''}}{{item.after_sale_state == 3 ? '换货中' : ''}}{{item.after_sale_state == 4 ? '已退款' : ''}}{{item.after_sale_state == 5 ? '已退货退款' : ''}}{{item.after_sale_state == 6 ? '已换货' : ''}}{{item.after_sale_state == 7 ? '已拒绝' : ''}}</view>
+            </view>
+          </view>
+        </view>
+
+        <!-- 待收货状态 -->
+        <block wx:if="{{item.after_sale_state == 0}}">
+          <view class="settlement" wx:if="{{item.state == 2}}">
+            <view>
+              实付：<text style="font-size:22rpx">￥</text>{{item.total}}
+            </view>
+            <view>
+              <!-- <navigator url='../logistics?logistics_code={{item.logistics_code}}' hover-class='none'>
+                <button>查看物流</button>
+              </navigator> -->
+              <view bindtap='toGoodsDetail' data-pageid='{{pageId}}' data-orderid='{{index}}' data-isaftersale="true" hover-class='none'>
+                <button>申请售后</button>
+              </view>
+              <!-- <view class="btn" bindtap='acceptOrder' data-orderid='{{item.id}}' data-itempriceid='{{item.item_price_id}}'>
+                <button>确认收货</button>
+              </view> -->
+            </view>
+          </view>
+
+          <!-- 已收货状态 / 已评价状态 -->
+          <view class="settlement" wx:if="{{item.state == 3 || item.state == 4}}">
+            <view>
+              实付：<text style="font-size:22rpx">￥</text>{{item.total}}
+            </view>
+            <view>
+              <!-- <navigator url='../logistics?logistics_code={{item.logistics_code}}' hover-class='none'>
+                <button>查看物流</button>
+              </navigator> -->
+              <view class="btn" bindtap='toGoodsDetail' data-pageid='{{pageId}}' data-orderid='{{index}}' data-isaftersale="true" hover-class='none'>
+                <button>申请售后</button>
+              </view>
+            </view>
+          </view>
+        </block>
+
+        <!-- 售后中 -->
+        <view class="settlement" wx:if="{{item.after_sale_state != 0 && item.after_sale_state <= 3}}">
+          <view>
+            实付：<text style="font-size:22rpx">￥</text>{{item.total}}
+          </view>
+          <view>
+            <!-- <navigator url='../logistics?logistics_code={{item.logistics_code}}' hover-class='none'>
+              <button>查看物流</button>
+            </navigator> -->
+            <view class="btn" bindtap='cancelAfterSale' data-orderid='{{item.id}}' hover-class='none'>
+              <button>取消申请</button>
+            </view>
+          </view>
+        </view>
+
+        <!-- 售后完成 -->
+        <view class="settlement" wx:if="{{item.after_sale_state >= 4}}">
+          <view>
+            实付：<text style="font-size:22rpx">￥</text>{{item.total}}
+          </view>
+          <view>
+            <!-- <navigator url='../logistics?logistics_code={{item.logistics_code}}' hover-class='none'>
+              <button>查看物流</button>
+            </navigator> -->
+            <view class="btn" hover-class='none'>
+              <button wx:if="{{item.after_sale_state == 4}}">已退款</button>
+              <button wx:if="{{item.after_sale_state == 5}}">已退货退款</button>
+              <button wx:if="{{item.after_sale_state == 6}}">已换货</button>
+              <button wx:if="{{item.after_sale_state == 7}}">售后已拒绝</button>
+            </view>
+          </view>
+        </view>
+      </view>
+
+
+    </scroll-view>
+    <scroll-view wx:if="{{item.list.  length<=0}}">
+      <view class="norList">
+        <image class="norListImg" src="/images/dingdan.png"></image>
+        <view>无记录</view>
+      </view>
+    </scroll-view>
+  </swiper-item>
+</swiper>

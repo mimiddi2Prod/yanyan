@@ -1,0 +1,226 @@
+/* pages/activity/activity.wxss */
+.brand-desc{
+  padding: 20rpx;
+}
+.good-grid {
+  width: 750rpx;
+  height: auto;
+  overflow: hidden;
+  background: #fff;
+  padding-bottom: 60rpx;
+  /* margin-top: 20rpx; */
+}
+
+.good-grid .h {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: center;
+  height: 100rpx;
+  font-size: 33rpx;
+  color: #333;
+}
+
+.hh {
+  margin-bottom: 20rpx;
+}
+
+.good-grid .bb {
+  width: 750rpx;
+  height: auto;
+  overflow: hidden;
+  padding: 0 20rpx;
+}
+
+.good-grid .bb .itemm {
+  display: block;
+  float: left;
+  width: 345rpx;
+  margin-bottom: 20rpx;
+  height: auto;
+  overflow: hidden;
+  text-align: center;
+}
+
+.good-grid .bb .itemm:nth-child(2n + 1) {
+  margin-right: 20rpx;
+}
+
+.good-grid .itemm .imgg {
+  width: 345rpx;
+  height: 345rpx;
+  /* background: #f8f8f8; */
+  margin-bottom: 10rpx;
+}
+
+.good-grid .itemm .namee {
+  width: 100%;
+  overflow: hidden;
+  height: 40rpx;
+  line-height: 40rpx;
+  text-align: center;
+  font-size: 30rpx;
+}
+.black{
+  color: #333;
+}
+
+.good-grid .itemm .descc {
+  display: block;
+  height: 30rpx;
+  
+  font-size: 24rpx;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.descc-color{
+  color: #999;
+}
+
+.good-grid .itemm .pricee {
+  width: 90%;
+  height: 46rpx;
+  line-height: 46rpx;
+  text-align: center;
+  font-size: 30rpx;
+  /* color: #b4282d; */
+  /* border: 1rpx #ddd dashed; */
+  margin: 10rpx 5%;
+  display: flex;
+  flex-direction: row;
+  /* justify-content: space-around; */
+   justify-content: space-between;
+}
+
+.good-grid .itemm .pricee>text {
+  /* color: #b4282d; */
+  color:red;
+  width: 50%;
+  /* margin: 6rpx; */
+}
+
+.good-grid .itemm .pricee>text:first-child {
+  border-right: 1rpx dashed #ddd;
+}
+
+/* 登录 */
+
+.dialog-login {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 11;
+}
+
+.dialog-login .dialog-body {
+  width: 540rpx;
+  height: auto;
+  overflow: hidden;
+  background: #fff;
+  border-radius: 5px;
+  padding: 40rpx;
+}
+
+.dialog-login .dialog-body .title {
+  width: 100%;
+  text-align: center;
+  line-height: 60rpx;
+}
+
+.dialog-login .dialog-body .contents {
+  width: 100%;
+}
+
+.dialog-login .dialog-body button {
+  margin-top: 30rpx;
+}
+
+.footer {
+  position: fixed;
+  bottom: 40rpx;
+  /* width: 90%; */
+  height: 100rpx;
+  /* margin: 0 40rpx; */
+  /* left: 630rpx; */
+  /* left: 30rpx; */
+  background-color: #ecece9;
+  border-radius: 50rpx;
+  z-index: 2;
+}
+
+.footer-icon {
+  position: absolute;
+  display: flex;
+  flex-direction: row;
+  /* padding-left: 40rpx; */
+  background-color: #FFFF71;
+  border-top-right-radius: 50%;
+  border-bottom-right-radius: 50%;
+}
+
+.footer-icon>view {
+  position: absolute;
+  left: 70rpx;
+  /* top: -10rpx; */
+  background-color: red;
+  border-radius: 50%;
+  height: 40rpx;
+  width: 40rpx;
+  font-size: 20rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 40rpx;
+}
+
+.cart-icon {
+  width: 50rpx;
+  height: 50rpx;
+  padding: 20rpx;
+  background-color: #F5BF4C;
+  /* border-radius: 50%; */
+  border-top-right-radius: 50%;
+  border-bottom-right-radius: 50%;
+  /* transform: translateY(-15rpx); */
+}
+
+.footer-price {
+  margin-left: 150rpx;
+  height: 100rpx;
+  line-height: 100rpx;
+  width: 380rpx;
+  display: inline-block;
+}
+
+.footer-submit {
+  display: inline-block;
+  background-color: #879d89;
+  border-radius: 50rpx;
+  height: 100rpx;
+  line-height: 100rpx;
+  width: 145rpx;
+  text-align: center;
+  transform: translateX(5rpx);
+}
+
+.footer-submit > text {
+  color: white;
+}
+.warmText {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20rpx 20rpx 60rpx 20rpx;
+}
+
+.warmText>text {
+  font-size: 24rpx;
+  color: #808080;
+}

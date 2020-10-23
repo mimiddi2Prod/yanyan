@@ -1,0 +1,277 @@
+/* pages/my/afterSale/saleDesc.wxss */
+
+page {
+  background-color: #f9f9f9;
+}
+
+.goods {
+  background-color: #fff;
+  margin-bottom: 20rpx;
+  padding: 20rpx;
+  display: flex;
+  flex-direction: row;
+}
+
+.goods>view>view:last-child {
+  font-size: 24rpx;
+  color: #9a9b94;
+  margin-top: 10rpx;
+}
+
+.goods>image {
+  width: 200rpx;
+  height: 200rpx;
+  padding: 10rpx;
+  background-color: #f4f4f4;
+  margin-right: 20rpx;
+}
+
+.item-view {
+  padding: 0 20rpx;
+  background-color: white;
+  margin-bottom: 20rpx;
+}
+
+.picker {
+  width: 100%;
+  height: 100rpx;
+  line-height: 100rpx;
+}
+
+.a {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  /* justify-content: space-between; *//* padding: 30rpx 0; */
+}
+
+.item-name {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.item-sel {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.item-name image {
+  width: 50rpx;
+  height: 50rpx;
+  margin-right: 10rpx;
+}
+
+.item-name text {
+  font-size: 30rpx;
+}
+
+.item-go {
+  width: 50rpx;
+  height: 50rpx;
+}
+
+.money>view:first-child {
+  padding: 20rpx;
+  background-color: #fff;
+}
+
+.money>view:first-child>text {
+  color: #ab2b2b;
+}
+
+.money>view:last-child {
+  padding: 20rpx;
+  color: #a3a3a3;
+  margin-bottom: 20rpx;
+}
+
+.desc {
+  padding: 20rpx;
+  background-color: #fff;
+  margin-bottom: 20rpx;
+}
+
+.desc>textarea {
+  padding: 20rpx 0;
+  width: 710rpx;
+}
+
+.policy {
+  width: 30%;
+  margin-top: 10rpx;
+  font-size: 24rpx;
+}
+
+.submit {
+  /* position: fixed; *//* bottom: 0; */
+  width: 100%;
+  /* background-color: red; */
+  /* background-color: #434343;
+  color: #fff; */
+  background: #F5BF4C;
+color: #000;
+
+  font-size: 34rpx;
+  border-radius: 0;
+  height: 86rpx;
+  margin-top: 20rpx;
+}
+
+/* 上传图片框 */
+
+.loadImg {
+  padding: 20rpx;
+  background-color: #fff;
+  margin-bottom: 40rpx;
+}
+
+.img {
+  width: 200rpx;
+  height: 200rpx;
+  margin-right: 20rpx;
+  display: inline-block;
+}
+
+.loadImg>view:first-child {
+  margin-bottom: 10rpx;
+}
+
+.border {
+  width: 200rpx;
+  height: 200rpx;
+  border: 2rpx dashed #ddd;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  margin-right: 20rpx;
+}
+
+.abs {
+  display: inline-block;
+  background: #9a9a9a;
+  top: 50%;
+  left: 50%;
+  position: absolute;
+}
+
+.img-c {
+  margin-left: -2rpx;
+  margin-top: -16rpx;
+  height: 32rpx;
+  width: 4rpx;
+}
+
+.img-r {
+  margin-left: -16rpx;
+  margin-top: -2rpx;
+  height: 4rpx;
+  width: 32rpx;
+}
+
+/* 换货 */
+
+.exchange {
+  display: flex;
+  flex-direction: row;
+  padding: 20rpx;
+}
+
+.exchange-index {
+  width: 20%;
+}
+
+.exchange-item {
+  width: 80%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  /* justify-content: space-between; */
+}
+
+.exchange-item .address {
+  width: 100%;
+  padding: 4rpx 0;
+}
+
+.exchange-item .address .name {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+  margin-right: 20rpx;
+  margin-bottom: 20rpx;
+}
+
+/* .exchange-item>image{
+  align-items: flex-end
+} */
+
+/* 售后数量选择 */
+
+.numbers>view {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between
+}
+
+.numbers>view:first-child {
+  padding: 20rpx;
+  background-color: #fff;
+}
+
+.numbers>view:first-child>text {
+  color: #ab2b2b;
+}
+
+.numbers>view:last-child {
+  padding: 20rpx;
+  color: #a3a3a3;
+  margin-bottom: 20rpx;
+}
+
+
+.selnum {
+  /* width: 235rpx;*/
+  height: 52rpx; 
+  width: 160rpx;
+  border: 1rpx solid #ccc;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.selnum .cut {
+  /* width: 70rpx; *//* height: 100%; */
+  text-align: center;
+  flex: 1;
+  /* line-height: 50rpx; */
+}
+
+.selnum .number {
+  flex: 1;
+  /* height: 100%; */
+  text-align: center;
+  /* line-height: 68.75rpx; */
+  border-left: 1px solid #ccc;
+  border-right: 1px solid #ccc;
+  /* float: left; */
+  font-size: 20rpx;
+}
+
+.selnum .add {
+  /* width: 80rpx; *//* height: 100%; */
+  text-align: center;
+  flex: 1;
+  /* line-height: 50rpx; */
+}

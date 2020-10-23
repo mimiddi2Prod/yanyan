@@ -1,0 +1,36 @@
+/**app.wxss**/
+/* .container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 200rpx 0;
+  box-sizing: border-box;
+}  */
+
+/* 售罄 */
+.grayImg{
+  opacity: 0.4;
+}
+.grayTxt{
+  position: absolute;
+  width: 345rpx;
+  height: 345rpx;
+  line-height: 345rpx;
+  text-align: center;
+  font-size: 28rpx;
+  /* color: #cbcbcb; */
+}
+.grayTxt>text{
+  border-radius: 20rpx;
+  background-color: #cbcbcb;
+  padding: 0 20rpx;
+}
+.goods-add-cart-nor {
+  /* margin: 10rpx; */
+  font-size: 32rpx;
+}
+.gray {
+  color: #cbcbcb;
+}

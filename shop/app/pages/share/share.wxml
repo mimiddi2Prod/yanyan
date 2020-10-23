@@ -1,0 +1,12 @@
+<!--pages/share/share.wxml-->
+<!-- <view>
+<image class="share_info" style="width:{{ImgWidth}}rpx" src="/images/share_info.png" mode="widthFix"></image>
+</view> -->
+
+<image class="share_info" src="/images/share_info.png" mode="widthFix"></image>
+
+
+<view class="btn_view">
+<button open-type="share">分享</button>
+<button bindtap="getShareCouponCard">领红包</button>
+</view>

@@ -1,0 +1,118 @@
+/* pages/group_buy/group_buy.wxss */
+.good-grid {
+  width: 750rpx;
+  height: auto;
+  overflow: hidden;
+  background: #fff;
+  /* margin-top: 20rpx; */
+}
+
+.good-grid .h {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: center;
+  height: 100rpx;
+  font-size: 33rpx;
+  color: #333;
+}
+
+.hh {
+  margin-bottom: 20rpx;
+}
+
+.good-grid .bb {
+  width: 750rpx;
+  height: auto;
+  overflow: hidden;
+  padding: 0 20rpx;
+}
+
+.good-grid .bb .itemm {
+  position: absolute;
+  display: block;
+  float: left;
+  width: 345rpx;
+  margin-bottom: 20rpx;
+  height: auto;
+  overflow: hidden;
+  text-align: center;
+}
+
+.good-grid .bb .itemm:nth-child(2n + 1) {
+  margin-right: 20rpx;
+}
+
+.good-grid .itemm .imgg {
+  width: 345rpx;
+  height: 345rpx;
+  background: #f8f8f8;
+  margin-bottom: 10rpx;
+}
+
+.good-grid .itemm .namee {
+  /* width: 100%; */
+  /* overflow: hidden; */
+  /* height: 40rpx; */
+  line-height: 40rpx;
+  text-align: center;
+  font-size: 30rpx;
+  color: #333;
+  width: 345rpx;
+}
+
+.good-grid .itemm .descc {
+  display: block;
+  /* height: 30rpx; */
+  color: #999;
+  font-size: 24rpx;
+  /* white-space: nowrap; */
+  /* overflow: hidden; */
+  text-overflow: ellipsis;
+}
+
+.good-grid .itemm .pricee {
+  width: 90%;
+  height: 46rpx;
+  line-height: 46rpx;
+  text-align: center;
+  font-size: 30rpx;
+  /* color: #b4282d; */
+  border: 1rpx #ddd dashed;
+  margin: 10rpx 5%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.good-grid .itemm .pricee>text {
+  /* color: #b4282d; */
+  color:red;
+  width: 50%;
+  /* margin: 6rpx; */
+}
+
+.good-grid .itemm .pricee>text:first-child {
+  border-right: 1rpx dashed #ddd;
+}
+
+.rank {
+  position: absolute;
+  width: 32rpx;
+  height: 32rpx;
+  transform: translate(30%, 30%);
+}
+
+.warmText {
+  /* display: flex;
+  flex-direction: column;
+  align-items: center; */
+  transform: translateX(-50%);
+  left: 50%;
+  padding: 20rpx;
+}
+
+.warmText>text {
+  font-size: 24rpx;
+  color: #808080;
+}

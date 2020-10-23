@@ -1,0 +1,126 @@
+<!--pages/search/search.wxml-->
+<scroll-view class="container" style="height: 100%;">
+  <view class="search-header">
+    <view class="input-box">
+      <image class="icon" src="../../images/chazhao.png"></image>
+      <input name="input" class="keywrod" focus="true" value="{{keyword}}" confirm-type="search" bindinput="inputChange" bindfocus="inputFocus" bindconfirm="onKeywordConfirm" confirm-type="search" placeholder="{{defaultKeyword.keyword}}" />
+      <image class="del" wx:if="{{keyword}}" bindtap="clearKeyword" src="../../images/serdel.png"></image>
+    </view>
+    <view class="right" bindtap="closeSearch">取消</view>
+  </view>
+  <view class="no-search" wx:if="{{ searchStatus}}">
+    <!-- <view class="serach-keywords search-history" wx:if="{{keyword  && searchkeyword.length > 0}}"> -->
+    <view class="serach-keywords search-history">
+      <view class="h">
+        <text class="title">历史记录</text>
+        <image class="icon" bindtap="clearHistory" src="../../images/hisdel.png"></image>
+      </view>
+      <view class="b">
+        <view class="item" bindtap="onKeywordTap" data-keyword="{{item}}" wx:for="{{searchkeyword}}" hover-class="navigator-hover">{{item}}</view>
+      </view>
+    </view>
+    <!-- <view class="serach-keywords search-hot" wx:if="{{!keyword}}">
+      <view class="h">
+        <text class="title">热门搜索</text>
+      </view>
+      <view class="b">
+        <view class="item {{item.is_hot === 1 ? 'active' : ''}}" hover-class="navigator-hover" bindtap="onKeywordTap" data-keyword="{{item.keyword}}" wx:for="{{hotKeyword}}">{{item.keyword}}</view>
+      </view>
+    </view> -->
+    <!-- <view class="shelper-list" wx:if="{{keyword}}">
+      <view class="item" hover-class="navigator-hover" wx:for="{{helpKeyword}}" bindtap="onKeywordTap" data-keyword="{{item}}">{{item}}</view>
+    </view> -->
+  </view>
+
+  <!-- <view class="search-result" wx:if="{{ searchStatus && goodsList.length}}">
+    <view class="sort">
+      <view class="sort-box">
+        <view class="item {{currentSortType == 'default' ? 'active' : ''}}" bindtap="openSortFilter" id="defaultSort">
+          <text class="txt">综合</text>
+        </view>
+        <view class="item by-price {{currentSortType == 'price' ? 'active' : ''}} {{currentSortOrder == 'asc'  ? 'asc' : 'desc'}}" bindtap="openSortFilter" id="priceSort">
+          <text class="txt">价格</text>
+        </view>
+        <view class="item {{currentSortType == 'category' ? 'active' : ''}}" bindtap="openSortFilter" id="categoryFilter">
+          <text class="txt">分类</text>
+        </view>
+      </view>
+      <view class="sort-box-category" wx-if="{{categoryFilter}}">
+        <view class="item {{item.checked ? 'active' : ''}}" wx:for="{{filterCategory}}" wx:key="cate-{{item.id}}" data-category-index="{{index}}" bindtap="selectCategory">{{item.name}}</view>
+      </view>
+    </view>
+    <view class="cate-item">
+      <view class="b">
+        <navigator class="item {{(iindex + 1) % 2 == 0 ? 'item-b' : ''}}" url="/pages/goods/goods?id={{iitem.id}}" wx:for="{{goodsList}}" wx:for-item="iitem" wx:for-index="iindex">
+          <image class="rank" src="/images/B.png"></image>
+          <image class="img" src="{{iitem.list_pic_url}}" lazy-load="true"></image>
+          <text class="name">{{iitem.name}}</text>
+          <view class="price">
+            <text>￥{{iitem.retail_price}}</text>
+            <text>立即购买</text>
+          </view>
+        </navigator>
+      </view>
+    </view>
+  </view> -->
+
+  <!-- <view class="srchList" wx:if="{{searchList.length > 0}}">
+    <view class="srchct" wx:for="{{searchList}}" wx:key="*this">
+      <view>{{item.name}}</view>
+      <view>库存：{{item.stock}}</view>
+      <view bindtap="addToCart" data-id="{{item.id}}">+</view>
+    </view>
+  </view> -->
+
+  <view class="a-section a-topic" wx:if="{{searchList.length > 0 && !searchStatus}}">
+    <view class="b">
+      <view class="good-grid">
+        <view class="bb">
+          <block wx:for="{{searchList}}" wx:for-index="lindex" wx:for-item="litem" wx:key="{{litem.id}}">
+            <navigator url="../goods/goods?id={{litem.id}}" class="itemm" hover-class="none">
+              <image class="label" wx:if="{{litem.label}}" src="{{litem.label[0]}}" mode="aspectFit" lazy-load="true"></image>
+              <view class="grayTxt" wx:if="{{litem.stock <= 0}}"><text>补货中</text></view>
+              <image class="imgg {{litem.stock <= 0 ? 'grayImg' : ''}}" src="{{litem.image[0]}}" mode="aspectFit" lazy-load="true"></image>
+              <view class="namee {{litem.stock > 0 ? 'black' : 'gray'}}">{{litem.name}}</view>
+              <view class="descc {{litem.stock > 0 ? 'descc-color' : 'gray'}}">{{litem.describe}}</view>
+              <!-- <view class="descc">
+                <text>￥{{litem.price}}</text>
+              </view> -->
+              <view class="pricee">
+                <!-- <text>￥{{litem.price}}</text>
+                <text>立即购买</text> -->
+                <view>
+                  <text wx:if="{{litem.isPanic}}" style="color:red;font-size:20rpx;">限时</text>
+                  <text wx:if="{{litem.isPanic}}" style="color:red"><text style="font-size:18rpx">￥</text>{{litem.panic_buying_price}}</text>
+                  <text style="{{litem.isPanic ? 'text-decoration:line-through;font-size:24rpx;' : 'color:#F5BF4C'}};"><text style="font-size:18rpx">￥</text>{{litem.price}}</text>
+                </view>
+                <image src="/images/add.png" style="width:50rpx;height:50rpx;" catchtap="addToCart" data-id="{{litem.id}}" wx:if="{{litem.stock > 0}}"></image>
+                <view class='goods-add-cart-nor gray' style="font-size:26rpx" wx:else>售罄</view>
+              </view>
+            </navigator>
+          </block>
+        </view>
+
+      </view>
+    </view>
+  </view>
+
+  <!-- <view class="search-result-empty" wx:if="{{searchList.length <= 0 && !searchStatus && keyword}}">
+    <image class="icon" src="../../images/dingdan.png"></image>
+    <text class="text">您寻找的商品还未上架</text>
+  </view> -->
+  <view class="norList" wx:if="{{searchList.length <= 0 && !searchStatus && keyword}}">
+    <image class="norListImg" src="/images/dingdan.png"></image>
+    <view>您寻找的商品还未上架</view>
+  </view>
+</scroll-view>
+
+<view class='dialog-login' wx:if="{{showLoginDialog}}">
+  <view class='dialog-body'>
+    <view class="titles">请登录以获取更好的服务</view>
+    <view class='contents'>
+      <button type="primary" open-type="getUserInfo" bindgetuserinfo="getUserInfo">微信登录</button>
+      <button bindtap='loginDialog'>取消</button>
+    </view>
+  </view>
+</view>

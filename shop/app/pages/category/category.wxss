@@ -1,0 +1,284 @@
+.container {
+  background: #f9f9f9;
+}
+
+.cate-nav {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 1000;
+}
+
+.cate-nav-body {
+  height: 84rpx;
+  white-space: nowrap;
+  background: #fff;
+  border-top: 1px solid rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+}
+
+.cate-nav .item {
+  display: inline-block;
+  height: 84rpx;
+  min-width: 130rpx;
+  padding: 0 15rpx;
+}
+
+.cate-nav .item .name {
+  display: block;
+  height: 84rpx;
+  padding: 0 20rpx;
+  line-height: 84rpx;
+  color: #333;
+  font-size: 30rpx;
+  width: auto;
+}
+
+.cate-nav .item.active .name {
+  color: #ab2b2b;
+  border-bottom: 2px solid #ab2b2b;
+}
+
+.cate-item {
+  margin-top: 94rpx;
+  height: auto;
+  overflow: hidden;
+}
+
+.cate-item .h {
+  height: 145rpx;
+  width: 750rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.cate-item .h .name {
+  display: block;
+  height: 35rpx;
+  margin-bottom: 18rpx;
+  font-size: 30rpx;
+  color: #333;
+}
+
+.cate-item .h .desc {
+  display: block;
+  height: 24rpx;
+  font-size: 24rpx;
+  color: #999;
+}
+
+.cate-item .b {
+  width: 750rpx;
+  /* padding: 0 6.25rpx; */
+  height: auto;
+  overflow: hidden;
+}
+
+.cate-item .b .item {
+  float: left;
+  background: #fff;
+  /* width: 365rpx; */
+  width: 372rpx;
+  margin-bottom: 6.25rpx;
+  /* padding-bottom: 33.333rpx; */
+  height: auto;
+  overflow: hidden;
+  text-align: center;
+}
+
+.cate-item .b .item-b {
+  /* margin-left: 6.25rpx; */
+  margin-left: 6rpx;
+}
+
+.cate-item .item .img {
+  /* width: 302rpx;
+  height: 302rpx; */
+  width: 360rpx;
+  height: 360rpx;
+}
+
+.cate-item .item .name {
+  display: block;
+  /* width: 365.625rpx; */
+  width: 320rpx;
+  /* height: 35rpx; */
+  height: 40rpx;
+  /* margin: 11.5rpx 0 22rpx 0; */
+  margin: 6rpx 0 10rpx 0;
+  text-align: center;
+  overflow: hidden;
+  padding: 0 20rpx;
+  font-size: 30rpx;
+  color: #333;
+}
+
+.cate-item .item .price {
+  /* display: block;
+  width: 365.625rpx;
+  height: 30rpx;
+  text-align: center;
+  font-size: 30rpx;
+  color: #b4282d; */
+  /* width: 90%; */
+  width: 350rpx;
+  height: 46rpx;
+  line-height: 46rpx;
+  text-align: center;
+  font-size: 30rpx;
+  border: 1rpx #ddd dashed;
+  margin: 10rpx 10rpx;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.desc {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* 新增 */
+
+.cate-item .item .price>text {
+  /* color: #b4282d; */
+  color:red;
+  width: 50%;
+}
+
+.cate-item .item .price>text:first-child {
+  border-right: 1rpx dashed #ddd;
+}
+
+.rank {
+  position: absolute;
+  width: 32rpx;
+  height: 32rpx;
+  /* transform: translate(-76%,30%) */
+  transform: translate(20%, 30%);
+  /* 根据 .cate-item .item .img做了调整 */
+}
+
+/* 商品list */
+.good-grid {
+  width: 750rpx;
+  height: auto;
+  overflow: hidden;
+  background: #fff;
+  margin-top: 90rpx;
+  /* margin-top: 20rpx; */
+}
+
+.good-grid .h {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: center;
+  height: 100rpx;
+  font-size: 33rpx;
+  color: #333;
+}
+
+.h {
+  margin-bottom: 20rpx;
+}
+
+.good-grid .b {
+  width: 750rpx;
+  height: auto;
+  overflow: hidden;
+  padding: 0 20rpx;
+}
+
+.good-grid .b .item {
+  display: block;
+  float: left;
+  width: 345rpx;
+  margin-bottom: 20rpx;
+  height: auto;
+  overflow: hidden;
+  text-align: center;
+}
+
+.good-grid .b .item:nth-child(2n + 1) {
+  margin-right: 20rpx;
+}
+
+.good-grid .item .img {
+  width: 345rpx;
+  height: 345rpx;
+  background: #f8f8f8;
+  margin-bottom: 10rpx;
+}
+
+.good-grid .item .name {
+  width: 100%;
+  overflow: hidden;
+  height: 40rpx;
+  line-height: 40rpx;
+  text-align: center;
+  font-size: 30rpx;
+  color: #333;
+}
+
+.good-grid .item .desc {
+  display: block;
+  height: 30rpx;
+  color: #999;
+  font-size: 24rpx;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.good-grid .item .price {
+  width: 90%;
+  height: 46rpx;
+  line-height: 46rpx;
+  text-align: center;
+  font-size: 30rpx;
+  /* color: #b4282d; */
+  border: 1rpx #ddd dashed;
+  margin: 10rpx 5%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.good-grid .item .price>text {
+  /* color: #b4282d; */
+  color:red;
+  width: 50%;
+  /* margin: 6rpx; */
+}
+
+.good-grid .item .price>text:first-child {
+  border-right: 1rpx dashed #ddd;
+}
+
+.rank{
+  position: absolute;
+  width: 32rpx;
+  height: 32rpx;
+  transform: translate(30%,30%)
+}
+
+.warmText {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20rpx;
+}
+
+.warmText>text {
+  font-size: 24rpx;
+  color: #808080;
+}
+
+.load{
+  width: 60rpx;
+  height:60rpx;
+}

@@ -1,0 +1,104 @@
+<!--pages/shopping/addressAdd/addressAdd.wxml-->
+<!-- 模态框 catchtouchmove阻止弹窗后滚动穿透 -->
+<view class="modal" catchtouchmove="ture" wx:if="{{showModal}}">
+  <view class="modal-bg"></view>
+  <view class="modal-container">
+    <view class="modal-title">编辑地址</view>
+
+    <view class="modal-name">
+      <input placeholder='姓名'></input>
+    </view>
+
+    <view class="modal-tel">
+      <input type='number' placeholder='电话'></input>
+    </view>
+
+    <view>
+      <picker mode="region" bindchange="bindRegionChange" value="{{region}}">
+        <view class="region">
+          <view wx:if="{{!region}}" space='ensp' style="color:#808080">选择城市</view>
+          <view wx:else>
+            <text space='ensp'>{{region[0]}} </text>
+            <text space='ensp'>{{region[1]}} </text>
+            <text space='ensp'>{{region[2]}} </text>
+          </view>
+        </view>
+      </picker>
+    </view>
+
+    <view>
+      <textarea placeholder='详细地址'></textarea>
+    </view>
+
+    <button>保存</button>
+    <image src="../../images/clear_input.png" mode="cover" bindtap='showModal'></image>
+  </view>
+</view>
+<!-- 模态框 -->
+
+<!-- 地址1 -->
+<view class="addressList">
+  <view class="addressInfo">
+    <view class="a">
+      <text space='ensp'>{{address.userName}}，</text>
+      <text space='ensp'>{{address.telNumber}}</text>
+    </view>
+    <view class="b">
+      <text space='ensp'>{{address.provinceName}} </text>
+      <text space='ensp'>{{address.cityName}} </text>
+      <text space='ensp'>{{address.countyName}} </text>
+      <text space='ensp'>{{address.detailInfo}} </text>
+    </view>
+  </view>
+
+  <view class="addressEdit">
+    <view>
+      <image src="../../images/ic_menu_topic_pressed.png"></image>
+      <text class="active">已设为默认</text>
+    </view>
+
+    <view>
+      <text bindtap='showModal'>编辑</text>
+      <text>删除</text>
+    </view>
+
+  </view>
+
+</view>
+<!-- 地址1 -->
+
+<view class="addressList">
+  <view class="addressInfo">
+    <view class="a">
+      <text space='ensp'>{{address.userName}}，</text>
+      <text space='ensp'>{{address.telNumber}}</text>
+    </view>
+    <view class="b">
+      <text space='ensp'>{{address.provinceName}} </text>
+      <text space='ensp'>{{address.cityName}} </text>
+      <text space='ensp'>{{address.countyName}} </text>
+      <text space='ensp'>{{address.detailInfo}} </text>
+    </view>
+  </view>
+
+  <view class="addressEdit">
+    <view>
+      <image src="../../images/ic_menu_topic_nor.png"></image>
+      <text>设为默认</text>
+    </view>
+
+    <view>
+      <text bindtap='showModal'>编辑</text>
+      <text>删除</text>
+    </view>
+
+  </view>
+
+</view>
+
+
+
+<view class="addbtn">
+  <button bindtap='showModal'>新建地址</button>
+  <button bindtap='getWxAddress'>微信地址</button>
+</view>

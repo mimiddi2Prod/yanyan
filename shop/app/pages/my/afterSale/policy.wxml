@@ -1,0 +1,6 @@
+<!--pages/my/afterSale/policy.wxml-->
+<view class="container">
+  <!-- <rich-text nodes="<ul><li class='li'>如需进行售后服务，请在选择完货物状态以及退款原因，填写完退款说明，上传相关凭证后，提交该页面，系统后台将收到您的信息，并尽快为您处理。如果您办理的是退货退款服务，我们将在收到退货包裹并确认无误后，于48小时内进行退款。您的退款将原路返回，到账时间以各银行处理时间为准。</li><li class='li'>关于商品退换货运费，如商品本身有质量问题，运费由我方承担；如果非产品本身质量问题，由您承担商品退换货所产生的运费。</li><ul>"></rich-text> -->
+  <rich-text nodes="<ul><li class='li'>商品破损/质量问题</li><li class='li'>发错货</li><li class='li'>多拍错拍</li><li class='li'>其他</li><ul>"></rich-text>
+  <view>出现以上问题可以联系商家进行退款申请</view>
+</view>

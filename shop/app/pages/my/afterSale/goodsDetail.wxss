@@ -1,0 +1,147 @@
+/* pages/my/afterSale/goodsDetail.wxss */
+
+page {
+  background-color: #f9f9f9;
+}
+
+.address {
+  background-color: #fdfdeb;
+  padding: 20rpx 20rpx 30rpx 20rpx;
+  margin-bottom: 20rpx;
+}
+
+.address>view {
+  margin: 10rpx 0;
+  color: #413e33;
+}
+
+.address>text {
+  font-size: 26rpx;
+  color: #9a9b94;
+}
+
+.address>view>text:first-child {
+  margin-right: 60rpx;
+}
+
+.goodsInfo {
+  background-color: #fff;
+  margin-bottom: 20rpx;
+}
+
+.goodsInfo>view {
+  padding: 0 0 0 20rpx;
+}
+
+.goodsInfo>view:first-child {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20rpx 20rpx 20rpx 0;
+  margin-left: 20rpx;
+  border-bottom: 1rpx solid #DADADA;
+}
+
+.goodsInfo>view:first-child>text:last-child {
+  color: #a5404e;
+}
+
+.goodsInfo>view:last-child {
+  padding: 20rpx;
+  display: flex;
+  flex-direction: row;
+}
+
+.goodsInfo .goods-img {
+  margin-right: 20rpx;
+  background-color: #f3f3f3;
+  width: 140rpx;
+  height: 140rpx;
+  padding: 20rpx;
+}
+
+.goodsInfo .goods-name {
+  width: 550rpx;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.goodsInfo .goods-name>view>view:first-child {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.goodsInfo .goods-name>text {
+  font-size: 24rpx;
+  color: #a2a2a2;
+}
+
+.goodsInfo .del-line {
+  display: inline-block;
+  margin-left: 20rpx;
+}
+
+.goodsInfo .del-line>view {
+  border-top: 1rpx solid #939393;
+  transform: translateY(20rpx);
+}
+
+.goodsInfo .del-line>text {
+  color: #939393;
+}
+
+.number {
+  background-color: #fff;
+  margin-bottom: 20rpx;
+  padding: 20rpx;
+  line-height: 1.6;
+  display: flex;
+  flex-direction: row;
+}
+
+.number>view {
+  display: flex;
+  flex-direction: column;
+}
+
+.number>view:first-child {
+  width: 22%;
+}
+
+.number>view:first-child>text {
+  color: #7c7c7c;
+}
+
+.payStyle {
+  background-color: #fff;
+  margin-bottom: 20rpx;
+  padding-left: 20rpx;
+}
+
+.payStyle .number:first-child {
+  border-bottom: 1rpx solid #dadada;
+  padding: 0 0 20rpx 0;
+  margin-bottom: 0;
+}
+
+.payStyle .number:last-child {
+  padding: 20rpx 0;
+}
+
+.payStyle .number:last-child>view>text {
+  color: #a5404e;
+}
+
+.aftersale{
+  font-size: 26rpx;
+  /* width: 200rpx; */
+  /* margin-left: 4rpx; */
+  background-color: #fff;
+  border: 1rpx solid #f4f4f4;
+  padding: 0 20rpx;
+  line-height: 2;
+}

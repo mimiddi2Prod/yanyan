@@ -1,0 +1,16 @@
+<!--pages/my/coupon/coupon.wxml-->
+<!-- <view class="card {{item.canUseCoupon ? 'cbg' : 'nbg'}}" wx:for="{{cardList}}" wx:key="*this" bindtap="selectCard" data-id="{{item.id}}" data-canuse="{{item.canUseCoupon}}"> -->
+<view class="card cbg" wx:for="{{cardList}}" wx:key="*this" bindtap="selectCard" data-id="{{item.id}}">
+  <view class="content">
+    <image class="logo" src="{{item.cash.base_info.logo_url}}"></image>
+    <view>
+      <view>{{item.cash.base_info.brand_name}}</view>
+      <view>{{item.cash.base_info.title}}</view>
+    </view>
+  </view>
+  <view class="other content">
+    <view>{{item.begin_time}} ~ {{item.end_time}}</view>
+    <!-- <view>{{item.canUseCoupon ? '可用' : '不满足使用条件'}}</view> -->
+    <view>去使用</view>
+  </view>
+</view>

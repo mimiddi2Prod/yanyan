@@ -1,0 +1,83 @@
+<!--pages/my/afterSale/goodsDetail.wxml-->
+<view class="address">
+  <view>
+    <text>bungee gum</text>
+    <text>130****7913</text>
+  </view>
+  <text>福建省厦门市集美啥啥啥啥啥的</text>
+</view>
+
+<view class="goodsInfo">
+  <view>
+    <text>包裹1</text>
+    <text>待发货</text>
+  </view>
+
+  <view>
+    <image class="goods-img" src="/images/tupian.png" mode="cover"></image>
+    <view class="goods-name">
+      <view>
+        <view>
+          <text>3盒/提 谷风一木3层硬抽面纸巾</text>
+          <text>x1</text>
+        </view>
+        <text>3盒/提</text>
+      </view>
+
+      <view>
+        <view>
+          <view>
+            <text>￥8.80</text>
+            <view class="del-line">
+              <view></view>
+              <text>￥18.90</text>
+            </view>
+          </view>
+          <view>
+            <navigator url="saleType">
+              <button class="aftersale" hover-class='none'>退换</button>
+            </navigator>
+          </view>
+        </view>
+
+      </view>
+    </view>
+  </view>
+</view>
+
+<view class="number">
+  <view>
+    <text>订单编号:</text>
+    <text>下单时间:</text>
+
+  </view>
+
+  <view>
+    <text>79844546</text>
+    <text>2019-02-26 14:00:15</text>
+  </view>
+</view>
+
+<view class="payStyle">
+  <view class="number">
+    <view>
+      <text>支付方式:</text>
+      <text>商品合计:</text>
+      <text>运费:</text>
+    </view>
+    <view>
+      <text>微信</text>
+      <text>￥8.80</text>
+      <text>￥0.00</text>
+    </view>
+  </view>
+  <view class="number">
+    <view>
+      <text>实付:</text>
+    </view>
+    <view>
+      <text>￥8.80</text>
+    </view>
+  </view>
+
+</view>

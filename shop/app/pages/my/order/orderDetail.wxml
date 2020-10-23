@@ -1,0 +1,115 @@
+<!--pages/my/order/orderDetail.wxml-->
+<!-- <view class="modal" catchtouchmove="ture" wx:if="{{showModal}}">
+  <view class="modal-bg"></view>
+  <view class="modal-container" style="top:{{winTop}}rpx">
+    <view class="modal-banner">
+      <image src="{{image}}" mode="aspectFill" bindtap="getCouponCard"></image>
+    </view>
+    <image src="../../../images/icon_close.png" mode="cover" bindtap='showModal'></image>
+  </view>
+</view> -->
+
+<view class="address">
+  <view>
+    <text>{{orderDetail.receiver}}</text>
+    <text>{{orderDetail.tel}}</text>
+  </view>
+  <text>{{orderDetail.address_text}}</text>
+</view>
+
+<view class="goodsInfo">
+  <view>
+    <text>包裹</text>
+    <text wx:if="{{orderDetail.state == 0}}">{{orderDetail.payInterval ? '等待付款' + orderDetail.payInterval : '订单已关闭'}}</text>
+    <text wx:if="{{orderDetail.state != 0 && orderDetail.after_sale_state == 0}}">{{orderDetail.state == -1 ? '已取消' : ''}}{{orderDetail.state == 1 ? '待发货' : ''}}{{orderDetail.state == 2 ? '待收货' : ''}}{{orderDetail.state == 3 ? '待评价' : ''}}{{orderDetail.state == 4 ? '已完成' : ''}}</text>
+    <text wx:if="{{orderDetail.after_sale_state != 0}}">{{orderDetail.after_sale_state == 1 ? '退款中' : ''}}{{orderDetail.after_sale_state == 2 ? '退货退款中' : ''}}{{orderDetail.after_sale_state == 3 ? '换货中' : ''}}{{orderDetail.after_sale_state == 4 ? '已退款' : ''}}{{orderDetail.after_sale_state == 5 ? '已退货退款'
+      : ''}}{{orderDetail.after_sale_state == 6 ? '已换货' : ''}}{{orderDetail.after_sale_state == 7 ? '已拒绝' : ''}}</text>
+    <!-- <text wx:else></text> -->
+  </view>
+
+  <block wx:for="{{orderDetail.goodsList}}">
+    <view class="info">
+      <!-- <block> -->
+      <!-- <image class="goods-img" src="{{item.image}}?imageView2/0/w/300/h/300" mode="aspectFill" bindtap='showImg' data-image='{{item.image}}'></image> -->
+      <image class="goods-img" wx:for="{{orderDetail.imageList}}" wx:for-item="imgItem" wx:for-index="imgIndex" wx:if="{{imgIndex == index}}" src="{{imgItem}}" mode="aspectFill" bindtap='showImg' data-image='{{item.image}}'></image>
+      <view class="goods-name">
+        <view>
+          <view>
+            <text>{{item.goodsname}}</text>
+            <text>x{{item.number}}</text>
+          </view>
+          <!-- <text>{{orderDetail.param_1}}，{{orderDetail.param_2}}</text> -->
+        </view>
+        <view>
+          <view>
+            <view>
+              <text><text style="font-size:22rpx">￥</text>{{item.single_price}}</text>
+            </view>
+            <view>
+              <navigator url="../afterSale/saleType" wx:if="{{isAfterSale}}">
+                <button class="aftersale" hover-class='none'>退换</button>
+              </navigator>
+            </view>
+          </view>
+
+        </view>
+
+
+      </view>
+
+    </view>
+  </block>
+</view>
+
+
+<view class="number">
+  <view>
+    <text>订单编号:</text>
+    <text>下单时间:</text>
+
+  </view>
+
+  <view>
+    <text>{{orderDetail.tradeId}}</text>
+    <text>{{orderDetail.create_time}}</text>
+  </view>
+</view>
+
+<view class="payStyle">
+  <view class="number">
+    <view>
+      <text>商品合计:</text>
+      <text>配送费:</text>
+      <text wx:if="{{orderDetail.card}}">优惠券:</text>
+    </view>
+    <view>
+      <text><text style="font-size:16rpx">￥</text>{{orderDetail.total_price}}</text>
+      <text><text style="font-size:16rpx">￥</text>{{orderDetail.postage}}</text>
+      <text wx:if="{{orderDetail.card}}">{{orderDetail.card.info.cash.base_info.title}}</text>
+    </view>
+  </view>
+  <view class="number">
+    <view>
+      <text>总计:</text>
+    </view>
+    <view>
+      <text><text style="font-size:16rpx">￥</text>{{orderDetail.pay_price}}</text>
+    </view>
+  </view>
+</view>
+
+<button class="pay" bindtap='toPayOrder' wx:if="{{orderDetail.state == 0 && orderDetail.payInterval}}">支付</button>
+
+<view class='dialog-login' wx:if="{{showPayMethodDialog}}">
+  <view class='dialog-body' catchtap='onDialogBody'>
+    <view class='title'>请选择支付方式</view>
+    <view class='content'>
+      <!-- <button bindtap="wxPay">微信支付</button>
+      <button bindtap="balancePay">积分支付</button> -->
+      <button bindtap="checkStock" data-pay="0">微信支付</button>
+      <button bindtap="checkStock" data-pay="1">积分支付</button>
+      <button bindtap='payDialog'>取消</button>
+      <!-- <button open-type="getUserInfo" lang="zh_CN" bindgetuserinfo="onWechatLogin">手机号登录</button> -->
+    </view>
+  </view>
+</view>

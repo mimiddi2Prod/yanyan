@@ -1,0 +1,121 @@
+<!--pages/panic/panic.wxml-->
+<!-- <view style="margin:0"> -->
+<view class="pg">
+  <image class="top-img" src="/images/panic.jpg" style="width:750rpx;display:flex" mode="widthFix"></image>
+  <!-- </view> -->
+  <view class="title {{appear ? 'title-top' : ''}}">
+    <view class="a-section a-topic" wx:if="{{panicBuying.length > 0 && item.isPanic}}" wx:for="{{panicBuying}}" wx:for-index="index" wx:for-item="item" wx:key="*this" bindtap="scroll" data-index="{{index}}">
+      <view class="h {{index == 0 && index==tag ? 'sanjiao' : ''}} {{index != 0 && index==tag ? 'sanjiao-time' : ''}}" wx:if="{{item.isPanic}}">
+        <view class="txt" wx:if="{{item.time}}"><view>距离结束</view><view>{{item.time}}</view></view>
+        <view class="txt" wx:else><view>{{item.start_time}}</view><view>即将开始</view></view>
+      </view>
+    </view>
+  </view>
+
+  <view class="not-list" wx:if="{{!panicBuying.length}}">
+    <!-- <view>图</view>
+    <view>图</view>
+    <view>图</view>
+    <view>图</view>
+    <view>图</view> -->
+    <image src="/images/pend.png" mode="aspectFill"></image>
+  </view>
+
+  <view class="a-section a-topic" style="margin-top:{{appear ? '100rpx' : ''}}" wx:if="{{panicBuying.length > 0}}" wx:for="{{panicBuying}}" wx:for-index="index" wx:for-item="item" wx:key="*this">
+    <view class="b" wx:if="{{item.isPanic && index == tag}}">
+      <!-- <scroll-view scroll-x="true" class="list">
+      <view class="item" wx:for="{{item.list}}" wx:for-index="lindex" wx:for-item="litem" wx:key="{{litem.id}}">
+        <navigator url="../goods/goods?id={{litem.id}}" hover-class="none">
+          <image class="img" src="{{litem.image[0]}}" mode="aspectFill"></image>
+          <view class="np" catchtap="addToCart" data-id="{{litem.id}}">
+            <text class="name">{{litem.name}}</text>
+            <text class="price">原价￥{{litem.price}}元</text>
+            <text class="price">抢购价￥{{litem.panic_buying_price}}元</text>
+          </view>
+          <text class="desc">{{litem.subtitle}}</text>
+        </navigator>
+      </view>
+    </scroll-view> -->
+      <!-- <view wx:for="{{item.list}}" wx:for-index="lindex" wx:for-item="litem" wx:key="{{litem.id}}">
+      <image class="img" src="{{litem.image[0]}}" mode="aspectFill"></image>
+      <view class="np" catchtap="addToCart" data-id="{{litem.id}}">
+        <text class="name">{{litem.name}}</text>
+        <text class="price">原价￥{{litem.price}}元</text>
+        <text class="price">抢购价￥{{litem.panic_buying_price}}元</text>
+      </view>
+      <text class="desc">{{litem.subtitle}}</text>
+    </view> -->
+
+
+      <view class="good-grid">
+        <view class="bb">
+          <block wx:for="{{item.list}}" wx:for-index="lindex" wx:for-item="litem" wx:key="{{litem.id}}">
+            <navigator url="../goods/goods?id={{litem.id}}" class="itemm" hover-class="none">
+              <image class="label" wx:if="{{litem.label}}" src="{{litem.label[0]}}" mode="aspectFit" lazy-load="true"></image>
+              <image class="imgg" src="{{litem.image[0]}}" mode="aspectFit" lazy-load="true"></image>
+              <view class="namee">{{litem.name}}</view>
+              <!-- <view class="descc">{{litem.describe}}</view> -->
+              <view class="descc">
+                <text style="font-size:20rpx;color:red;border-radius:12rpx;margin-right:10rpx;">{{index == 0 ? '限时' : '即将开抢'}}</text>
+                <text style="text-decoration: line-through;"><text style="font-size:16rpx">￥</text>{{litem.price}}</text>
+              </view>
+              <view wx:if="{{item.time}}" class="pricee" catchtap="addToCart" data-id="{{litem.id}}">
+                <text><text style="font-size:22rpx">￥</text>{{litem.panic_buying_price}}</text>
+                <text>立即购买</text>
+              </view>
+              <view wx:if="{{!item.time}}" class="pricee">
+                <text><text style="font-size:22rpx">￥</text>{{litem.panic_buying_price}}</text>
+                <text>即将开抢</text>
+              </view>
+            </navigator>
+          </block>
+        </view>
+
+      </view>
+    </view>
+  </view>
+
+  <!-- <view class="a-section a-topic" wx:if="{{panicBuying.length > 0}}" wx:for="{{panicBuying}}" wx:for-index="index" wx:for-item="item" wx:key="*this">
+  <view class="h" wx:if="{{item.isPanic}}">
+    <view>
+      <text class="txt" wx:if="{{item.time}}">正在抢购{{item.time}}</text>
+      <text class="txt" wx:else>{{item.start_time}}开始</text>
+    </view>
+  </view>
+  <view class="b" wx:if="{{item.isPanic}}">
+    <scroll-view scroll-x="true" class="list">
+      <view class="item" wx:for="{{item.list}}" wx:for-index="lindex" wx:for-item="litem" wx:key="{{litem.id}}">
+        <navigator url="../goods/goods?id={{litem.id}}" hover-class="none">
+          <image class="img" src="{{litem.image[0]}}" mode="aspectFill"></image>
+          <view class="np" catchtap="addToCart" data-id="{{litem.id}}">
+            <text class="name">{{litem.name}}</text>
+            <text class="price">原价￥{{litem.price}}元</text>
+            <text class="price">抢购价￥{{litem.panic_buying_price}}元</text>
+          </view>
+          <text class="desc">{{litem.subtitle}}</text>
+        </navigator>
+      </view>
+    </scroll-view>
+  </view>
+</view> -->
+<view class="warmText">
+    <text>没有更多数据了~</text>
+  </view>
+</view>
+<view class='dialog-login' wx:if="{{showLoginDialog}}">
+  <view class='dialog-body'>
+    <view class='title'>请登录以获取更好的服务</view>
+    <view class='contents'>
+      <button type="primary" open-type="getUserInfo" bindgetuserinfo="getUserInfo">微信登录</button>
+      <button bindtap='loginDialog'>取消</button>
+    </view>
+  </view>
+</view>
+
+<!-- 悬浮购物车 -->
+<navigator class="footer" hover-class="none" url="../cart/cart" open-type="switchTab">
+  <view class="footer-icon">
+    <image class="cart-icon" src="/images/shop-nor.png"></image>
+    <view wx:if="{{checkedAllNumber > 0}}">{{checkedAllNumber}}</view>
+  </view>
+</navigator>

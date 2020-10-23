@@ -1,0 +1,25 @@
+<!--pages/couponCard/couponCard.wxml-->
+<!-- <view wx:for="{{cardList}}" wx:key="*this" bindtap="selectCard" data-id="{{item.id}}" data-canuse="{{item.canUseCoupon}}">
+  <view>满{{item.least_cost}}减{{item.reduce_cost}}代金券</view>
+  <view>有效期：{{item.begin_time}} ~ {{item.end_time}}</view>
+  <view>{{item.canUseCoupon ? '可选' : '不可选'}}</view>
+</view> -->
+
+<view class="card {{item.canUseCoupon ? 'cbg' : 'nbg'}}" wx:for="{{cardList}}" wx:key="*this" bindtap="selectCard" data-id="{{item.id}}" data-canuse="{{item.canUseCoupon}}">
+  <view class="content">
+    <image class="logo" src="{{item.cash.base_info.logo_url}}"></image>
+    <view>
+      <view>{{item.cash.base_info.brand_name}}</view>
+      <view>{{item.cash.base_info.title}}</view>
+    </view>
+  </view>
+  <view class="other content">
+    <view>{{item.begin_time}} ~ {{item.end_time}}</view>
+    <!-- <view wx:else>已过期</view> -->
+    <view>{{item.canUseCoupon ? '可用' : '不满足使用条件'}}</view>
+
+    <!-- <view wx:if="{{item.isExpireCoupon}}">已过期</view>
+    <view wx:elif="{{item.canUseCoupon}}">可用</view>
+    <view wx:else>不满足使用条件</view> -->
+  </view>
+</view>

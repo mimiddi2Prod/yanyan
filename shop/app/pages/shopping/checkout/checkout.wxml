@@ -1,0 +1,149 @@
+<!--pages/shopping/checkout/checkout.wxml-->
+<view class="container">
+  <view class="address-box">
+    <view class="address-item" bindtap="selectAddress" wx:if="{{checkedAddress.id}}">
+      <view class="l">
+        <text class="name">{{checkedAddress.name}}</text>
+        <text class="default" wx:if="{{checkedAddress.isDefault}}">默认</text>
+      </view>
+      <view class="m">
+        <text class="mobile">{{checkedAddress.mobile}}</text>
+        <text class="address">{{checkedAddress.full_region + checkedAddress.address}}</text>
+      </view>
+      <view class="r">
+        <image src="../../../images/address_right.png"></image>
+      </view>
+    </view>
+    <view class="address-item address-empty" bindtap="addAddress" wx:if="{{!checkedAddress.id}}">
+      <view class="m">
+        还没有收货地址，去添加
+      </view>
+      <view class="r">
+        <image src="../../../images/address_right.png"></image>
+      </view>
+    </view>
+  </view>
+
+  <view class="coupon-box" bindtap="toCouponCard">
+    <view class="coupon-item">
+      <view class="l">
+        <text class="name" wx:if="{{cardList.length > 0}}">{{selectCard.id ? '满'+selectCard.least_cost+'减'+selectCard.reduce_cost+'代金券' : '请选择优惠券'}}</text>
+        <text class="name" wx:if="{{cardList.length <= 0}}">当前无优惠券</text>
+        <text class="txt" wx:if="{{!selectCard.id}}">{{cardList.length}}张</text>
+      </view>
+      <view class="r">
+        <image src="../../../images/address_right.png"></image>
+      </view>
+    </view>
+  </view>
+
+  <view class="order-box">
+    <view class="order-item">
+      <view class="l">
+        <text class="name">商品合计</text>
+      </view>
+      <view class="r">
+        <text class="txt"><text style="font-size:22rpx">￥</text>{{goodsTotalPrice}}</text>
+      </view>
+    </view>
+    <view class="order-item">
+      <view class="l">
+        <text class="name">运费（满{{free_delivery_fee}}免配送费，配送费{{delivery_fee}}）</text>
+      </view>
+      <view class="r">
+        <text class="txt"><text style="font-size:22rpx">￥</text>{{freightPrice}}</text>
+      </view>
+    </view>
+    <view class="order-item" wx:if="{{reduce_cost}}">
+      <view class="l">
+        <text class="name">优惠券</text>
+      </view>
+      <view class="r">
+        <text class="txt">-<text style="font-size:18rpx">￥</text>{{reduce_cost}}</text>
+      </view>
+    </view>
+    <!-- <view class="order-item no-border">
+            <view class="l">
+                <text class="name">优惠券</text>
+            </view>
+            <view class="r">
+                <text class="txt">-￥{{couponPrice}}</text>
+            </view>
+        </view> -->
+  </view>
+
+  <view class="goods-items">
+    <view class="item" wx:for="{{checkedGoodsList}}" wx:key="{{item.id}}">
+      <view class="img">
+        <image src="{{item.imageC}}" mode="aspectFit"></image>
+      </view>
+      <view class="info">
+        <view>
+          <view class="t">
+            <text class="name">{{item.name}}</text>
+            <text class="number">x{{item.number}}</text>
+          </view>
+          <!-- <view class="m">
+            <text style="margin-right:10rpx;">{{item.param_1}}</text>
+            <text>{{item.param_2}}</text>
+          </view> -->
+        </view>
+        <view class="b" wx:if="{{item.isPanic}}">抢购价<text style="font-size:22rpx">￥</text>{{item.panic_buying_price}}</view>
+        <view class="b" wx:else><text style="font-size:22rpx">￥</text>{{item.price}}</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="desc">
+    <!-- <view>{{saleType == 2 ? '换货' : '退款'}}说明：</view> -->
+    <textarea placeholder='如果您有什么特殊要求,请在此处填入' style="min-height:120rpx;" auto-height="true" bindinput='getNote'></textarea>
+  </view>
+
+  <view style="opacity: 0;height:106rpx">
+    1
+  </view>
+  <!-- <view class="order-box">
+    <view class="order-item">
+      <view class="l">
+        <text class="name">可得积分</text>
+      </view>
+      <view class="r">
+        <text class="txt">{{getIntegral}}</text>
+      </view>
+    </view>
+  </view> -->
+
+  <view class="order-box" wx:if="{{costIntegral > 0}}">
+    <view class="order-item">
+      <view class="l">
+        <text class="name">花费积分</text>
+      </view>
+      <view class="r">
+        <text class="txt">{{costIntegral}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- <view wx:for="{{cardList}}" wx:key="*this">
+    满{{item.least_cost}}减{{item.reduce_cost}}
+  </view> -->
+
+  <cover-view class="order-total">
+    <cover-view class="l">实付：<text style="font-size:22rpx">￥</text>{{actualPrice}}</cover-view>
+    <cover-view class="r" bindtap="submitOrder">去付款</cover-view>
+  </cover-view>
+</view>
+
+<cover-view class='dialog-login' wx:if="{{showPayMethodDialog}}">
+  <cover-view class='dialog-body'>
+    <cover-view class='title'>请选择支付方式</cover-view>
+    <cover-view class='content'>
+      <!-- <button bindtap="wxPay">微信支付</button>
+      <button bindtap="balancePay">余额支付</button> -->
+      <button bindtap="checkStock" data-pay="0">微信支付</button>
+      <button bindtap="checkStock" data-pay="1">积分支付</button>
+      <button bindtap='payDialog'>取消</button>
+      <!-- <button open-type="getUserInfo" lang="zh_CN" bindgetuserinfo="onWechatLogin">手机号登录</button> -->
+    </cover-view>
+  </cover-view>
+</cover-view>

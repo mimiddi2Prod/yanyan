@@ -1,0 +1,174 @@
+<!--pages/my/afterSale/saleDesc.wxml-->
+<view style="min-height:{{winHeight}}rpx;">
+
+  <view class="goods">
+    <image src='{{orderDetail.imageO}}' mode="aspectFill"></image>
+    <view>
+      <view>{{orderDetail.name}}</view>
+      <!-- <view>{{orderDetail.param_1}}，{{orderDetail.param_2}}</view> -->
+    </view>
+  </view>
+
+  <!-- 退款 -->
+  <view class="item-view" wx:if="{{saleType == 0}}">
+    <!-- 选择器1 -->
+    <view class="item" style="border-bottom: 1rpx solid #ddd;">
+      <picker class="picker" mode="selector" range="{{goodsStatusList}}" bindchange="goodsStatus" value="{{goodsStatus}}">
+        <view class="a">
+          <view class="item-name">
+            <!-- <image src="{{item.image}}"></image> -->
+            <text>货物状态</text>
+          </view>
+          <view class="item-sel">
+            <view wx:if="{{!goodsStatus}}" space='ensp' style="color:#808080">请选择</view>
+            <view wx:else>
+              <text space='ensp'>{{goodsStatus}} </text>
+            </view>
+            <image class="item-go" src="/images/address_right.png"></image>
+          </view>
+        </view>
+      </picker>
+    </view>
+    <!-- 选择器1 -->
+
+    <!-- 选择器2 -->
+    <view class="item">
+      <picker class="picker" mode="selector" range='{{refundReasonList}}' bindchange="refundReason" value="{{refundReason}}" wx:if="{{goodsStatus}}">
+        <view class="a">
+          <view class="item-name">
+            <!-- <image src="{{item.image}}"></image> -->
+            <text>退款原因</text>
+          </view>
+          <view class="item-sel">
+            <view wx:if="{{!refundReason}}" space='ensp' style="color:#808080">请选择</view>
+            <view wx:else>
+              <text space='ensp'>{{refundReason}} </text>
+            </view>
+            <image class="item-go" src="/images/address_right.png"></image>
+          </view>
+        </view>
+      </picker>
+
+      <view class="picker" wx:else>
+        <view class="a">
+          <view class="item-name">
+            <text>退款原因</text>
+          </view>
+          <view class="item-sel">
+            <view space='ensp' style="color:#808080">请选择</view>
+            <image class="item-go" src="/images/address_right.png"></image>
+          </view>
+        </view>
+      </view>
+    </view>
+    <!-- 选择器2 -->
+  </view>
+  <!-- 退款 -->
+
+  <!-- 退货退款 -->
+  <view class="item-view" wx:if="{{saleType == 1}}">
+    <view class="item">
+      <picker class="picker" mode="selector" range='{{refundReasonList}}' bindchange="refundReason" value="{{refundReason}}">
+        <view class="a">
+          <view class="item-name">
+            <text>退款原因</text>
+          </view>
+          <view class="item-sel">
+            <view wx:if="{{!refundReason}}" space='ensp' style="color:#808080">请选择</view>
+            <view wx:else>
+              <text space='ensp'>{{refundReason}} </text>
+            </view>
+            <image class="item-go" src="/images/address_right.png"></image>
+          </view>
+        </view>
+      </picker>
+    </view>
+  </view>
+  <!-- 退货退款 -->
+
+  <!-- 换货 -->
+  <view class="item-view" wx:if="{{saleType == 2}}">
+    <view class="item">
+      <picker class="picker" mode="selector" range='{{exchangeList}}' value="{{exchange}}">
+        <view class="a">
+          <view class="item-name">
+            <text>换货原因</text>
+          </view>
+          <view class="item-sel">
+            <view>
+              <text space='ensp'>{{exchange}} </text>
+            </view>
+            <image class="item-go" src="/images/address_right.png"></image>
+          </view>
+        </view>
+      </picker>
+    </view>
+  </view>
+  <!-- 换货 -->
+
+  <view class="item-view exchange" wx:if="{{saleType == 2}}" bindtap='toChooseAddress'>
+    <view class="exchange-index">换货地址</view>
+    <view class="exchange-item item-name">
+      <view class="address">
+        <view class="name">
+          <view>{{address.receiver}}</view>
+          <view>{{address.tel}}</view>
+        </view>
+        <view>{{address.address_text}}</view>
+      </view>
+      <image class="item-go" style="margin-right:0" src="/images/address_right.png"></image>
+    </view>
+  </view>
+
+  <view class="numbers">
+    <view>
+      <view>商品件数</view>
+      <view class="selnum">
+        <view class="cut" bindtap="cutNumber">-</view>
+        <input value="{{goodsNumber}}" class="number" disabled="true" type="number" />
+        <view class="add" bindtap="addNumber">+</view>
+      </view>
+    </view>
+    <!-- <view style='margin-bottom:0'>最多可退{{orderDetail.number}}件，商品全退才包含邮费</view> -->
+  </view>
+
+
+  <view class="money" wx:if="{{saleType != 2}}">
+    <view>退款金额：
+      <text><text style="font-size:22rpx">￥</text>{{refund}}</text>
+    </view>
+    <!-- <view>最多￥{{total_price}}，含发货邮费￥{{orderDetail.postage}}</view> -->
+    <view>最多<text style="font-size:22rpx">￥</text>{{total_price}}</view>
+  </view>
+
+  <view class="desc">
+    <view>{{saleType == 2 ? '换货' : '退款'}}说明：</view>
+    <textarea placeholder='选填' style="min-height:120rpx;" auto-height="true" bindinput='getDescription'></textarea>
+  </view>
+
+  <view class="loadImg">
+    <view>上传凭证</view>
+    <view class="border" bindtap='chooseImg'>
+      <em class="img-r abs"></em>
+      <em class="img-c abs"></em>
+    </view>
+
+    <image class="img" wx:for="{{imgList}}" wx:key="*this" src="{{item.tempFilePath}}" bindtap='delImg' data-index="{{index}}" mode="cover"></image>
+  </view>
+
+  <navigator url='policy' hover-class='none' style="width:100%;">
+    <button class="policy">退换政策</button>
+  </navigator>
+
+</view>
+
+<!-- <view style="height:80rpx;display:flex;flex-direction: row;align-items: center;width:100%;">
+  <navigator url='policy' hover-class='none' style="width:100%;">
+    <button class="policy">退换政策</button>
+  </navigator>
+</view> -->
+
+<!-- <navigator url='waitResult' hover-class='none'> -->
+<!-- <button class="submit" open-type='contact' bindtap='sumbit'>提交</button> 客服版 -->
+<button class="submit" bindtap='sumbit'>提交</button>
+<!-- </navigator> -->

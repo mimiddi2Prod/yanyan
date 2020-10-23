@@ -1,0 +1,32 @@
+<!--pages/my/customer.wxml-->
+<image class="banner" src="/images/banner.png" mode="widthFix"></image>
+
+<view class="title">
+  会员特权
+</view>
+<view class="card">
+  <view class='font28 tequan'>
+    会员价格-消费积分-专属折扣-充值赠送-更多特权
+  </view>
+</view>
+
+<view class="title">
+  会员规则
+</view>
+<view class="card">
+  <view class="font28">菜品会员价</view>
+  <view class="text">
+    可享受菜品会员价格
+  </view>
+  <view class='font28'>消费赠积分</view>
+  <view class="text">
+    每消费1元可获得1积分
+  </view>
+  <view class="font28">充值送余额</view>
+  <view class="text">
+    会员充值1000元,送100元;充值3000元;送500元;充值10000元,送2000元
+  </view>
+</view>
+
+<button wx:if="{{!isCustomer}}" class="btn_no_style" open-type="getPhoneNumber" bindgetphonenumber="getPhoneNumber" hover-class='none'>申请办理会员卡</button>
+<!-- <button wx:if="{{isCustomer}}" class="btn_no_style" hover-class='none'>您已经是会员了</button> -->

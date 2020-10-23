@@ -1,0 +1,94 @@
+<!--pages/my/order/orderDetail.wxml-->
+<view class="address">
+  <view>
+    <text>{{orderDetail.receiver}}</text>
+    <text>{{orderDetail.tel}}</text>
+  </view>
+  <text>{{orderDetail.address_text}}</text>
+</view>
+
+<view class="goodsInfo">
+  <view>
+    <text>包裹</text>
+    <text></text>
+    <!-- <text>{{orderDetail.state == 0 ? '待付款' : ''}}{{orderDetail.state == 1 ? '待发货' : ''}}{{orderDetail.state == 2 ? '待收货' : ''}}{{orderDetail.state == 3 ? '待评价' : ''}}</text> -->
+  </view>
+
+  <view>
+    <image class="goods-img" src="{{orderDetail.imageO}}" mode="aspectFill" bindtap='showImg' data-image='{{orderDetail.image}}'></image>
+    <view class="goods-name">
+      <view>
+        <view>
+          <text>{{orderDetail.name}}</text>
+          <text>x{{orderDetail.number}}</text>
+        </view>
+        <!-- <text>{{orderDetail.param_1}}，{{orderDetail.param_2}}</text> -->
+      </view>
+
+      <!-- <view>
+        <text>￥{{orderDetail.single_price}}</text> -->
+        <!-- <view class="del-line">
+          <view></view>
+          <text>￥18.90</text>
+        </view> -->
+      <!-- </view> -->
+
+       <view>
+        <view>
+          <view>
+            <text><text style="font-size:22rpx">￥</text>{{orderDetail.single_price}}</text>
+            <!-- <view class="del-line">
+              <view></view>
+              <text>￥18.90</text>
+            </view> -->
+          </view>
+          <view>
+            <navigator url="../afterSale/saleType" wx:if="{{isAfterSale}}">
+              <button class="aftersale" hover-class='none'>退换</button>
+            </navigator>
+          </view>
+        </view>
+
+      </view>
+
+
+    </view>
+  </view>
+</view>
+
+<view class="number">
+  <view>
+    <text>订单编号:</text>
+    <text>下单时间:</text>
+
+  </view>
+
+  <view>
+    <text>{{orderDetail.tradeId}}</text>
+    <text>{{orderDetail.create_time}}</text>
+  </view>
+</view>
+
+<view class="payStyle">
+  <view class="number">
+    <view>
+      <!-- <text>支付方式:</text> -->
+      <text>商品合计:</text>
+      <!-- <text>运费:</text> -->
+    </view>
+    <view>
+      <!-- <text>微信</text> -->
+      <text><text style="font-size:22rpx">￥</text>{{total_goods_price}}</text>
+      <!-- <text>￥{{orderDetail.postage}}</text> -->
+    </view>
+  </view>
+  <view class="number">
+    <view>
+      <text>总计:</text>
+    </view>
+    <view>
+      <text><text style="font-size:22rpx">￥</text>{{total_price}}</text>
+    </view>
+  </view>
+
+</view>

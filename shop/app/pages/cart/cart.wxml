@@ -1,0 +1,127 @@
+<!-- 模态框 catchtouchmove阻止弹窗后滚动穿透 -->
+<form bindsubmit="editGoodsNum">
+  <view class="modal" catchtouchmove="ture" wx:if="{{showModal}}">
+    <view class="modal-bg"></view>
+    <view class="modal-container">
+      <view class="modal-title">编辑商品数量</view>
+
+      <view class="modal-name">
+        <input placeholder='数量' type='number' name="goodsNum" bindinput="getEditNum" value="{{editNum}}"></input>
+      </view>
+
+      <button form-type='submit'>保存</button>
+
+      <image src="/images/clear_input.png" mode="cover" bindtap='showModal'></image>
+    </view>
+  </view>
+</form>
+<!-- 模态框 -->
+<view class="container">
+  <!-- <view class="service-policy">
+    <view class="item">30天无忧退货</view>
+    <view class="item">48小时快速退款</view>
+    <view class="item">满88元免邮费</view>
+  </view> -->
+  <view class="no-cart" wx:if="{{cartGoods.length <= 0}}">
+    <view class="c">
+      <image src="../../images/cart.png" mode="aspectFill"/>
+      <!-- <text>去添加点什么吧</text> -->
+    </view>
+  </view>
+  <view class="cart-view" wx:if="{{cartGoods.length > 0}}">
+    <view class="list">
+      <view class="group-item">
+        <view class="goods">
+          <view class="item {{isEditCart ? 'edit' : ''}}" wx:for="{{cartGoods}}" wx:key="*this" wx:if="{{item.stock >= 0}}">
+            <!-- <view class="checkbox {{item.checked ? 'checked' : ''}}" bindtap="checkedItem" data-item-index="{{index}}"> -->
+             <view class="checkbox" bindtap="checkedItem" data-item-index="{{index}}">
+              <image style="height: 34rpx;width: 34rpx;padding: 64rpx 22rpx" src="{{item.checked ? '/images/choose-active.png' : '/images/choose-nor.png'}}"></image>
+            </view>
+            <view class="cart-goods">
+              <image class="img" src="{{item.imageC}}" mode="aspectFit"></image>
+              <view class="info">
+                <view>
+                  <view class="t">
+                    <text class="name">{{item.name}}</text>
+                    <!-- <text class="num">x{{item.number}}</text> -->
+
+                  </view>
+                  <!-- <view class="t">
+                    <text class="param">{{item.param_1}}，{{item.param_2}}</text>
+                  </view> -->
+                  <!-- <view class="attr" wx:if="{{isEditCart}}">{{ isEditCart ? '已选择:' : ''}}{{item.goods_specifition_name_value}}</view> -->
+                </view>
+                <view class="b">
+                  <text class="price"><text style="font-size:16rpx">￥</text>{{item.price}}</text>
+                  <text class="price" wx:if="{{item.isPanic}}">抢购价<text style="font-size:16rpx">￥</text>{{item.panic_buying_price}}</text>
+                  <text class="price" wx:if="{{item.integral_price > 0}}">+{{item.integral_price}}积分</text>
+                  <view class="selnum">
+                    <view class="cut" bindtap="cutNumber" data-item-index="{{index}}">-</view>
+                    <input value="{{item.number}}" class="number" bindtap='showModal' disabled="true" data-item-index="{{index}}" type="number" />
+                    <view class="add" bindtap="addNumber" data-item-index="{{index}}">+</view>
+                  </view>
+                </view>
+              </view>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <!-- <view class="common-problem">
+        <view class="h">
+          <view class="line"></view>
+          <text class="title">常见问题</text>
+        </view>
+        <view class="b">
+          <view class="item" wx:for="{{issueList}}" wx:key="{{item.id}}">
+            <view class="question-box">
+              <text class="spot"></text>
+              <text class="question">{{item.question}}</text>
+            </view>
+            <view class="answer">
+              {{item.answer}}
+            </view>
+          </view>
+        </view>
+      </view> -->
+
+      <!--<view class="group-item">
+                <view class="header">
+                    <view class="promotion">
+                        <text class="tag">满赠</text>
+                        <text class="txt">再加26元, 3件赠1件蔓越莓干</text>
+                        <image class="icon" src="http://nos.netease.com/mailpub/hxm/yanxuan-wap/p/20150730/style/img/icon-normal/go-b67cb9718d.png"></image>
+                    </view>
+                    <view class="get">领赠品</view>                
+                </view>
+                <view class="goods">
+                    <view class="item">
+                        <view class="checkbox" ></view>
+                        <view class="cart-goods">
+                            <image class="img" src="http://yanxuan.nosdn.127.net/04e05e9de3a471b1f6479dd137b459a8.png"></image>
+                            <view class="info">
+                                <view class="t">
+                                    <text class="name">秋冬保暖加厚细羊毛被</text>
+                                    <text class="num">x1</text>
+                                </view>
+                                <view class="attr">220*240cm</view>
+                                <view class="b">
+                                    <text class="price">￥199.99</text>
+                                    <view class="open">优惠活动</view>
+                                </view>
+                            </view>
+                        </view>
+                    </view>
+                </view>
+            </view>-->
+    </view>
+    <view class="cart-bottom">
+      <view class="checkbox {{checkedAllStatus ? 'checked' : ''}}" bindtap="checkedAll">全选({{checkedAllNumber}})</view>
+      <view class="total"><text style="font-size:18rpx">{{!isEditCart ? '￥' : ''}}</text>{{!isEditCart ? checkedAllPrice : ''}}<text wx:if="{{checkedAllIntegralPrice}}"> + {{checkedAllIntegralPrice+'积分'}}</text></view>
+      <!-- <view class="delete" bindtap="editCart">{{!isEditCart ? '编辑' : '完成'}}</view> -->
+      <view class="delete" bindtap="deleteCart">删除</view>
+      <view class="checkout" bindtap="deleteCart" wx:if="{{isEditCart}}">删除所选</view>
+      <view class="checkout" bindtap="checkoutOrder" wx:if="{{!isEditCart}}">下单</view>
+    </view>
+  </view>
+</view>

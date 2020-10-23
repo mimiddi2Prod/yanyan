@@ -1,0 +1,10 @@
+<!--pages/blank/blank.wxml-->
+<!-- <image src="{{image}}" mode="widthFix"></image>
+<view class="text">{{text}}</view> -->
+
+<view class="top">
+  <view>{{text1}}</view>
+  {{text2}}
+</view>
+
+<image src="{{image}}" mode="widthFix"></image>

@@ -1,0 +1,24 @@
+/* pages/blank/blank.wxss */
+
+page {
+  background-color: #f2f2f2;
+}
+
+.top {
+  position: absolute;
+  margin-top: 36%;
+  z-index: 2;
+  text-align: center;
+  width: 100%;
+}
+
+.top > view {
+  margin-bottom: 8rpx;
+}
+
+image {
+  width: 100%;
+  position: absolute;
+  /* bottom: 0; */
+  top: 0;
+}

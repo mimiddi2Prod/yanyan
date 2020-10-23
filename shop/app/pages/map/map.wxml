@@ -1,0 +1,55 @@
+<!--pages/map/map.wxml-->
+<view class="row-center search">
+  <view class="row-center sl-city" bindtap="modal">
+    <view class="down">{{slcCity}}</view>
+    <image class="fold" src="{{foldImg}}"></image>
+  </view>
+  <view class="kw-view">
+    <input class="keyword" bindinput="Input"></input>
+  </view>
+</view>
+
+<view class="content" wx:if="{{modal}}" style="padding:80rpx 10rpx 0 10rpx">
+  <view wx:for="{{opCity}}" wx:key="*this" bindtap="getCity" data-city="{{item}}" style="padding:10rpx 0">{{item}}</view>
+</view>
+
+<view class="content" wx:else>
+  <!-- <view>
+    {{streetList.myLocation[0].title}} {{streetList.myLocation[0].address}}
+  </view> -->
+  <!-- <view wx:if="{{modal}}">
+    <view wx:for="{{opCity}}" wx:key="*this" bindtap="getCity" data-city="{{item}}">{{item}}</view>
+  </view> -->
+
+  <view>
+
+    <!-- <map id="myMap" style="width: 100%; height: 500px;" longitude="{{longitude}}" latitude="{{latitude}}" scale='16' subkey="{{subkey}}" markers="{{markers}}" bindregionchange="regionchange" setting="setting" bindtap="bindtap"></map> -->
+    <map id="myMap" longitude="{{longitude}}" latitude="{{latitude}}" scale='16' subkey="{{subkey}}" bindregionchange="regionchange" style="width:750rpx;height:600rpx;position:fixed;top:80rpx;"></map>
+    <image class="mapMarkerImg" src="/images/marker.png"></image>
+
+    <view wx:for="{{streetList}}" wx:key="*this" wx:if="{{!keyword}}" class="{{item.CanDeliver ? 'candeliver' : 'notdeliver'}}" bindtap="getLocation" data-candeliver="{{item.CanDeliver}}" data-location="{{item.location}}" data-adres="{{item.address}}" data-title="{{item.title}}">
+      <view wx:if="{{!index}}">
+        <!-- 当前： {{item.title}} {{item.address}} -->
+        当前： {{item.title}}
+        <!-- <view bindtap="location">重新定位</view> -->
+      </view>
+      <view wx:else>
+        <!-- 周围： {{item.title}} {{item.address}} -->
+        周围： {{item.title}}
+      </view>
+    </view>
+
+    <view class="{{item.CanDeliver ? 'candeliver' : 'notdeliver'}}" wx:if="{{keyword}}" wx:for="{{keywordList}}" wx:key="*this" bindtap="getLocation" data-candeliver="{{item.CanDeliver}}" data-location="{{item.location}}" data-adres="{{item.address}}" data-title="{{item.title}}">
+      {{item.title}} {{item.address}} 
+      <!-- 距离：{{item.distance/1000}}km 预估骑行时间：{{item.duration/60}}min -->
+    </view>
+  </view>
+
+  <view wx:for="{{mapList}}" bindtap="getLocation" data-location="{{item.location}}">
+    {{item.title}} {{item.address}} {{item.tel}}
+  </view>
+</view>
+
+<!-- <navigator url="../my/address" class="col-center address" hover-class="none">
+  <view>添加地址</view>
+</navigator> -->

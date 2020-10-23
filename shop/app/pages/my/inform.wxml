@@ -1,0 +1,17 @@
+<!--pages/my/inform.wxml-->
+<scroll-view scroll-y="true" scroll-top='{{scrolltop}}rpx'>
+  <view class="container" style="margin-bottom:{{marbBottom}};">
+    <view class="{{item.userType == 0 ? 'info' : 'info-reverse'}} {{index == messageList.length-1 ? 'myopacity' : ''}}" wx:for="{{messageList}}" wx:key="*this">
+    <!-- style="opacity:{{index == messageList.length-1 ? opacity : ''}}" -->
+      <image class="avatar" src='/images/tupian.png'></image>
+      <view class="content">
+        <text>{{item.content}}</text>
+      </view>
+    </view>
+  </view>
+</scroll-view>
+
+<view class="foot">
+  <input name="input" type='text' placeholder='请留言，工作人员将在24h内回复您' bindinput='getIpt' value="{{text}}"></input>
+  <button bindtap='submitIpt'>发送</button>
+</view>

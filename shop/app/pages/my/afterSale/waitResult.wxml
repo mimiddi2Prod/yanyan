@@ -1,0 +1,43 @@
+<!--pages/my/afterSale/waitResult.wxml-->
+<view class="resultDesc">
+  <view>
+    <text>请等待人员处理</text>
+  </view>
+  <view>
+    <text>还剩2天23时59分</text>
+  </view>
+</view>
+<view class="feedback">
+  <view class="a">您已成功发起退款申请，请耐心等待处理</view>
+  <view>
+    <rich-text nodes="<ul class='b'><li class='li'>商家同意处理巴拉巴拉</li><li>如果商家拒绝巴拉巴拉如果商家拒绝巴拉巴拉如果商家拒绝巴拉巴拉</li></ul>"></rich-text>
+  </view>
+  <view class="c">
+    <button>撤销申请</button>
+    <button>修改申请</button>
+  </view>
+</view>
+
+<view class="list">
+  <text>协商历史</text>
+  <image src='/images/address_right.png'></image>
+</view>
+
+<view class="list">
+  <text>运费险</text>
+  <image src='/images/address_right.png'></image>
+</view>
+
+<view class="goods-Info">
+  <view>退款信息</view>
+  <view class="goods">
+    <image src='/images/tupian.png'></image>
+    <text>[开新价]英国川宁Twinings仕女伯爵红茶巴拉巴拉</text>
+  </view>
+  <view>
+      <view>退款原因：发票问题</view>
+      <view>退款金额：￥23.23</view>
+      <view>申请时间：2019-2-21 15:18</view>
+      <view>退款编号：20151554155654125</view>
+  </view>
+</view>

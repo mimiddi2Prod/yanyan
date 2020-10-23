@@ -1,0 +1,51 @@
+/* pages/my/customer.wxss */
+page {
+  background-color: whitesmoke;
+}
+
+.banner {
+  width: 100%;
+  /* padding-top: 90rpx; */
+}
+
+.title {
+  margin: 30rpx 0 0 30rpx;
+}
+
+.card {
+  background-color: white;
+  border-radius: 24rpx;
+  margin: 30rpx;
+  padding: 30rpx;
+}
+
+.text {
+  color: #8B8B8B;
+  text-indent: 10rpx;
+  font-size: 26rpx;
+  margin: 6rpx 0;
+}
+
+.font28{
+  font-size: 28rpx;
+}
+
+.tequan{
+  text-align: center
+}
+
+button{
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
+
+.btn_no_style{
+  /* text-align: left; */
+  width: 100%;
+  border: 0;
+  padding: 0;
+  /* line-height:0; */
+  border-radius: 0;
+  line-height: 3
+}

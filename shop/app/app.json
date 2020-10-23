@@ -1,0 +1,94 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/brandDetail/brandDetail",
+    "pages/catalogTop/catalogTop",
+    "pages/catalog/catalog",
+    "pages/category/category",
+    "pages/cart/cart",
+    "pages/cart/goodsToCart",
+    "pages/my/my",
+    "pages/my/customer",
+    "pages/my/order/order",
+    "pages/my/order/orderDetail",
+    "pages/my/logistics",
+    "pages/my/address",
+    "pages/my/review",
+    "pages/my/inform",
+    "pages/my/integral",
+    "pages/my/afterSale/afterSale",
+    "pages/my/afterSale/goodsDetail",
+    "pages/my/afterSale/saleType",
+    "pages/my/afterSale/saleDesc",
+    "pages/my/afterSale/waitResult",
+    "pages/my/afterSale/policy",
+    "pages/payResult/payResult",
+    "pages/my/userAgreement",
+    "pages/goods/goods",
+    "pages/group_buy/group_buy",
+    "pages/search/search",
+    "pages/reviewList/reviewList",
+    "pages/shopping/checkout/checkout",
+    "pages/shopping/addressAdd/addressAdd",
+    "pages/location/location",
+    "pages/map/map",
+    "pages/panic/panic",
+    "pages/couponCard/couponCard",
+    "pages/my/afterSale/afterSaleDetail",
+    "pages/service/service",
+    "pages/service/info",
+    "pages/activity/activity",
+    "pages/share/share",
+    "pages/my/coupon/coupon"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTitleText": "岩岩到家",
+    "navigationBarTextStyle": "black",
+    "enablePullDownRefresh": true
+  },
+  "tabBar": {
+    "backgroundColor": "#FFF",
+    "borderStyle": "white",
+    "selectedColor": "#F5BF4C",
+    "color": "#000",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "iconPath": "images/shouye-nor.png",
+        "selectedIconPath": "images/shouye-active.png",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/catalogTop/catalogTop",
+        "iconPath": "images/fenlei-nor.png",
+        "selectedIconPath": "images/fenlei-active.png",
+        "text": "分类"
+      },
+      {
+        "pagePath": "pages/cart/cart",
+        "iconPath": "images/shop-nor.png",
+        "selectedIconPath": "images/shop-active.png",
+        "text": "购物车"
+      },
+      {
+        "pagePath": "pages/my/my",
+        "iconPath": "images/wode-nor.png",
+        "selectedIconPath": "images/wode-active.png",
+        "text": "我的"
+      }
+    ]
+  },
+  "networkTimeout": {
+    "request": 10000,
+    "downloadFile": 10000
+  },
+  "debug": true,
+  "sitemapLocation": "sitemap.json",
+  "permission": {
+    "scope.userLocation": {
+      "desc": "为了给您提供更好的服务，我们需要获取您的地理位置"
+    }
+  }
+}
