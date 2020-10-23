@@ -1,0 +1,20 @@
+{
+  "name": "yycentralcontrolsystem",
+  "version": "1.0.0",
+  "main": "CCSMain.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": {},
+  "dependencies": {
+    "js-sha1": "^0.6.0",
+    "koa": "^2.11.0",
+    "koa-bodyparser": "^4.2.1",
+    "koa-router": "^7.4.0",
+    "mysql": "^2.17.1",
+    "request": "^2.88.0",
+    "wechat-api": "^1.35.1"
+  }
+}
