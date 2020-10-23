@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1"> <!--适配移动端 -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <!-- <link rel="shortcut icon" href="favicon.ico" mce_href="./favicon.ico" type="image/x-icon"> -->
+
+    <title>index</title>
+    <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
+
+    <!--<script src="https://cdn.bootcss.com/jsencrypt/3.0.0-beta.1/jsencrypt.min.js"></script>-->
+    <script src="./rsa/jsencrypt.min.js"></script>
+    <script type="text/javascript" src="./node_modules/vue/dist/vue.min.js"></script>
+    <script type="text/javascript" src="./jquery-3.3.1/jquery-3.3.1.min.js"></script>
+    <link href="./bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <script type="text/javascript" src="./js/utils/apis.js"></script>
+
+    <script type="text/javascript" src="./js/utils/http.js"></script>
+
+    <link href="./css/index.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+<div class="container" id="login">
+
+    <div class="form-signin">
+        <!--    <h2 class="form-signin-heading">index</h2> -->
+        <img src="./images/logo.png" class="img-rounded">
+        <label for="inputUsername" class="sr-only">用户名</label>
+        <input type="text" v-model="username" id="inputUsername" class="form-control" placeholder="用户名" required
+               autofocus>
+        <label for="inputPassword" class="sr-only">密码</label>
+        <input type="password" v-model="password" id="inputPassword" class="form-control" placeholder="密码" required>
+
+        <button class="btn btn-lg btn-primary btn-block" id="enter" v-on:click="submit">登录</button>
+
+    </div>
+
+</div>
+
+<script type="text/javascript" src='./js/index.js'></script>
+</body>
+</html>

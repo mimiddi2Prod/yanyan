@@ -1,0 +1,92 @@
+label{
+    margin-bottom: 0;
+    font-weight:300;
+}
+
+.jumbotron{
+    background-color: #fff;
+    padding-left: 20px;
+    padding-right: 20px;
+    width: 100%;
+}
+
+.jumbotron .title{
+    margin-bottom: 10px;
+}
+
+@media (min-width: 768px) {
+    .item {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-around;
+    }
+}
+
+/*.item{*/
+    /*display: flex;*/
+    /*flex-direction: row;*/
+    /*align-items: center;*/
+    /*justify-content: space-around;*/
+/*}*/
+
+.home-title>nav{
+    padding: 20px;
+    background-color: #FB524E;
+    color:#fff;
+}
+
+.row-center{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.row{
+    display: flex;
+    flex-direction: row;
+}
+
+.column-center{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.column{
+    display: flex;
+    flex-direction: column;
+}
+
+.item .column-center>div:first:child{
+    margin-bottom: 20px;
+}
+
+.title>div{
+    width: 50px;
+}
+
+.title>div:nth-child(2n){
+    border-right: 1px solid #434343;
+}
+
+.title>div:first-child{
+    width: 100px;
+}
+
+.zhishu{
+    justify-content: space-around;
+}
+
+.zhishu>nav{
+    width: 24%;
+}
+
+.zhishu>nav .item{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+
+}

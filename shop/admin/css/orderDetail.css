@@ -1,0 +1,261 @@
+label{
+    margin-bottom: 0;
+    font-weight:300;
+}
+
+h2{
+    color:#C21C18;
+    margin: 10px 0;
+}
+
+.jumbotron{
+    background-color: #fff;
+    padding-left: 20px;
+    padding-right: 20px;
+    width: 100%;
+}
+
+.jumbotron .title{
+    margin-bottom: 40px;
+}
+
+.glyphicon {
+    top: 2px;
+}
+
+.container .jumbotron .title > h4 > span:first-child {
+    cursor: pointer;
+}
+
+.container .jumbotron .title > h4 > span:nth-child(2) {
+    font-size: 17px;
+    margin: 0 6px;
+}
+
+.item{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.item .item-title{
+    padding: 0 20px;
+}
+
+.item .item-title:first-child>span{
+    margin-right: 20px;
+}
+
+.item .item-title:last-child>span{
+    margin-left: 20px;
+}
+
+.order-title{
+    margin-top: 10px;
+    min-width: 900px;
+}
+
+.order-title>nav{
+    padding: 20px;
+}
+
+.order-title>.navbar-default:first-child{
+    background-color: #FEF3E2;
+}
+
+.select>form{
+    width: 10%;
+    display: inline-block;
+    margin-bottom: 20px;
+}
+
+.line{
+    display: inline-block;
+    border:1px solid #C4C4C4;
+    margin:0 6px;
+    width: 10px;
+}
+
+.btn-margin-right{
+    margin:0 20px 0 0;
+}
+
+.btn-margin-left{
+    margin:0 0 0 20px;
+}
+
+.nav-1{
+    margin-top: 10px;
+    min-width: 900px;
+    border-bottom: 1px solid #ddd;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.nav-1>ul{
+    width: 50%;
+}
+
+.nav-1>div{
+    width: 50%;
+    justify-content: flex-end;
+}
+
+.nav-1 .nav-tabs{
+    border-bottom:0;
+}
+
+.goods{
+    border: 1px solid #E4E4E4;
+    border-top: 0;
+    padding: 20px;
+    min-width: 900px;
+}
+
+.goods>div{
+    margin-bottom: 20px;
+}
+
+.goods>nav{
+    border: 0;
+    margin-bottom: 0;
+}
+
+.goods>div>nav{
+    border: 0;
+    margin-bottom: 0;
+}
+
+.goods>nav .item{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 50px;
+}
+
+.goods>div>nav .item{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 50px;
+}
+
+
+.first-title{
+    flex:5;
+}
+
+.second-title{
+    /*flex:3;*/
+    margin-left: 100px;
+}
+
+.third-title{
+    flex:2;
+}
+
+.have-border{
+    border-right: 1px solid #C6C6C6;
+}
+
+.operating-title{
+    flex:1;
+}
+
+.goods .goods-container{
+    /*padding: 20px 0 30px 0;*/
+    width: 100%;
+    /*border-bottom: 1px solid #EBEAEB;*/
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 10px;
+    /*align-items: center;*/
+}
+
+.goods .goods-container1{
+    padding: 20px 0 30px 0;
+    width: 100%;
+    border-bottom: 1px solid #EBEAEB;
+    display: flex;
+    flex-direction: row;
+    /*align-items: center;*/
+}
+
+.row-center{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.row{
+    display: flex;
+    flex-direction: row;
+    margin: 0;
+}
+
+.column-center{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.column{
+    display: flex;
+    flex-direction: column;
+}
+
+.column>div{
+    /*margin-left: 30px;*/
+}
+
+/*.column>div>span{*/
+/*margin-right: 10px;*/
+/*}*/
+
+/*.first-title>label .a{*/
+/*width: 20%;*/
+/*}*/
+
+/*.first-title>label .b{*/
+/*width: 60%;*/
+/*}*/
+
+.first-title>label .c{
+    /*width: 20%;*/
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.first-title>label .a>img{
+    width: 100px;
+    height: 100px;
+    margin-left: 30px;
+}
+
+.b{
+    padding-left: 20px;
+}
+
+.c{
+    text-align: center;
+}
+
+.afterSaleImg{
+    display: flex;
+    flex-direction: row;
+}
+.afterSaleImg .proof{
+    height: 100px;
+    width: 100px;
+    margin-right: 10px;
+    margin-left: 0;
+}
+
+.afterSaleImg .proof:hover{
+    width: 500px;
+    height: 500px;
+    transition-duration: 0.3s;
+}

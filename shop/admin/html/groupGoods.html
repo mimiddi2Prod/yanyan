@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!--适配移动端 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
+    <title>商品列表</title>
+    <script type="text/javascript" src="../node_modules/vue/dist/vue.min.js"></script>
+    <script type="text/javascript" src="../jquery-3.3.1/jquery-3.3.1.min.js"></script>
+    <!--<link rel="stylesheet" type="text/css"-->
+          <!--href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">-->
+    <link rel="stylesheet" type="text/css" href="../bootstrap/css/bootstrap.min.css">
+    <script type="text/javascript" src="../bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../layDate-v5.0.9/laydate/laydate.js"></script> <!--时间控件-->
+    <script type="text/javascript" src="../js/utils/apis.js"></script>
+    <script type="text/javascript" src="../js/utils/http.js"></script> <!--封装接口请求-->
+    <script type="text/javascript" src="../js/utils/formatTime.js"></script> <!--时间格式化-->
+    <!--<script type="text/javascript" src='https://unpkg.com/qiniu-js@2.5.3/dist/qiniu.min.js'></script> &lt;!&ndash;七牛云图片上传所需&ndash;&gt;-->
+    <script type="text/javascript" src="./../qiniu-js/qiniu.min.js"></script> <!--七牛云图片上传所需-->
+    <script type="text/javascript" src="../js/utils/qiniuUpload.js"></script> <!--封装的七牛云图片上传-->
+    <link href="../css/style.css" rel="stylesheet">
+    <link href="../css/menu.css" rel="stylesheet">
+    <link href="../css/groupGoods.css" rel="stylesheet">
+</head>
+
+<body>
+<div id="LoadMenu" class="left">
+    <load-menu></load-menu>
+</div>
+
+<div id="LoadVoice" style="position: fixed">
+    <load-voice></load-voice>
+</div>
+
+<div class="right">
+    <div class="jumbotron" id="group">
+        <div class="title item">
+            <h4>团购管理</h4>
+        </div>
+
+        <div class="nav-1">
+            <ul class="nav nav-tabs">
+                <li v-bind:class="(index == navId ? 'active' : '')" v-for="item,index in navList"
+                    v-on:click="changeNav(index)"><a href="javascript:;">{{item}}</a></li>
+            </ul>
+        </div>
+
+        <div class="goods">
+            <!-- 商品标题 -->
+            <nav class="navbar navbar-default" role="navigation">
+                <div class="item">
+                    <span class="first-title have-border column-center">商品描述</span>
+                    <span class="second-title have-border column-center">价格</span>
+                    <span class="second-title have-border column-center">预售量</span>
+                    <span class="second-title have-border column-center">库存</span>
+                    <span class="second-title have-border column-center" v-if="navId == 2">分类</span>
+                    <span class="second-title have-border column-center" v-if="navId == 2">创建时间</span>
+                    <span class="second-title have-border column-center" v-if="navId != 2">团购开始时间</span>
+                    <!--<span class="second-title have-border column-center" v-if="navTwoId == 1">购买积分</span>-->
+                    <span class="second-title have-border column-center" v-if="navId != 2">团购结束时间</span>
+                    <span class="second-title column-center">操作</span>
+                </div>
+            </nav>
+
+            <!-- 商品详情 -->
+            <div class="goods-container" v-for="item,index in goodsList">
+                <div class="m">
+                    <div class="first-title">
+                        <label class="form-check-label row-center">
+                            <div class="a" v-on:change="checkOne()">
+                                <!--<input type="checkbox" name="checkGoods" v-model="item.checked">-->
+                                <img :src="item.image[0]">
+                            </div>
+                            <div class="b">
+                                <span>{{item.name}}</span>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="second-title column-center">
+                        {{item.price}}
+                    </div>
+                    <div class="second-title column-center">
+                        {{item.volume}}
+                    </div>
+                    <div class="second-title column-center">
+                        {{item.total_stock}}
+                    </div>
+                    <div class="second-title column-center" v-if="navId == 2">
+                        {{item.category_name_1}}
+                    </div>
+                    <div class="second-title column-center" v-if="navId == 2">
+                        {{item.create_time}}
+                    </div>
+                    <div class="second-title column-center" v-if="navId != 2">
+                        {{item.start_time}}
+                    </div>
+                    <!--<div class="second-title column-center" v-if="navTwoId == 1">-->
+                    <!--{{item.integral_price}}-->
+                    <!--</div>-->
+                    <div class="second-title column-center" v-if="navId != 2">
+                        {{item.end_time}}
+                    </div>
+                    <div class="second-title column-center">
+                        <!--<button type="button" class="btn btn-link" v-on:click="changePage('goods-edit',item.id)">编辑</button>-->
+                        <button type="button" class="btn btn-link" v-on:click="isFounded(1,item.id)" v-if="navId == 0 && item.founded != -1">
+                            设为团购成功
+                        </button>
+                        <button type="button" class="btn btn-link" v-on:click="isFounded(-1,item.id)" v-if="navId == 0 && item.founded != -1">
+                            设为团购失败
+                        </button>
+                        <button type="button" class="btn btn-link" v-on:click="changePage('goods-group-refund',item.id)" v-if="navId == 0 && item.founded == -1 && item.refundNumber != item.volume">
+                            退款
+                        </button>
+                        <div v-if="navId == 0 && item.founded == -1 && item.refundNumber == item.volume">
+                            已全部退款
+                        </div>
+                        <button type="button" class="btn btn-link" v-on:click="addGroupBuy(item.id)" v-if="navId == 2"
+                                data-toggle="modal"
+                                data-target="#myModal">添加团购
+                        </button>
+                        <!--<button type="button" class="btn btn-link" v-on:click="changePage('goods-review',item.id)">评价-->
+                        <!--</button>-->
+                        <button type="button" class="btn btn-link" v-on:click="changeGoodsState(item.id,item.state)">
+                            {{item.state == 0 ? '下架' : '上架'}}
+                        </button>
+                    </div>
+                </div>
+                <div class="p borderBotm" v-if="item.param.length > 0">
+                    <div class="param" v-for="paramItem,paramIndex in item.param"
+                         :class="(paramIndex >= 2 && !item.showMoreParam ? 'none' : '')">
+                        <div style="text-align: end;flex:2">
+                            <span style="padding-right: 20px">{{paramItem.param_1}}，{{paramItem.param_2}}</span>
+                        </div>
+                        <div class="column-center" style="flex:1">
+                            {{paramItem.price}}
+                        </div>
+                        <div class="column-center" style="flex:1">
+                            {{paramItem.volume}}
+                        </div>
+                        <div class="column-center" style="flex:1">
+                            {{paramItem.stock}}
+                        </div>
+                    </div>
+                    <div class="param">
+                        <div style="text-align: center;flex:2">
+                        <span style="margin-left: 160px;color: #337ab7;cursor: pointer"
+                              v-on:click="showMoreParam(item.id)">{{item.showMoreParam ? '收起' : '查看更多'}}</span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+        <!-- 分页栏 -->
+        <ul class="pagination">
+            <li v-on:click="getPage(last_id-1 >= 0 ? last_id-1 : last_id)"><a href="javascript:;">&laquo;</a></li>
+            <li v-for="item,index in pageList" v-on:click="getPage(index)"
+                v-bind:class="(item == last_id+1 ? 'active' : '')"><a
+                    href="javascript:;">{{item}}</a></li>
+            <li v-on:click="getPage(last_id+1 < pageList[pageList.length-1] ? last_id+1 : last_id)"><a href="javascript:;">&raquo;</a>
+            </li>
+        </ul>
+
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title" id="title"></h4> <!--标题-->
+                    </div>
+                    <div class="modal-body" id="content">
+                        <span>选择团购开始时间</span><input type="text" class="form-control" id="start_time"
+                                                    style="width: auto;display: inline-block;" placeholder="选择团购开始时间">
+                        <span>选择团购结束时间</span><input type="text" class="form-control" id="end_time"
+                                                    style="width: auto;display: inline-block;" placeholder="选择团购结束时间">
+                    </div> <!--团购结束时间...-->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                        <button type="button" class="btn btn-primary" v-on:click="checkAddGroupBuy()">确定</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal -->
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="../js/voiceReminder.js"></script>
+<script type="text/javascript" src="../js/menu.js"></script>
+<script type="text/javascript" src="../js/groupGoods.js"></script>
+</body>
+</html>

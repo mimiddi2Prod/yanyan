@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!--适配移动端 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
+    <title>添加banner</title>
+    <script type="text/javascript" src="../node_modules/vue/dist/vue.min.js"></script>
+    <script type="text/javascript" src="../jquery-3.3.1/jquery-3.3.1.min.js"></script>
+    <!--<link rel="stylesheet" type="text/css"-->
+    <!--href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">-->
+    <link rel="stylesheet" type="text/css" href="../bootstrap/css/bootstrap.min.css">
+    <script type="text/javascript" src="../bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../layDate-v5.0.9/laydate/laydate.js"></script> <!--时间控件-->
+    <script type="text/javascript" src="../js/utils/apis.js"></script>
+    <script type="text/javascript" src="../js/utils/http.js"></script> <!--封装接口请求-->
+    <script type="text/javascript" src="../js/utils/formatTime.js"></script> <!--时间格式化-->
+    <!--<script type="text/javascript" src='https://unpkg.com/qiniu-js@2.5.3/dist/qiniu.min.js'></script> &lt;!&ndash;七牛云图片上传所需&ndash;&gt;-->
+    <script type="text/javascript" src="./../qiniu-js/qiniu.min.js"></script> <!--七牛云图片上传所需-->
+    <script type="text/javascript" src="../js/utils/qiniuUpload.js"></script> <!--封装的七牛云图片上传-->
+    <link href="../css/style.css" rel="stylesheet">
+    <link href="../css/menu.css" rel="stylesheet">
+    <link href="../css/addRecommend.css" rel="stylesheet">
+</head>
+
+<body>
+<div id="LoadMenu" class="left">
+    <load-menu></load-menu>
+</div>
+
+<div id="LoadVoice" style="position: fixed">
+    <load-voice></load-voice>
+</div>
+
+<div class="right">
+    <div class="jumbotron" id="addRecommend">
+        <!-- 类目 添加分类 -->
+        <div class="title row-center">
+            <h4><span v-on:click="window.location.href = 'recommend'">banner</span><span
+                    class="glyphicon glyphicon-menu-right"></span><span>添加banner</span></h4>
+        </div>
+
+        <!-- 添加商品信息分栏 -->
+        <!-- 基础信息 -->
+        <div class="subtitle">
+            <div>基础信息</div>
+
+            <div class="sort row-center">
+                <div class="index">跳转类型</div>
+                <div class="item">
+                    <div class="select">
+                        <form role="form">
+                            <div class="form-group">
+                                <!--<select class="form-control">-->
+                                <!--<option>弹窗型</option>-->
+                                <!--<option>轮播型</option>-->
+                                <!--</select>-->
+                                <select class="form-control" v-model="ad_type">
+                                    <option disabled="" value="" selected="selected">请选择广告类型</option>
+                                    <option v-for="item in adTypeList" v-bind:value="item.id">{{item.name}}</option>
+                                </select>
+                            </div>
+                        </form>
+                        <!--<form role="form">-->
+                        <!--<div class="form-group">-->
+                        <!--<select class="form-control">-->
+                        <!--<option>1</option>-->
+                        <!--<option>2</option>-->
+                        <!--<option>3</option>-->
+                        <!--<option>4</option>-->
+                        <!--<option>5</option>-->
+                        <!--</select>-->
+                        <!--</div>-->
+                        <!--</form>-->
+                    </div>
+
+                    <div class="text">(广告类型分为 -- 可关闭的弹窗型banner --- swiper轮播型banner)</div>
+                </div>
+            </div>
+
+            <div class="sort row-center">
+                <div class="index">广告图片</div>
+                <div class="item">
+                    <!--<div class="row-center">-->
+                    <!--<div class="goods-img">-->
+                    <!--<input id="inputImg" type="file" accept="image/*" v-model="img" v-on:change="getImg()"/>-->
+                    <!--<em class="img-r abs">&nbsp;</em>-->
+                    <!--<em class="img-c abs">&nbsp;</em>-->
+                    <!--</div>-->
+                    <!--<img :src='imgsrc' v-if="imgsrc">-->
+                    <!--</div>-->
+                    <div class="row-center">
+                        <div class="goods-img">
+                            <input id="inputImg" class="getImg" type="file" accept="image/*"
+                                   v-on:change="getImg('inputImg')"/> <!-- multiple能够选择多张图片 -->
+                            <em class="img-r abs">&nbsp;</em>
+                            <em class="img-c abs">&nbsp;</em>
+                        </div>
+                        <div class="imgShow" v-if="imageList.length > 0" v-for="item,index in imageList">
+                            <!--<input class="getImg" type="file" accept="image/*"/>-->
+                            <img class="imgSrc" :src='item.tempFilePath'>
+                            <img class="imgDel" src="/images/del.png" v-on:click="delImg(index)">
+                        </div>
+                    </div>
+                    <!--<div class="goods-img">-->
+                    <!--<input type="file" accept="image/*" v-model="img"/>-->
+                    <!--<em class="img-r abs">&nbsp;</em>-->
+                    <!--<em class="img-c abs">&nbsp;</em>-->
+                    <!--</div>-->
+                    <div class="text">建议：轮播型图片应为《长度大高度小》，弹窗型图片应为《长度小高度大》。</div>
+                </div>
+            </div>
+
+            <div class="sort row-center">
+                <div class="index">广告描述</div>
+                <div class="item"><input type="text" class="form-control" v-model="desc" name=""/></div>
+            </div>
+
+            <div class="sort row-center">
+                <div class="index">排序</div>
+                <div class="item"><input type="text" class="form-control" v-model="sort" name=""/></div>
+            </div>
+
+            <!--<div class="sort row-center">-->
+            <!--<div class="index">跳转类型</div>-->
+            <!--<div class="item">-->
+            <!--<div class="select">-->
+            <!--<form role="form">-->
+            <!--<div class="form-group">-->
+            <!--<select class="form-control">-->
+            <!--<option>页面内部跳转</option>-->
+            <!--<option>web-view</option>-->
+            <!--<option>关联小程序跳转</option>-->
+            <!--</select>-->
+            <!--</div>-->
+            <!--</form>-->
+            <!--</div>-->
+
+            <!--<div class="text">(先不选 将来可能用于跳转 &#45;&#45; 页面内部跳转 -&#45;&#45; web-view -&#45;&#45; 关联小程序跳转)</div>-->
+            <!--</div>-->
+            <!--</div>-->
+            <div class="sort row-center">
+                <div class="index">链接选择</div>
+                <div class="item">
+                    <div class="select">
+                        <form role="form">
+                            <div class="form-group">
+                                <select class="form-control" v-model="url_type" v-on:change="changeUrl">
+                                    <option disabled="" value="" selected="selected">请选择广告类型</option>
+                                    <option v-for="item in urlTypeList" v-bind:value="item.id">{{item.name}}</option>
+                                </select>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="text">(链接单个商品或跳转新页面展示多个商品)</div>
+                </div>
+            </div>
+
+            <!--<div class="sort row-center">-->
+            <!--<div class="index">内部链接</div>-->
+            <!--<div class="item"><input type="text" class="form-control" name="" placeholder="以后或许有用，现在先不用填"/></div>-->
+            <!--</div>-->
+            <div class="sort row-center" v-if="url_type != 2">
+                <div class="index">商品类目</div>
+                <!--<div class="item">-->
+                <div class="item">
+                    <div class="select" v-for="item,index in goods">
+                        <form role="form">
+                            <div class="form-group">
+                                <select class="form-control" v-model="item.category_parent_id_select"
+                                        v-on:change="haveCategoryParent(item.category_parent_id_select,index)">
+                                    <option disabled="" value="" selected="selected">请选择大分类</option>
+                                    <option v-for="cpitem in item.category_parent" v-bind:value="cpitem.id">
+                                        {{cpitem.name}}
+                                    </option>
+                                </select>
+                            </div>
+                        </form>
+                        <form role="form" v-if="item.category_parent_id_select">
+                            <div class="form-group">
+                                <select class="form-control" v-model="item.category_id_select"
+                                        v-on:change="haveCategory(item.category_id_select,index)">
+                                    <option disabled="" value="" selected="selected">请选择小分类</option>
+                                    <option v-for="citem in item.category" v-bind:value="citem.id">{{citem.name}}
+                                    </option>
+                                </select>
+                            </div>
+                        </form>
+                        <form role="form" v-if="item.category_id_select">
+                            <div class="form-group">
+                                <select class="form-control" v-model="item.goods_id">
+                                    <option disabled="" value="" selected="selected">请选择链接的商品</option>
+                                    <option v-for="gitem in item.goodsList" v-bind:value="gitem.id">{{gitem.name}}
+                                    </option>
+                                </select>
+                            </div>
+                        </form>
+                        <!--<form role="form">-->
+                        <div class="form-group">
+                            <button class="btn btn-default" v-if="index > 0" v-on:click="spliceGoods(index)">删除商品
+                            </button>
+                        </div>
+                        <!--</form>-->
+                    </div>
+
+                    <div class="text">(如果有只选了分类而没选商品的，不计入提交数据)</div>
+                    <button class="btn btn-default" v-if="url_type" v-on:click="pushGoods">添加商品</button>
+                </div>
+                <!--</div>-->
+            </div>
+
+            <!--<div class="sort row-center">-->
+            <!--<div class="index">内部链接</div>-->
+            <!--<div class="item">-->
+            <!--<div class="select">-->
+            <!--<form role="form">-->
+            <!--<div class="form-group">-->
+            <!--<select class="form-control" v-model="goodsId">-->
+            <!--<option disabled="" value="" selected="selected">请选择链接的商品</option>-->
+            <!--<option v-for="item in goodsList" v-bind:value="item.id">{{item.name}}</option>-->
+            <!--</select>-->
+            <!--</div>-->
+            <!--</form>-->
+            <!--</div>-->
+
+            <!--<div class="text">(广告类型分为 &#45;&#45; 可关闭的弹窗型banner -&#45;&#45; swiper轮播型banner)</div>-->
+            <!--</div>-->
+            <!--</div>-->
+
+
+        </div>
+        <!-- 型号/价格 -->
+        <!--<div class="subtitle">-->
+        <!--<div>型号/价格</div>-->
+
+        <!--<div class="sort row-center">-->
+        <!--<div class="index">商品价格</div>-->
+        <!--<div class="item"><input type="text" class="form-control" name="" /></div>-->
+        <!--</div>-->
+
+        <!--<div class="sort row-center">-->
+        <!--<div class="index">商品库存</div>-->
+        <!--<div class="item"><input type="text" class="form-control" name="" /></div>-->
+        <!--</div>-->
+
+        <!--<div class="sort row-center">-->
+        <!--<div class="index">商品编码</div>-->
+        <!--<div class="item"><input type="text" class="form-control" name="" /></div>-->
+        <!--</div>-->
+
+        <!--<div class="sort row-center">-->
+        <!--<div class="index">商品型号</div>-->
+        <!--<div class="item">wwwwww</div>-->
+        <!--</div>-->
+        <!--</div>	-->
+        <!-- 运费/其他 -->
+        <!--<div class="subtitle">-->
+        <!--<div>运费/其他</div>-->
+
+        <!--<div class="sort row-center">-->
+        <!--<div class="index">商品分类</div>-->
+        <!--<div class="item">-->
+        <!--<label class="form-check-label">-->
+        <!--<input class="form-check-input" type="checkbox" name=""> 22-->
+        <!--</label>-->
+        <!--<label class="form-check-label">-->
+        <!--<input class="form-check-input" type="checkbox" name=""> 44-->
+        <!--</label>-->
+        <!--</div>-->
+        <!--</div>-->
+
+        <!--<div class="sort row-center">-->
+        <!--<div class="index">运费设置</div>-->
+        <!--<div class="item">-->
+        <!--<div class="select">-->
+        <!--<form role="form">-->
+        <!--<div class="form-group">-->
+        <!--<select class="form-control">-->
+        <!--<option>1</option>-->
+        <!--<option>2</option>-->
+        <!--<option>3</option>-->
+        <!--<option>4</option>-->
+        <!--<option>5</option>-->
+        <!--</select>-->
+        <!--</div>-->
+        <!--</form>-->
+        <!--</div>-->
+        <!--</div>-->
+        <!--</div>-->
+
+        <!--<div class="sort row-center">-->
+        <!--<div class="index">可配送区域</div>-->
+        <!--<div class="item">wwwwww</div>-->
+        <!--</div>-->
+
+        <!--<div class="sort row-center">-->
+        <!--<div class="index">开售时间</div>-->
+        <!--<div class="item">-->
+        <!--<label class="form-check-label">-->
+        <!--<input class="form-check-input" type="radio" name="exampleRadios"-->
+        <!--id="exampleRadios3" value="option2">-->
+        <!--立刻开售-->
+        <!--</label>-->
+        <!--<label class="form-check-label">-->
+        <!--<input class="form-check-input" type="radio" name="exampleRadios"-->
+        <!--id="exampleRadios3" value="option2">-->
+        <!--定时开售-->
+        <!--<input type="text" class="form-control" id="test5" style="width: auto;display: inline-block;" placeholder="选择开售时间">-->
+        <!--</label>-->
+        <!--</div>-->
+        <!--</div>-->
+        <!--</div>	-->
+        <!-- 商品详情 -->
+        <!--<div class="subtitle">-->
+        <!--<div class="row-center">-->
+        <!--<div class="goods-detail">商品详情</div>-->
+        <!--<div>根据商品图片和标题</div>-->
+        <!--</div>-->
+        <!--</div>	-->
+
+
+        <div class="subtitle">
+            <div class="row-center">
+                <button type="button" class="btn btn-secondary" v-on:click="addReco(1)">添加并禁用</button>
+                <button type="button" class="btn btn-danger" v-on:click="addReco(0)">添加并使用</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="../js/voiceReminder.js"></script>
+<script type="text/javascript" src="../js/menu.js"></script>
+<script type="text/javascript" src="../js/addRecommend.js"></script>
+</body>
+</html>

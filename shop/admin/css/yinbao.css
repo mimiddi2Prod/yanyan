@@ -1,0 +1,52 @@
+.jumbotron {
+    background-color: #fff;
+    padding-left: 20px;
+    padding-right: 20px;
+    width: 100%;
+}
+
+.jumbotron .title {
+    margin-bottom: 40px;
+}
+
+.zhishu {
+    justify-content: space-around;
+}
+
+.zhishu > nav {
+    width: 24%;
+}
+
+.zhishu > nav .item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+}
+
+.time {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin: 20px 0;
+}
+
+th > div{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+/*时间样式*/
+/** {margin: 0;padding: 0}*/
+/*#calendar {width: 210px;margin: 100px auto;overflow: hidden;border: 1px solid #000;padding: 20px;position: relative}*/
+/*#calendar h4 {text-align: center;margin-bottom: 10px}*/
+/*#calendar .a1 {position: absolute;top: 20px;left: 20px;}*/
+/*#calendar .a2 {position: absolute;top: 20px;right: 20px;}*/
+/*#calendar .week {height: 30px;line-height: 20px;border-bottom: 1px solid #000;margin-bottom: 10px}*/
+/*#calendar .week li {float: left;width: 30px;height: 30px;text-align: center;list-style: none;}*/
+/*#calendar .dateList {overflow: hidden;clear: both}*/
+/*#calendar .dateList li {float: left;width: 30px;height: 30px;text-align: center;line-height: 30px;list-style: none;}*/
+/*#calendar .dateList .ccc {color: #ccc;}*/
+/*#calendar .dateList .red {background: #F90;color: #fff;}*/
+/*#calendar .dateList .sun {color: #f00;}*/

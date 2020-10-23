@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!--适配移动端 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
+    <title>瀑布流&精选</title>
+    <script type="text/javascript" src="../node_modules/vue/dist/vue.min.js"></script>
+    <script type="text/javascript" src="../jquery-3.3.1/jquery-3.3.1.min.js"></script>
+    <!--<link rel="stylesheet" type="text/css"-->
+          <!--href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">-->
+    <link rel="stylesheet" type="text/css" href="../bootstrap/css/bootstrap.min.css">
+    <script type="text/javascript" src="../bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../layDate-v5.0.9/laydate/laydate.js"></script> <!--时间控件-->
+    <script type="text/javascript" src="../js/utils/apis.js"></script>
+    <script type="text/javascript" src="../js/utils/http.js"></script> <!--封装接口请求-->
+    <script type="text/javascript" src="../js/utils/formatTime.js"></script> <!--时间格式化-->
+    <!--<script type="text/javascript" src='https://unpkg.com/qiniu-js@2.5.3/dist/qiniu.min.js'></script> &lt;!&ndash;七牛云图片上传所需&ndash;&gt;-->
+    <script type="text/javascript" src="./../qiniu-js/qiniu.min.js"></script> <!--七牛云图片上传所需-->
+    <script type="text/javascript" src="../js/utils/qiniuUpload.js"></script> <!--封装的七牛云图片上传-->
+    <link href="../css/style.css" rel="stylesheet">
+    <link href="../css/menu.css" rel="stylesheet">
+    <link href="../css/waterfall.css" rel="stylesheet">
+</head>
+
+<body>
+<div id="LoadMenu" class="left">
+    <load-menu></load-menu>
+</div>
+
+<div id="LoadVoice" style="position: fixed">
+    <load-voice></load-voice>
+</div>
+
+<div class="right">
+    <div class="jumbotron" id="waterfall">
+        <!-- 类目 搜索栏 -->
+        <div class="title item">
+            <h4>瀑布流&精选</h4>
+            <!--<button type="button" class="btn btn-danger" v-on:click="changePage('waterfall-add')">添加瀑布流</button>-->
+            <div class="search">
+                <!--<form class="bs-example bs-example-form" role="form">-->
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="input-group">
+                            <input type="text" class="form-control" v-model="searchString">
+                            <span class="input-group-btn">
+ 								<button class="btn btn-default" type="button" v-on:click="searchGoods">搜索</button>
+ 							</span>
+                        </div><!-- /input-group -->
+                    </div><!-- /.col-lg-6 -->
+                </div><!-- /.row -->
+                <!--</form>-->
+            </div>
+        </div>
+
+        <div class="nav-1">
+            <ul class="nav nav-tabs">
+                <li v-bind:class="(index == navId ? 'active' : '')" v-for="item,index in navList"
+                    v-on:click="changeNav(index)"><a href="javascript:;">{{item}}</a></li>
+            </ul>
+        </div>
+
+        <div class="goods" style="border-top: 0">
+            <!-- 商品标题 -->
+            <nav class="navbar navbar-default" role="navigation">
+                <div class="item">
+
+                    <span class="first-title have-border column-center">名称</span>
+                    <span class="second-title have-border column-center">描述</span>
+                    <span class="first-title have-border column-center">图片</span>
+                    <span class="second-title have-border column-center">排序</span>
+                    <span class="second-title column-center">状态</span>
+                    <!--<span class="second-title column-center">操作</span>-->
+                </div>
+            </nav>
+
+            <!-- 商品详情 -->
+            <div class="goods-container" v-for="item,index in watList">
+                <div class="first-title">
+                    <label class="form-check-label row-center">
+                        <div class="a column-center">
+                            <span>{{item.name}}</span>
+                        </div>
+                    </label>
+                </div>
+                <div class="second-title">
+                    <label class="form-check-label row-center">
+                        <div class="a column-center">
+                            <span>{{item.describe}}</span>
+                        </div>
+                    </label>
+                </div>
+                <div class="first-title column-center">
+                    <label class="form-check-label row-center">
+                        <div class="a">
+                            <!-- <input type="checkbox" name=""> -->
+                            <img :src="item.image">
+                        </div>
+                    </label>
+                </div>
+                <div class="second-title column-center">
+                    <!--{{item.sort}}-->
+                    <input class="form-control" style="min-width:30px" v-bind:value="item.sort"
+                           v-model="item.sort" v-on:keyUp.enter="updateSort(item.id,item.sort)"
+                           oninput="value=value.replace(/[^\d]/g,'')"/>
+                </div>
+
+                <div class="second-title column-center">
+                    <!--btn-secondary-->
+                    <button type="button" class="btn btn-danger" v-if="item.type == 0 || item.type == 1 || item.type == 3"
+                            v-on:click="changeStatus(item.id,2)">移除到待选项
+                    </button>
+                    <button type="button" class="btn btn-danger" v-if="item.type == 2"
+                            v-on:click="changeStatus(item.id,0)">添加到瀑布流
+                    </button>
+                    <button type="button" class="btn btn-danger" v-if="item.type == 2"
+                            v-on:click="changeStatus(item.id,1)" style="margin-top: 10px">添加到精选栏
+                    </button>
+                    <!--<button type="button" class="btn btn-danger" v-if="item.type == 2"-->
+                            <!--v-on:click="changeStatus(item.id,3)" style="margin-top: 10px">添加到限时抢购-->
+                    <!--</button>-->
+                </div>
+                <!--<div class="second-title column-center">-->
+                    <!--<button type="button" class="btn btn-link">编辑</button>-->
+                    <!--<button type="button" class="btn btn-link" v-on:click="delItem(index)" data-toggle="modal"-->
+                            <!--data-target="#myModal">删除-->
+                    <!--</button>-->
+                <!--</div>-->
+            </div>
+
+        </div>
+
+        <!-- 分页栏 -->
+        <!--<ul class="pagination">-->
+        <!--<li><a href="#">&laquo;</a></li>-->
+        <!--<li class="active"><a href="#">1</a></li>-->
+        <!--<li class="disabled"><a href="#">2</a></li>-->
+        <!--<li><a href="#">3</a></li>-->
+        <!--<li><a href="#">4</a></li>-->
+        <!--<li><a href="#">5</a></li>-->
+        <!--<li><a href="#">&raquo;</a></li>-->
+        <!--</ul>-->
+        <!--<ul class="pagination">-->
+            <!--<li v-on:click="getPage(last_id-1 >= 0 ? last_id-1 : last_id)"><a href="javascript:;">&laquo;</a></li>-->
+            <!--<li v-for="item,index in pageList" v-on:click="getPage(index)"-->
+                <!--v-bind:class="(item == last_id+1 ? 'active' : '')"><a-->
+                    <!--href="javascript:;">{{item}}</a></li>-->
+            <!--<li v-on:click="getPage(last_id+1 < pageList[pageList.length-1] ? last_id+1 : last_id)"><a href="javascript:;">&raquo;</a>-->
+            <!--</li>-->
+        <!--</ul>-->
+        <ul class="pagination">
+            <li v-on:click="getPage(0)"><a href="javascript:;">首页</a></li>
+            <li v-on:click="getPage(last_id-1 >= 0 ? last_id-1 : last_id)"><a href="javascript:;">&laquo;</a></li>
+            <li v-if="index >= last_id-5  && index < last_id+11" v-for="item,index in pageList" v-on:click="getPage(index)"
+                v-bind:class="(item == last_id+1 ? 'active' : '')"><a
+                    href="javascript:;">{{item}}</a></li>
+            <li v-if="pageList.length-1 != last_id && pageList.length-12 > last_id"><a href="javascript:;">...</a></li>
+            <li v-if="pageList.length-1 != last_id && pageList.length-11 > last_id" v-on:click="getPage(pageList.length-1)">
+                <a href="javascript:;">{{pageList.length}}</a></li>
+            <li v-on:click="getPage(last_id+1 < pageList[pageList.length-1] ? last_id+1 : last_id)"><a
+                    href="javascript:;">&raquo;</a>
+            </li>
+            <li v-on:click="getPage(pageList.length-1)"><a href="javascript:;">尾页</a></li>
+        </ul>
+    </div>
+
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="title"></h4> <!--标题-->
+                </div>
+                <div class="modal-body" id="content"><span></span></div> <!--是否删除...-->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary">确定</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+</div>
+
+<script type="text/javascript" src="../js/voiceReminder.js"></script>
+<script type="text/javascript" src="../js/menu.js"></script>
+<script type="text/javascript" src="../js/waterfall.js"></script>
+</body>
+</html>

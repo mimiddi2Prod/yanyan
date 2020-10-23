@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!--适配移动端 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
+    <title>餐品推荐</title>
+    <script type="text/javascript" src="../node_modules/vue/dist/vue.min.js"></script>
+    <script type="text/javascript" src="../jquery-3.3.1/jquery-3.3.1.min.js"></script>
+    <!--<link rel="stylesheet" type="text/css"-->
+    <!--href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">-->
+    <link rel="stylesheet" type="text/css" href="../bootstrap/css/bootstrap.min.css">
+    <script type="text/javascript" src="../bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../layDate-v5.0.9/laydate/laydate.js"></script> <!--时间控件-->
+    <script type="text/javascript" src="../js/utils/apis.js"></script>
+    <script type="text/javascript" src="../js/utils/http.js"></script> <!--封装接口请求-->
+    <script type="text/javascript" src="../js/utils/formatTime.js"></script> <!--时间格式化-->
+    <!--<script type="text/javascript" src='https://unpkg.com/qiniu-js@2.5.3/dist/qiniu.min.js'></script> &lt;!&ndash;七牛云图片上传所需&ndash;&gt;-->
+    <script type="text/javascript" src="./../qiniu-js/qiniu.min.js"></script> <!--七牛云图片上传所需-->
+    <script type="text/javascript" src="../js/utils/qiniuUpload.js"></script> <!--封装的七牛云图片上传-->
+    <link href="../css/style.css" rel="stylesheet">
+    <link href="../css/menu.css" rel="stylesheet">
+    <link href="../css/brunchBanner.css" rel="stylesheet">
+</head>
+
+<body>
+<div id="LoadMenu" class="left">
+    <load-menu></load-menu>
+</div>
+
+
+<div class="right">
+    <div class="jumbotron" id="brunchBanner">
+        <!-- 类目 搜索栏 -->
+        <div class="title item">
+            <h4>餐品推荐</h4>
+            <button type="button" class="btn btn-danger" v-on:click="window.location.href = 'addBrunchBanner'">添加推荐
+            </button>
+        </div>
+
+        <div class="nav-1">
+            <ul class="nav nav-tabs">
+                <li v-bind:class="(index == navId ? 'active' : '')" v-for="item,index in navList"
+                    v-on:click="changeNav(index)"><a href="javascript:;">{{item}}</a></li>
+            </ul>
+        </div>
+
+        <div class="goods" style="border-top: 0">
+            <!-- 商品标题 -->
+            <nav class="navbar navbar-default" role="navigation">
+                <div class="item">
+                    <span class="second-title have-border column-center">名称</span>
+                    <span class="first-title have-border column-center">图片</span>
+                    <span class="second-title have-border column-center">排序</span>
+                    <span class="second-title have-border column-center">创建时间</span>
+                    <span class="second-title column-center">操作</span>
+                </div>
+            </nav>
+
+            <div class="goods-container" v-for="item,index in bannerList">
+                <div class="second-title column-center">
+                    <label class="form-check-label row-center">
+                        <div class="a">
+                            <span>{{item.name}}</span>
+                        </div>
+                    </label>
+                </div>
+                <!--<div class="first-title column-center">-->
+                <!--<label class="form-check-label row-center">-->
+                <!--<span>{{item.desc}}</span>-->
+                <!--</label>-->
+                <!--</div>-->
+                <div class="first-title column-center">
+                    <label class="form-check-label row-center">
+                        <div class="a">
+                            <img :src="item.image">
+                        </div>
+                    </label>
+                </div>
+                <!--<div class="second-title column-center">-->
+                <!--{{item.price}}-->
+                <!--</div>-->
+                <div class="second-title column-center">
+                    <!--{{item.sort}}-->
+                    <input class="form-control" style="min-width:30px;width: 50%" v-bind:value="item.sort"
+                           v-model="item.sort" v-on:keyUp.enter="updateSort(item.id,item.sort)"
+                           oninput="value=value.replace(/[^\d]/g,'')"/>
+                </div>
+                <div class="second-title column-center">
+                    {{item.create_time}}
+                </div>
+                <div class="second-title column-center">
+                    <button type="button" class="btn " :class="item.status == 0 ? 'btn-danger' : 'btn-secondary'"
+                            v-on:click="changeStatus(item.id,item.status)">{{item.status == 0 ? "点击禁用" : "点击开启"}}
+                    </button>
+                    <button type="button" class="btn btn-link" v-on:click="delItem(index)" data-toggle="modal"
+                            data-target="#myModal">删除
+                    </button>
+                    <!--<button type="button" class="btn btn-link" v-on:click="editBrand(item.id)">编辑</button>-->
+                </div>
+            </div>
+
+        </div>
+
+        <!-- 分页栏 -->
+        <ul class="pagination">
+            <li v-on:click="getPage(last_id-1 >= 0 ? last_id-1 : last_id)"><a href="javascript:;">&laquo;</a></li>
+            <li v-for="item,index in pageList" v-on:click="getPage(index)"
+                v-bind:class="(item == last_id+1 ? 'active' : '')"><a
+                    href="javascript:;">{{item}}</a></li>
+            <li v-on:click="getPage(last_id+1 < pageList[pageList.length-1] ? last_id+1 : last_id)"><a
+                    href="javascript:;">&raquo;</a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="title"></h4> <!--标题-->
+                </div>
+                <div class="modal-body" id="content"><span></span></div> <!--是否删除...-->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary" onclick="delBrunchBanner()">确定</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+</div>
+
+<script type="text/javascript" src="../js/menu.js"></script>
+<script type="text/javascript" src="../js/brunchBanner.js"></script>
+</body>
+</html>

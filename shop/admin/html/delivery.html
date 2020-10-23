@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!--适配移动端 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
+    <title>配送</title>
+    <script type="text/javascript" src="../node_modules/vue/dist/vue.min.js"></script>
+    <script type="text/javascript" src="../jquery-3.3.1/jquery-3.3.1.min.js"></script>
+    <!--<link rel="stylesheet" type="text/css"-->
+    <!--href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">-->
+    <link rel="stylesheet" type="text/css" href="../bootstrap/css/bootstrap.min.css">
+    <script type="text/javascript" src="../bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../layDate-v5.0.9/laydate/laydate.js"></script> <!--时间控件-->
+    <script type="text/javascript" src="../js/utils/apis.js"></script>
+    <script type="text/javascript" src="../js/utils/http.js"></script> <!--封装接口请求-->
+    <script type="text/javascript" src="../js/utils/formatTime.js"></script> <!--时间格式化-->
+    <!--<script type="text/javascript" src='https://unpkg.com/qiniu-js@2.5.3/dist/qiniu.min.js'></script> &lt;!&ndash;七牛云图片上传所需&ndash;&gt;-->
+    <script type="text/javascript" src="./../qiniu-js/qiniu.min.js"></script> <!--七牛云图片上传所需-->
+    <script type="text/javascript" src="../js/utils/qiniuUpload.js"></script> <!--封装的七牛云图片上传-->
+    <link href="../css/style.css" rel="stylesheet">
+    <link href="../css/menu.css" rel="stylesheet">
+    <link href="../css/delivery.css" rel="stylesheet">
+</head>
+
+<body>
+<div id="LoadMenu" class="left">
+    <load-menu></load-menu>
+</div>
+
+
+<div class="right">
+    <div class="jumbotron" id="delivery">
+        <!-- 银豹 -->
+        <div class="title item">
+            <h4>配送</h4>
+            <div>待配送</div>
+        </div>
+
+        <div class="col-sm-12" v-for="item in order">
+            <div class="panel panel-default">
+                <div class="panel-heading" :class="isPhone ? '' : 'row-center'">
+                    <div :class="isPhone ? '' : 'row-center'">
+                        <h3 class="panel-title" style="margin-right: 6px">配送地址：{{item.address_text}}</h3>
+                        <h3 class="panel-title">收货人：{{item.receiver}}</h3>
+                    </div>
+                    <div class="row-center">
+                        <h3 class="panel-title" style="margin-right: 6px">订单号：{{item.tradeId}}</h3>
+                        <!--<h3 class="panel-title">总计：{{item.payments.amount}}</h3>-->
+                    </div>
+
+                </div>
+                <div class="panel-body">
+                    <!--<div>{{item.remark}}</div>-->
+                    <div :class="isPhone ? '' : 'row-center'" v-for="detail in item.goodsList">
+                        商品名：{{detail.goodsname}}
+                        <div :class="isPhone ? '' : 'row-center'">
+                            <span style="margin-right: 6px">数量：{{detail.after_sale_state == 0 ? detail.number : detail.number - detail.alterSaleNumber}}</span>
+                            <span>单价：{{detail.single_price}}</span>
+                        </div>
+                    </div>
+                    <button class="btn-default btn" v-on:click="changeOrderState(item.tradeId)">确认送达</button>
+                </div>
+            </div>
+        </div>
+        <!--<div class="col-sm-12" v-for="item in total">-->
+            <!--<div class="panel panel-default">-->
+                <!--<div class="panel-heading" :class="isPhone ? '' : 'row-center'">-->
+                    <!--<div :class="isPhone ? '' : 'row-center'">-->
+                        <!--<h3 class="panel-title" style="margin-right: 6px">网店订单号：{{item.orderNo ? item.orderNo : '线下单'}}</h3>-->
+                        <!--<h3 class="panel-title">创建时间：{{item.datetime}}</h3>-->
+                    <!--</div>-->
+                    <!--<div class="row-center">-->
+                        <!--<h3 class="panel-title" style="margin-right: 6px">餐品：{{item.items.length}}</h3>-->
+                        <!--<h3 class="panel-title">总计：{{item.payments.amount}}</h3>-->
+                    <!--</div>-->
+
+                <!--</div>-->
+                <!--<div class="panel-body">-->
+                    <!--<div>{{item.remark}}</div>-->
+                    <!--<div :class="isPhone ? '' : 'row-center'" v-for="detail in item.items">-->
+                        <!--商品名：{{detail.name}}-->
+                        <!--<div :class="isPhone ? '' : 'row-center'">-->
+                            <!--<span style="margin-right: 6px">数量：{{detail.quantity}}</span>-->
+                            <!--<span>总价：{{detail.totalAmount}}</span>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+    </div>
+
+</div>
+
+<script type="text/javascript" src="../js/voiceReminder.js"></script>
+<script type="text/javascript" src="../js/menu.js"></script>
+<script type="text/javascript" src="../js/delivery.js"></script>
+</body>
+</html>

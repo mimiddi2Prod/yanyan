@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!--适配移动端 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
+    <title>添加推荐餐品</title>
+    <script type="text/javascript" src="../node_modules/vue/dist/vue.min.js"></script>
+    <script type="text/javascript" src="../jquery-3.3.1/jquery-3.3.1.min.js"></script>
+    <!--<link rel="stylesheet" type="text/css"-->
+          <!--href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">-->
+    <link rel="stylesheet" type="text/css" href="../bootstrap/css/bootstrap.min.css">
+    <script type="text/javascript" src="../bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../layDate-v5.0.9/laydate/laydate.js"></script> <!--时间控件-->
+    <script type="text/javascript" src="../js/utils/apis.js"></script>
+    <script type="text/javascript" src="../js/utils/http.js"></script> <!--封装接口请求-->
+    <script type="text/javascript" src="../js/utils/formatTime.js"></script> <!--时间格式化-->
+    <!--<script type="text/javascript" src='https://unpkg.com/qiniu-js@2.5.3/dist/qiniu.min.js'></script> &lt;!&ndash;七牛云图片上传所需&ndash;&gt;-->
+    <script type="text/javascript" src="./../qiniu-js/qiniu.min.js"></script> <!--七牛云图片上传所需-->
+    <script type="text/javascript" src="../js/utils/qiniuUpload.js"></script> <!--封装的七牛云图片上传-->
+    <link href="../css/style.css" rel="stylesheet">
+    <link href="../css/menu.css" rel="stylesheet">
+    <link href="../css/addBrunchBanner.css" rel="stylesheet">
+</head>
+
+<body>
+<div id="LoadMenu" class="left">
+    <load-menu></load-menu>
+</div>
+
+
+<div class="right">
+    <div class="jumbotron" id="addBrunchBanner">
+        <!-- 类目 添加分类 -->
+        <div class="title row-center">
+            <h4><span v-on:click="window.location.href = 'brunchBanner'">餐品推荐</span><span
+                    class="glyphicon glyphicon-menu-right"></span><span>添加推荐</span></h4>
+        </div>
+
+        <!-- 添加商品信息分栏 -->
+        <!-- 基础信息 -->
+        <div class="subtitle">
+            <div>基础信息</div>
+
+            <div class="sort row-center">
+                <div class="index">广告图片</div>
+                <div class="item">
+                    <div class="row-center">
+                        <div class="goods-img">
+                            <input id="inputImg" class="getImg" type="file" accept="image/*"
+                                   v-on:change="getImg('inputImg')"/> <!-- multiple能够选择多张图片 -->
+                            <em class="img-r abs">&nbsp;</em>
+                            <em class="img-c abs">&nbsp;</em>
+                        </div>
+                        <div class="imgShow" v-if="imageList.length > 0" v-for="item,index in imageList">
+                            <!--<input class="getImg" type="file" accept="image/*"/>-->
+                            <img class="imgSrc" :src='item.tempFilePath'>
+                            <img class="imgDel" src="/images/del.png" v-on:click="delImg(index)">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sort row-center">
+                <div class="index">排序</div>
+                <div class="item"><input type="text" class="form-control" v-model="sort" name=""/></div>
+            </div>
+
+            <div class="sort row-center">
+                <div class="index">广告类型</div>
+                <div class="item row-center">
+                    <label class="form-check-label" v-for="item in adList">
+                        <input class="form-check-input" type="radio" name="integral" v-bind:value="item.id"
+                               v-model="adSelect">
+                        {{item.name}}
+                    </label>
+                </div>
+            </div>
+
+            <div class="sort row-center" v-if="adSelect == 0">
+                <div class="index">商品类目</div>
+                <div class="item">
+                    <div class="select">
+                        <form role="form">
+                            <div class="form-group">
+                                <select class="form-control" v-model="category_id_select"
+                                        v-on:change="haveCategory(category_id_select)">
+                                    <option disabled="" value="" selected="selected">请选择小分类</option>
+                                    <option v-for="item in category" v-bind:value="item.id">{{item.name}}</option>
+                                </select>
+                            </div>
+                        </form>
+                        <form role="form" v-if="category_id_select">
+                            <div class="form-group">
+                                <select class="form-control" v-model="goods_id">
+                                    <option disabled="" value="" selected="selected">请选择链接的商品</option>
+                                    <option v-for="item in goodsList" v-bind:value="item.id">{{item.name}}</option>
+                                </select>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="subtitle">
+            <div class="row-center">
+                <button type="button" class="btn btn-secondary" v-on:click="addReco(1)">添加并禁用</button>
+                <button type="button" class="btn btn-danger" v-on:click="addReco(0)">添加并使用</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="../js/menu.js"></script>
+<script type="text/javascript" src="../js/addBrunchBanner.js"></script>
+</body>
+</html>

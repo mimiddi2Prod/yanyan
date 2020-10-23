@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!--适配移动端 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
+    <title>添加品牌</title>
+    <script type="text/javascript" src="../node_modules/vue/dist/vue.min.js"></script>
+    <script type="text/javascript" src="../jquery-3.3.1/jquery-3.3.1.min.js"></script>
+    <!--<link rel="stylesheet" type="text/css"-->
+          <!--href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">-->
+    <link rel="stylesheet" type="text/css" href="../bootstrap/css/bootstrap.min.css">
+    <script type="text/javascript" src="../bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../js/utils/apis.js"></script>
+    <script type="text/javascript" src="../js/utils/http.js"></script> <!--封装接口请求-->
+    <script type="text/javascript" src="../js/utils/formatTime.js"></script> <!--时间格式化-->
+    <!--<script type="text/javascript" src='https://unpkg.com/qiniu-js@2.5.3/dist/qiniu.min.js'></script> &lt;!&ndash;七牛云图片上传所需&ndash;&gt;-->
+    <script type="text/javascript" src="./../qiniu-js/qiniu.min.js"></script> <!--七牛云图片上传所需-->
+    <script type="text/javascript" src="../js/utils/qiniuUpload.js"></script> <!--封装的七牛云图片上传-->
+    <link href="../css/style.css" rel="stylesheet">
+    <link href="../css/menu.css" rel="stylesheet">
+    <link href="../css/addBrand.css" rel="stylesheet">
+</head>
+
+<body>
+<div id="LoadMenu" class="left">
+    <load-menu></load-menu>
+</div>
+
+<div id="LoadVoice" style="position: fixed">
+    <load-voice></load-voice>
+</div>
+
+<div class="right">
+    <div class="jumbotron" id="addBrand">
+        <!-- 类目 添加分类 -->
+        <div class="title row-center">
+            <h4><span v-on:click="window.location.href = 'brand'">品牌管理</span><span
+                    class="glyphicon glyphicon-menu-right"></span><span>添加品牌</span></h4>
+        </div>
+
+        <!-- 添加商品信息分栏 -->
+        <!-- 基础信息 -->
+        <div class="subtitle">
+            <div>基础信息</div>
+
+            <div class="sort row-center">
+                <div class="index">品牌图片</div>
+                <div class="item">
+                    <!--<div class="row-center">-->
+                    <!--<div class="goods-img">-->
+                    <!--<input id="inputImg" type="file" accept="image/*" v-model="img" v-on:change="getImg()"/>-->
+                    <!--<em class="img-r abs">&nbsp;</em>-->
+                    <!--<em class="img-c abs">&nbsp;</em>-->
+                    <!--</div>-->
+                    <!--<img :src='imgsrc' v-if="imgsrc">-->
+                    <!--</div>-->
+                    <div class="row-center">
+                        <div class="goods-img">
+                            <input id="inputImg" class="getImg" type="file" accept="image/*"
+                                   v-on:change="getImg('inputImg')"/> <!-- multiple能够选择多张图片 -->
+                            <em class="img-r abs">&nbsp;</em>
+                            <em class="img-c abs">&nbsp;</em>
+                        </div>
+                        <div class="imgShow" v-if="imageList.length > 0" v-for="item,index in imageList">
+                            <!--<input class="getImg" type="file" accept="image/*"/>-->
+                            <img class="imgSrc" :src='item.tempFilePath'>
+                            <img class="imgDel" src="/images/del.png" v-on:click="delImg(index)">
+                        </div>
+                    </div>
+                    <!--<div class="goods-img">-->
+                    <!--<input type="file" accept="image/*" v-model="img"/>-->
+                    <!--<em class="img-r abs">&nbsp;</em>-->
+                    <!--<em class="img-c abs">&nbsp;</em>-->
+                    <!--</div>-->
+                    <div class="text">建议尺寸：(宽:高 375 * 180)。</div>
+                </div>
+            </div>
+
+            <div class="sort row-center">
+                <div class="index">品牌名称</div>
+                <div class="item"><input type="text" class="form-control" v-model="name" name=""/></div>
+            </div>
+
+            <div class="sort row-center">
+                <div class="index">品牌介绍</div>
+                <div class="item"><input type="text" class="form-control" v-model="desc" name=""/></div>
+            </div>
+
+            <div class="sort row-center">
+                <div class="index">价格</div>
+                <div class="item"><input type="text" oninput="value=value.replace(/[^\d.]/g,'')" class="form-control"
+                                         v-model="price" name="" placeholder="用于展示'起始价'，多少元起"/></div>
+            </div>
+
+            <div class="sort row-center">
+                <div class="index">排序</div>
+                <div class="item"><input type="text" oninput="value=value.replace(/[^\d]/g,'')" class="form-control"
+                                         v-model="sort" name="" placeholder="页面只会展示排序前四"/>
+                </div>
+            </div>
+
+            <div class="sort row-center">
+                <div class="index">跳转类型</div>
+                <div class="item">
+                    <div class="select">
+                        <form role="form">
+                            <div class="form-group">
+                                <select class="form-control">
+                                    <option>页面内部跳转</option>
+                                    <option>web-view</option>
+                                    <option>关联小程序跳转</option>
+                                </select>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="text">(先不选 将来可能用于跳转 -- 页面内部跳转 --- web-view --- 关联小程序跳转)</div>
+                </div>
+            </div>
+
+            <!--<div class="sort row-center">-->
+            <!--<div class="index">内部链接</div>-->
+            <!--<div class="item"><input type="text" class="form-control" name="" placeholder="以后或许有用，现在先不用填"/></div>-->
+            <!--</div>-->
+            <div class="sort row-center">
+                <div class="index">跳转路径</div>
+                <div class="item">
+                    <div class="select">
+                        <form role="form">
+                            <div class="form-group">
+                                <select class="form-control" v-model="url_select">
+                                    <option disabled="" value="" selected="selected">请选择跳转路径</option>
+                                    <option v-for="item in urlList">{{item}}
+                                    </option>
+                                </select>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="text">(请务必选对类目)</div>
+                </div>
+            </div>
+        </div>
+        <div class="subtitle">
+            <div class="row-center">
+                <button type="button" class="btn btn-secondary" v-on:click="submit(1)">添加并禁用</button>
+                <button type="button" class="btn btn-danger" v-on:click="submit(0)">添加并使用</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="../js/voiceReminder.js"></script>
+<script type="text/javascript" src="../js/menu.js"></script>
+<script type="text/javascript" src="../js/addBrand.js"></script>
+</body>
+</html>

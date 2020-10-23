@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!--适配移动端 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
+    <title>订单</title>
+    <script type="text/javascript" src="../node_modules/vue/dist/vue.min.js"></script>
+    <script type="text/javascript" src="../jquery-3.3.1/jquery-3.3.1.min.js"></script>
+    <!--<link rel="stylesheet" type="text/css"-->
+    <!--href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">-->
+    <link rel="stylesheet" type="text/css" href="../bootstrap/css/bootstrap.min.css">
+    <script type="text/javascript" src="../bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../layDate-v5.0.9/laydate/laydate.js"></script> <!--时间控件-->
+    <script type="text/javascript" src="../js/utils/apis.js"></script>
+    <script type="text/javascript" src="../js/utils/http.js"></script> <!--封装接口请求-->
+    <script type="text/javascript" src="../js/utils/formatTime.js"></script> <!--时间格式化-->
+    <!--<script type="text/javascript" src='https://unpkg.com/qiniu-js@2.5.3/dist/qiniu.min.js'></script> &lt;!&ndash;七牛云图片上传所需&ndash;&gt;-->
+    <script type="text/javascript" src="./../qiniu-js/qiniu.min.js"></script> <!--七牛云图片上传所需-->
+    <script type="text/javascript" src="../js/utils/qiniuUpload.js"></script> <!--封装的七牛云图片上传-->
+    <link href="../css/style.css" rel="stylesheet">
+    <link href="../css/menu.css" rel="stylesheet">
+    <link href="../css/order.css" rel="stylesheet">
+</head>
+
+<body>
+<div id="LoadMenu" class="left">
+    <load-menu></load-menu>
+</div>
+
+<div id="LoadVoice" style="position: fixed">
+    <load-voice></load-voice>
+</div>
+
+<div class="right">
+    <div class="jumbotron" id="order">
+        <!-- 类目 搜索栏 -->
+        <div class="title item">
+            <h4>订单管理</h4>
+        </div>
+
+        <div class="order-title">
+            <nav role="navigation" class="navbar navbar-default">
+                <div class="select">
+                    <form role="form">
+                        <div class="form-group">
+                            <select class="form-control" v-model="select_1">
+                                <option>商品ID</option>
+                                <option>商品名称</option>
+                            </select>
+                        </div>
+                    </form>
+                    <input type="text" class="form-control"
+                           style="width: auto; display: inline-block;margin-right: 50px;" v-model="id_or_goodsName">
+                    <span>下单时间：</span>
+                    <input type="text" class="form-control" id="test5_1" style="width: auto;display: inline-block;"
+                           placeholder="选择起始时间" v-model="start_time">
+                    <div class="line"></div>
+                    <input type="text" class="form-control" id="test5_2" style="width: auto;display: inline-block;"
+                           placeholder="选择截止时间" v-model="end_time">
+                </div>
+
+                <div class="select">
+                    <form role="form">
+                        <div class="form-group">
+                            <select class="form-control" v-model="select_2">
+                                <option>订单编号</option>
+                                <option>物流编号</option>
+                            </select>
+                        </div>
+                    </form>
+                    <input type="text" class="form-control"
+                           style="width: auto; display: inline-block;margin-right: 50px;" v-model="tradeId_or_logistics">
+                    <span>订单状态：</span>
+                    <form role="form">
+                        <div class="form-group">
+                            <select class="form-control" v-model="order_status">
+                                <option v-for="item,index in select_3" v-bind:value="index">{{item}}</option>
+                                <!--<option>全部</option>-->
+                                <!--<option>待发货</option>-->
+                                <!--<option>待付款</option>-->
+                                <!--<option>待送达</option>-->
+                                <!--<option>已完成</option>-->
+                                <!--<option>已关闭</option>-->
+                            </select>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="select">
+                    <form role="form">
+                        <div class="form-group">
+                            <select class="form-control" v-model="select_4">
+                                <option>收货人姓名</option>
+                                <option>收货人手机号</option>
+                            </select>
+                        </div>
+                    </form>
+                    <input type="text" class="form-control"
+                           style="width: auto; display: inline-block;margin-right: 50px;" v-model="userName_or_phone">
+                    <span>退款状态：</span>
+                    <form role="form">
+                        <div class="form-group">
+                            <select class="form-control" v-model="afterSale_status">
+                                <option v-for="item,index in select_5" v-bind:value="index">{{item}}</option>
+                                <!--<option>暂不选择</option>-->
+                                <!--<option>退款中+退款成功</option>-->
+                                <!--<option>退款中</option>-->
+                                <!--<option>退款成功</option>-->
+                            </select>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="select">
+                    <button type="button" class="btn btn-danger btn-margin-right" v-on:click="getOrderBySearch()">筛选订单</button>
+                    <!--<button type="button" class="btn btn-secondary btn-margin-right">清空筛选条件</button>-->
+                    <!--<button type="button" class="btn btn-secondary btn-margin-right">批量导出</button>-->
+                    <!--<button type="button" class="btn btn-secondary btn-margin-right">查看已生成报表</button>-->
+                </div>
+            </nav>
+        </div>
+
+
+        <!-- 商品状态 -->
+        <div class="nav-1">
+            <ul class="nav nav-tabs">
+                <li v-bind:class="(index == navId+1 ? 'active' : '')" v-for="item,index in navList"
+                    v-on:click="changeNav(index)" v-if="index != 1"><a href="javascript:;">{{item}}<span style="color:red" v-if="voiceVM.voice && (index == 3 || index == 4)">({{index == 3 ? voiceVM.voice.deliveryNumber : ''}}{{index == 4 ? voiceVM.voice.afterSaleNumber : ''}})</span></a></li>
+            </ul>
+            <!--<div class="row-center">-->
+                <!--<button type="button" class="btn btn-secondary btn-margin-left">打印订单</button>-->
+                <!--<button type="button" class="btn btn-secondary btn-margin-left">批量修改发货</button>-->
+                <!--<button type="button" class="btn btn-secondary btn-margin-left">批量发货</button>-->
+            <!--</div>-->
+            <div class="text-right">
+                <button type="button" class="btn btn-secondary btn-margin-left" style="margin-bottom: 6px" v-on:click="reviewGoods()">全部评价</button>
+                <button type="button" class="btn btn-secondary btn-margin-left" style="margin-bottom: 6px" v-on:click="updateRemindTime">已阅</button>
+            </div>
+        </div>
+
+        <div class="goods">
+            <!-- 商品标题 -->
+            <nav class="navbar navbar-default" role="navigation" style="margin-bottom: 14px;">
+                <div class="item">
+                    <span class="first-title have-border column-center">订单信息</span>
+                    <span class="second-title have-border column-center">收货信息</span>
+                    <span class="third-title column-center">操作</span>
+                </div>
+            </nav>
+
+            <!--for循环-->
+            <div v-for="item in orderList" v-if="!tradeList.length">
+                <nav class="navbar navbar-default" role="navigation">
+                    <div class="item">
+                        <div class="item-title">
+                            <span>下单时间：{{item.create_time}}</span>
+                            <span>订单号：{{item.tradeId}}</span>
+                        </div>
+                        <div class="item-title">
+                            <span>共{{item.number}}件商品</span>
+                            <!--<span>合计：¥{{item.total_price_and_postage}} （含运费：¥{{item.postage}} )</span>-->
+                            <span>合计：¥{{item.total_price}}</span>
+                        </div>
+                    </div>
+                </nav>
+
+                <!-- 商品详情 -->
+                <div class="goods-container" :style="{background: item.background}">
+                    <div class="first-title">
+                        <label class="form-check-label row">
+                            <div class="a">
+                                <img :src="item.image">
+                            </div>
+                            <div class="b">
+                                <span>{{item.name}}</span>
+                            </div>
+                            <div class="c">
+                                <div>原价￥{{item.single_price}}</div>
+                                <div v-if="item.select_card_id">优惠价￥{{item.discount_price}}</div>
+                                <div>x{{item.number}}</div>
+                                <div style="color:red">{{item.isFristOrder ? '(首单用户)' : ''}}</div>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="second-title column">
+                        <div><span>{{item.receiver}}</span><span>{{item.tel}}</span></div>
+                        <div>{{item.address_text}}</div>
+                        <div v-if="item.note"><span>卖家备注：{{item.note}}</span></div>
+                    </div>
+                    <div class="third-title column-center">
+                        <div type="button" v-if="item.state == 0">{{item.waitPay ? '待付款' : '已取消'}}</div>
+                        <div type="button" v-if="item.after_sale_state == 0">{{item.state == -1 ? '已取消' : ''}}
+                            {{item.state == 2 ? '待送达' : ''}}
+                            {{item.state == 3 ? '待评价' : ''}}
+                            {{item.state == 4 ? '已完成' : ''}}
+                            {{item.state == 5 ? '用户已删除订单' : ''}}
+                        </div>
+                        <div type="button" :style="item.after_sale_state <= 3 ? 'color:red' : ''" v-if="item.after_sale_state != 0">{{item.after_sale_state == 1 ? '退款中' : ''}}
+                            {{item.after_sale_state == 2 ? '退货退款中' : ''}}
+                            {{item.after_sale_state == 3 ? '换货中' : ''}}
+                            {{item.after_sale_state == 4 ? '已退款' : ''}}
+                            {{item.after_sale_state == 5 ? '已退货退款' : ''}}
+                            {{item.after_sale_state == 6 ? '已换货' : ''}}
+                            {{item.after_sale_state == 7 ? '已拒绝退款' : ''}}
+                        </div>
+                        <!--<button type="button" class="btn btn-link" v-if="item.after_sale_state == 0 && item.state == 1"-->
+                                <!--data-toggle="modal" data-target="#myModal" v-on:click="getLogistics(item.id,item.tel)">-->
+                            <!--待发货-->
+                        <!--</button>-->
+                        <button type="button" class="btn btn-link" v-on:click="reviewGoods(item.tradeId)" v-if="item.state == 4">评价
+                        </button>
+                        <button type="button" class="btn btn-link" v-on:click="orderDetail(item.id)">订单详情
+                        </button>
+                        <!-- <button type="button" class="btn btn-link">联系买家</button> -->
+                    </div>
+                </div>
+            </div>
+
+            <div v-for="item in tradeList" v-if="tradeList.length">
+                <nav class="navbar navbar-default" role="navigation">
+                    <div class="item">
+                        <div class="item-title">
+                            <span>下单时间：{{item.create_time}}</span>
+                            <span>订单号：{{item.tradeId}}</span>
+                            <span>id：{{item.user_id}}</span>
+                        </div>
+                        <div class="item-title">
+                            <span>共{{item.number}}件商品</span>
+                            <span>合计：¥{{item.total_price_and_postage}} （含运费：¥{{item.postage}} )</span>
+                            <span style="color:red">{{item.pay_method}}</span>
+                        </div>
+                    </div>
+                </nav>
+
+                <!-- 商品详情 -->
+                <div class="goods-container" :style="{background: order.background}" v-for="order in item.order">
+                    <div class="first-title">
+                        <label class="form-check-label row">
+                            <div class="a">
+                                <img :src="order.image">
+                            </div>
+                            <div class="b">
+                                <span>{{order.name}}</span>
+                            </div>
+                            <div class="c">
+                                <div>原价￥{{order.single_price}}</div>
+                                <div v-if="order.select_card_id">优惠价￥{{order.discount_price}}</div>
+                                <div>x{{order.number}}</div>
+                                <div style="color:red">{{order.isFristOrder ? '(首单用户)' : ''}}</div>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="second-title column">
+                        <div><span>{{order.receiver}}</span><span>{{order.tel}}</span></div>
+                        <div>{{order.address_text}}</div>
+                        <div v-if="order.note"><span>卖家备注：{{order.note}}</span></div>
+                    </div>
+                    <div class="third-title column-center">
+                        <div type="button" v-if="order.state == 0">{{order.waitPay ? '待付款' : '已取消'}}</div>
+                        <div type="button" v-if="order.after_sale_state == 0">{{order.state == -1 ? '已取消' : ''}}
+                            {{order.state == 2 ? '待送达' : ''}}
+                            {{order.state == 3 ? '待评价' : ''}}
+                            {{order.state == 4 ? '已完成' : ''}}
+                            {{order.state == 5 ? '用户已删除订单' : ''}}
+                        </div>
+                        <div type="button" :style="item.after_sale_state <= 3 ? 'color:red' : ''" v-if="order.after_sale_state != 0">{{order.after_sale_state == 1 ? '退款中' : ''}}
+                            {{order.after_sale_state == 2 ? '退货退款中' : ''}}
+                            {{order.after_sale_state == 3 ? '换货中' : ''}}
+                            {{order.after_sale_state == 4 ? '已退款' : ''}}
+                            {{order.after_sale_state == 5 ? '已退货退款' : ''}}
+                            {{order.after_sale_state == 6 ? '已换货' : ''}}
+                            {{order.after_sale_state == 7 ? '已拒绝退款' : ''}}
+                        </div>
+                        <button type="button" class="btn btn-link" v-on:click="reviewGoods(order.tradeId)" v-if="order.state == 4">评价
+                        </button>
+                        <button type="button" class="btn btn-link" v-on:click="orderDetail(order.id)">订单详情
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div style="text-align: center;margin-bottom:0" v-if="orderList.length <= 0">
+                没有数据哦
+            </div>
+        </div>
+
+        <!-- 分页栏 -->
+        <ul class="pagination">
+			<li v-on:click="getPage(0)"><a href="javascript:;">首页</a></li>
+            <li v-on:click="getPage(last_id-1 >= 0 ? last_id-1 : last_id)"><a href="javascript:;">&laquo;</a></li>
+            <li v-if="index >= last_id-5  && index < last_id+11" v-for="item,index in pageList" v-on:click="getPage(index)"
+                v-bind:class="(item == last_id+1 ? 'active' : '')"><a
+                    href="javascript:;">{{item}}</a></li>
+			<li v-if="pageList.length-1 != last_id && pageList.length-12 > last_id"><a href="javascript:;">...</a></li>
+			<li v-if="pageList.length-1 != last_id && pageList.length-11 > last_id" v-on:click="getPage(pageList.length-1)">
+			<a href="javascript:;">{{pageList.length}}</a></li>
+            <li v-on:click="getPage(last_id+1 < pageList[pageList.length-1] ? last_id+1 : last_id)"><a
+                    href="javascript:;">&raquo;</a>
+            </li>
+			<li v-on:click="getPage(pageList.length-1)"><a href="javascript:;">尾页</a></li>
+        </ul>
+
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title" id="myModalLabel"></h4>
+                    </div>
+                    <div class="modal-body">
+                        <form role="form">
+                            <div class="form-group">
+                                <select class="form-control" v-model="logistics_type">
+                                    <option disabled="" value="" selected="selected">请选择快递类型</option>
+                                    <option>顺丰</option>
+                                    <option>其他</option>
+                                </select>
+                            </div>
+                        </form>
+                        <input type="text" class="form-control" id="sortModalDesc" type="text" name=""
+                               v-model="logistics_code" style="margin-bottom: 6px" placeholder="运输单号"/>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                        <button type="button" class="btn btn-primary" v-on:click="submitLogisticsCode()">确定</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal -->
+        </div>
+
+    </div>
+</div>
+
+<script type="text/javascript" src="../js/voiceReminder.js"></script>
+<script type="text/javascript" src="../js/menu.js"></script>
+
+<script type="text/javascript" src="../js/order.js"></script>
+</body>
+</html>

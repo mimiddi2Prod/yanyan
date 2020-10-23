@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!--适配移动端 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
+    <title>每日订单</title>
+    <script type="text/javascript" src="../node_modules/vue/dist/vue.min.js"></script>
+    <script type="text/javascript" src="../jquery-3.3.1/jquery-3.3.1.min.js"></script>
+    <!--<link rel="stylesheet" type="text/css"-->
+    <!--href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">-->
+    <link rel="stylesheet" type="text/css" href="../bootstrap/css/bootstrap.min.css">
+    <script type="text/javascript" src="../bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../layDate-v5.0.9/laydate/laydate.js"></script> <!--时间控件-->
+    <script type="text/javascript" src="../js/utils/apis.js"></script>
+    <script type="text/javascript" src="../js/utils/http.js"></script> <!--封装接口请求-->
+    <script type="text/javascript" src="../js/utils/formatTime.js"></script> <!--时间格式化-->
+    <!--<script type="text/javascript" src='https://unpkg.com/qiniu-js@2.5.3/dist/qiniu.min.js'></script> &lt;!&ndash;七牛云图片上传所需&ndash;&gt;-->
+    <script type="text/javascript" src="./../qiniu-js/qiniu.min.js"></script> <!--七牛云图片上传所需-->
+    <script type="text/javascript" src="../js/utils/qiniuUpload.js"></script> <!--封装的七牛云图片上传-->
+    <link href="../css/style.css" rel="stylesheet">
+    <link href="../css/menu.css" rel="stylesheet">
+    <link href="../css/yinbaoOrder.css" rel="stylesheet">
+</head>
+
+<body>
+<div id="LoadMenu" class="left">
+    <load-menu></load-menu>
+</div>
+
+
+<div class="right">
+    <div class="jumbotron" id="yinbaoOrder">
+        <!-- 银豹 -->
+        <div class="title item">
+            <h4>每日订单</h4>
+            <button class="btn btn-secondary" v-on:click="yinbaoGetTodayOrder" style="margin-bottom: 6px">更新当日订单</button>
+            <h5 v-if="a">总计：{{orderAmount}} （不含今日）</h5>
+            <h5>今日总计：{{total_price}}</h5>
+            <h5>单数：{{total.length}}</h5>
+        </div>
+
+        <div class="col-sm-12" v-for="item in total">
+            <div class="panel panel-default">
+                <div class="panel-heading" :class="isPhone ? '' : 'row-center'">
+                    <div :class="isPhone ? '' : 'row-center'">
+                        <h3 class="panel-title" style="margin-right: 6px">网店订单号：{{item.orderNo ? item.orderNo : '线下单'}}</h3>
+                        <h3 class="panel-title">创建时间：{{item.datetime}}</h3>
+                    </div>
+                    <div class="row-center">
+                        <h3 class="panel-title" style="margin-right: 6px">餐品：{{item.items.length}}</h3>
+                        <h3 class="panel-title">总计：{{item.payments.amount}}</h3>
+                    </div>
+
+                </div>
+                <div class="panel-body">
+                    <div>{{item.remark}}</div>
+                    <div :class="isPhone ? '' : 'row-center'" v-for="detail in item.items">
+                        商品名：{{detail.name}}
+                        <div :class="isPhone ? '' : 'row-center'">
+                            <span style="margin-right: 6px">数量：{{detail.quantity}}</span>
+                            <span>总价：{{detail.totalAmount}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--<div class="panel panel-primary">-->
+            <!--<div class="panel-heading">-->
+            <!--<h3 class="panel-title">Panel title</h3>-->
+            <!--</div>-->
+            <!--<div class="panel-body">-->
+            <!--Panel content-->
+            <!--</div>-->
+            <!--</div>-->
+        </div>
+
+        <!--<div v-for="item in total">-->
+        <!--<div>-->
+        <!--数量：{{item.totalNumber}}-->
+        <!--总计：{{item.totalPrice}}-->
+        <!--网店订单号：{{item.yinbao_order_no}}-->
+        <!--创建时间：{{item.create_time}}-->
+        <!--</div>-->
+        <!--<div v-for="detail in item.list">-->
+        <!--商品名：{{detail.name}}-->
+        <!--数量：{{detail.number}}-->
+        <!--单价：{{detail.price}}-->
+        <!--</div>-->
+
+        <!--</div>-->
+    </div>
+
+</div>
+
+<script type="text/javascript" src="../js/menu.js"></script>
+<script type="text/javascript" src="../js/yinbaoOrder.js"></script>
+</body>
+</html>

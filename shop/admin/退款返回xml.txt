@@ -1,0 +1,240 @@
+退部份钱款：
+{ xml:
+   { return_code: [ 'SUCCESS' ],
+     return_msg: [ 'OK' ],
+     appid: [ 'wx14dd6120d4882a81' ],
+     mch_id: [ '1508603281' ],
+     nonce_str: [ 'g7FENOQUgEK2NaZ5' ],
+     sign: [ '9E4F507A3B7C23711BF9A0C24B792F62' ],
+     result_code: [ 'SUCCESS' ],
+     transaction_id: [ '4200000304201904124802131174' ],
+     out_trade_no: [ 'nw_155503559698455032' ],
+     out_refund_no: [ 'nw_t_155503566229484818' ],
+     refund_id: [ '50000600292019041209100886462' ],
+     refund_channel: [ '' ],
+     refund_fee: [ '1' ],
+     coupon_refund_fee: [ '0' ],
+     total_fee: [ '2' ],
+     cash_fee: [ '2' ],
+     coupon_refund_count: [ '0' ],
+     cash_refund_fee: [ '1' ] } }
+当退部分钱款累加起来总值 == 全部付款金额时  去请求也会返回
+{ xml:
+   { return_code: [ 'SUCCESS' ],
+     return_msg: [ 'OK' ],
+     appid: [ 'wx14dd6120d4882a81' ],
+     mch_id: [ '1508603281' ],
+     nonce_str: [ 'XzwsDNcX6tnxoErW' ],
+     sign: [ 'C5365868A3679E4A924735B5379AF7B9' ],
+     result_code: [ 'FAIL' ],
+     err_code: [ 'ERROR' ],
+     err_code_des: [ '订单已全额退款' ] } }
+
+
+全额退款：
+{ xml:
+   { return_code: [ 'SUCCESS' ],
+     return_msg: [ 'OK' ],
+     appid: [ 'wx14dd6120d4882a81' ],
+     mch_id: [ '1508603281' ],
+     nonce_str: [ 'vcSux2AWgzSlTvYM' ],
+     sign: [ 'C487465E9FA58028E7264522D29EABB4' ],
+     result_code: [ 'FAIL' ],
+     err_code: [ 'NOTENOUGH' ],
+     err_code_des: [ '交易未结算资金不足，请使用可用余额退款' ] } }
+{ xml:
+   { return_code: [ 'SUCCESS' ],
+     return_msg: [ 'OK' ],
+     appid: [ 'wx14dd6120d4882a81' ],
+     mch_id: [ '1508603281' ],
+     nonce_str: [ 'XzwsDNcX6tnxoErW' ],
+     sign: [ 'C5365868A3679E4A924735B5379AF7B9' ],
+     result_code: [ 'FAIL' ],
+     err_code: [ 'ERROR' ],
+     err_code_des: [ '订单已全额退款' ] } }
+{ xml:
+   { return_code: [ 'SUCCESS' ],
+     return_msg: [ 'OK' ],
+     appid: [ 'wx14dd6120d4882a81' ],
+     mch_id: [ '1508603281' ],
+     nonce_str: [ 'w7E9x7gnfsUgfSFo' ],
+     sign: [ 'E650A3CD292A364608029BA4795F4700' ],
+     result_code: [ 'FAIL' ],
+     err_code: [ 'NOTENOUGH' ],
+     err_code_des: [ '可用余额不足，请充值后重新发起' ] } }  // 推荐弄个退款专用号或者不设置自动提现
+
+
+当退款金额超过 支付金额时：（正常程序逻辑运行正确时 不会发生这种情况）
+{ xml:
+   { return_code: [ 'FAIL' ],
+     return_msg: [ 'invalid refund_fee' ] } }
+
+     curl -w "TCP handshake: %{time_connect}, SSL handshake: %{time_appconnect}\n" -so /dev/null https://notwastingapi.geshijiancha.com
+
+添加商品数据结构
+var y = {
+    "user_id": "4",
+    "imgList": ["goods_2019_4_23_15_41_19_0.jpg", "goods_2019_4_23_15_41_19_1.png", "goods_2019_4_23_15_41_19_2.png", "goods_2019_4_23_15_41_19_3.png"],
+    "goods_title": "如仍然",
+    "goods_desc": "华美",
+    "goods_brand_id": 1,
+    "qcl_id": 2,
+    "category_id_select": 23,
+    "paramItem": [{
+        "select": "color",
+        "select_id": "1",
+        "haveParamImg": true,
+        "size": [{"name": "red", "img": ["goods_param_2019_4_23_15_41_45_0.png"]}, {
+            "name": "black",
+            "img": ["goods_param_2019_4_23_15_41_47_0.png"]
+        }],
+        "specificationList": [{"id": 1, "name": "color"}, {"id": 2, "name": "size"}]
+    }, {
+        "select": "size",
+        "select_id": "2",
+        "haveParamImg": false,
+        "size": [{"name": "big", "img": []}, {"name": "little", "img": []}],
+        "specificationList": [{"id": 1, "name": "color"}, {"id": 2, "name": "size"}]
+    }],
+    "paramAndPrice": [
+    {"param_1": "black", "param_2": "little", "price": "3", "stock": "33"},
+    {
+        "param_1": "red",
+        "param_2": "little",
+        "price": "4",
+        "stock": "44"
+    },
+    {"param_1": "black", "param_2": "big", "price": "4", "stock": "44"},
+    {
+        "param_1": "red",
+        "param_2": "big",
+        "price": "5",
+        "stock": "55"
+    }],
+    "price": "3",
+    "goodsInfoImgList": ["goodsInfo_2019_4_23_15_42_1_0.png", "goodsInfo_2019_4_23_15_42_1_1.png", "goodsInfo_2019_4_23_15_42_1_2.png", "goodsInfo_2019_4_23_15_42_1_3.png"],
+    "state": 0
+}
+
+var k = {
+    "id": 2,
+    "name": "goods-2",
+    "image": ["http://yanxuan.nosdn.127.net/149dfa87a7324e184c5526ead81de9ad.png", "http://yanxuan.nosdn.127.net/149dfa87a7324e184c5526ead81de9ad.png"],
+    "url": "../goods/goods",
+    "qcl": 2,
+    "price": "33.00",
+    "describe": "desc1",
+    "type": 0,
+    "sort": 1,
+    "state": 0,
+    "specification_id_1": 1,
+    "specification_id_2": 2,
+    "category_id_1": 2,
+    "category_id_2": 0,
+    "category_id_3": 0,
+    "create_time": "2019/04/25 15:11:29",
+    "brand_id": 2,
+    "review_id": 1,
+    "goods_info": ["http://yanxuan.nosdn.127.net/149dfa87a7324e184c5526ead81de9ad.png", "http://yanxuan.nosdn.127.net/149dfa87a7324e184c5526ead81de9ad.png"],
+    "param": [{
+        "param_id_1": 1,
+        "param_id_2": 3,
+        "stock": 54,
+        "price": "62.00",
+        "image": "http://yanxuan.nosdn.127.net/149dfa87a7324e184c5526ead81de9ad.png",
+        "param_1": "red",
+        "param_2": "big"
+    }, {
+        "param_id_1": 1,
+        "param_id_2": 4,
+        "stock": 981,
+        "price": "0.01",
+        "image": "http://yanxuan.nosdn.127.net/149dfa87a7324e184c5526ead81de9ad.png",
+        "param_1": "red",
+        "param_2": "little"
+    }, {
+        "param_id_1": 2,
+        "param_id_2": 3,
+        "stock": 24,
+        "price": "76.00",
+        "image": "/img/3.jpg",
+        "param_1": "black",
+        "param_2": "big"
+    }, {
+        "param_id_1": 2,
+        "param_id_2": 4,
+        "stock": 0,
+        "price": "44.00",
+        "image": "/img/3.jpg",
+        "param_1": "black",
+        "param_2": "little"
+    }, {
+        "param_id_1": 5,
+        "param_id_2": 3,
+        "stock": 12,
+        "price": "3.00",
+        "image": "/img/3.jpg",
+        "param_1": "blue",
+        "param_2": "big"
+    }, {
+        "param_id_1": 5,
+        "param_id_2": 4,
+        "stock": 0,
+        "price": "12.00",
+        "image": "/img/3.jpg",
+        "param_1": "blue",
+        "param_2": "little"
+    }, {
+        "param_id_1": 6,
+        "param_id_2": 3,
+        "stock": 235,
+        "price": "65.00",
+        "image": "/img/3.jpg",
+        "param_1": "green",
+        "param_2": "big"
+    }, {
+        "param_id_1": 6,
+        "param_id_2": 4,
+        "stock": 0,
+        "price": "23.00",
+        "image": "/img/3.jpg",
+        "param_1": "green",
+        "param_2": "little"
+    }, {
+        "param_id_1": 1,
+        "param_id_2": 7,
+        "stock": 1,
+        "price": "2.00",
+        "image": "http://yanxuan.nosdn.127.net/149dfa87a7324e184c5526ead81de9ad.png",
+        "param_1": "red",
+        "param_2": "mid"
+    }, {
+        "param_id_1": 2,
+        "param_id_2": 7,
+        "stock": 55,
+        "price": "332.00",
+        "image": "/img/3.jpg",
+        "param_1": "black",
+        "param_2": "mid"
+    }, {
+        "param_id_1": 5,
+        "param_id_2": 7,
+        "stock": 0,
+        "price": "4.00",
+        "image": "/img/3.jpg",
+        "param_1": "blue",
+        "param_2": "mid"
+    }, {
+        "param_id_1": 6,
+        "param_id_2": 7,
+        "stock": 1,
+        "price": "1.00",
+        "image": "/img/3.jpg",
+        "param_1": "green",
+        "param_2": "mid"
+    }],
+    "category_name_1": "play",
+    "category_parent_id": 4,
+    "showMoreParam": true,
+    "total_stock": 1363
+}

@@ -1,0 +1,81 @@
+.menu > nav {
+    /*background-color: #F6F6F6;*/
+    border-color: #fff;
+    height: auto;
+    position: absolute;
+}
+
+nav > .nav {
+    background-color: #F6F6F6;
+}
+
+nav > .nav > li > div {
+    padding: 20px 30px;
+    height: 62px;
+    font-size: 16px;
+    font-weight: 500;
+    color: #878988
+}
+
+.active {
+    background-color: #fff;
+}
+
+.active > div > span{
+    color: #D91E2B;
+}
+
+.menu-logo {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+}
+
+.a-item {
+    padding: 20px 30px;
+}
+
+.canSelect > div {
+    color: #878988;
+}
+
+.canSelect > div .nor-img {
+    margin-left: 30px;
+}
+
+.canSelect > div .have-img {
+    margin-left: 0;
+}
+
+.canSelect > div:focus, .nav > .canSelect > div:hover {
+    color: #D91E2B;
+    background-color: #fff;
+}
+
+
+.noSelect > span {
+    cursor: default;
+    color: #F6F6F6;
+    margin: 0;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.canSelect > div:focus, .nav > .noSelect > div:hover {
+    color: #878988;
+    background-color: #F6F6F6;
+}
+
+.nav > .noSelect > div:focus, .nav > .noSelect > div:active {
+    color: #878988;
+    background-color: #F6F6F6;
+}
+
+.nav > li > .a-sub-item {
+    padding: 20px 30px 20px 60px;
+    height: 62px;
+    font-size: 16px;
+    font-weight: 500;
+}

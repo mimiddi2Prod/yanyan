@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!--适配移动端 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
+    <title>商品列表</title>
+    <script type="text/javascript" src="../node_modules/vue/dist/vue.min.js"></script>
+    <script type="text/javascript" src="../jquery-3.3.1/jquery-3.3.1.min.js"></script>
+    <!--<link rel="stylesheet" type="text/css"-->
+    <!--href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">-->
+    <link rel="stylesheet" type="text/css" href="../bootstrap/css/bootstrap.min.css">
+    <script type="text/javascript" src="../bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../js/utils/apis.js"></script>
+    <script type="text/javascript" src="../js/utils/http.js"></script> <!--封装接口请求-->
+    <script type="text/javascript" src="../js/utils/formatTime.js"></script> <!--时间格式化-->
+    <link href="../css/style.css" rel="stylesheet">
+    <link href="../css/menu.css" rel="stylesheet">
+    <link href="../css/goods.css" rel="stylesheet">
+</head>
+
+<body>
+<div id="LoadMenu" class="left">
+    <load-menu></load-menu>
+</div>
+
+<div id="LoadVoice" style="position: fixed">
+    <load-voice></load-voice>
+</div>
+
+<div class="right">
+    <div class="jumbotron" id="goods">
+        <!-- 类目 搜索栏 -->
+        <div class="title item">
+            <h4>商品管理</h4>
+            <div class="search">
+                <!--<form class="bs-example bs-example-form" role="form">-->
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="input-group">
+                            <input type="text" class="form-control" v-model="searchString">
+                            <span class="input-group-btn">
+ 								<button class="btn btn-default" type="button" v-on:click="searchGoods">搜索</button>
+ 							</span>
+                        </div><!-- /input-group -->
+                    </div><!-- /.col-lg-6 -->
+                </div><!-- /.row -->
+                <!--</form>-->
+            </div>
+
+        </div>
+        <!-- 商品状态 -->
+        <div class="nav-1">
+            <ul class="nav nav-tabs">
+                <li v-bind:class="(index == navId ? 'active' : '')" v-for="item,index in navList"
+                    v-on:click="changeNav(index)"><a href="javascript:;">{{item}}</a></li>
+            </ul>
+            <!--<ul class="nav nav-tabs">-->
+            <!--<li class="active"><a href="#">全部</a></li>-->
+            <!--<li><a href="#">出售中</a></li>-->
+            <!--<li><a href="#">已售完</a></li>-->
+            <!--<li><a href="#">已下架</a></li>-->
+            <!--</ul>-->
+            <div class="row-center">
+                <button type="button" class="btn btn-secondary" v-on:click="down('tableExcel')">批量导出商品</button>
+                <button type="button" class="btn btn-danger" v-on:click="window.location.href = 'addGoods'">添加商品
+                </button>
+            </div>
+        </div>
+
+        <!-- 积分 -->
+        <!--<div class="nav-1" v-if="user_type == 0">-->
+        <!--<ul class="nav nav-tabs">-->
+        <!--<li v-bind:class="(index == navTwoId ? 'active' : '')" v-for="item,index in nav_tow_List"-->
+        <!--v-on:click="changeNavTwo(index)"><a href="javascript:;">{{item}}</a></li>-->
+        <!--</ul>-->
+        <!--</div>-->
+
+        <!-- 排序 -->
+        <!--<div class="nav-2">-->
+        <!--<nav class="navbar navbar-default" role="navigation">-->
+        <!--<div class="container-fluid">-->
+        <!--<div class="navbar-header">-->
+        <!--<a class="navbar-brand" href="javascript:;">排序</a>-->
+        <!--</div>-->
+        <!--<div>-->
+        <!--<ul class="nav navbar-nav">-->
+        <!--<li class="active"><a href="javascript:;">创建时间</a></li>-->
+        <!--<li><a href="javascript:;">库存</a></li>-->
+        <!--<li><a href="javascript:;">销量</a></li>-->
+        <!--</ul>-->
+        <!--</div>-->
+        <!--</div>-->
+        <!--</nav>-->
+        <!--</div>-->
+        <!-- 批量操作 -->
+        <div class="nav-3" style="margin-top:20px">
+            <nav class="navbar navbar-default" role="navigation">
+                <div class="conshowPriceModaltainer-fluid">
+                    <!--<label class="form-check-label row-center" v-on:click="checkAll($event)">-->
+                    <label class="form-check-label row-center" v-on:change="checkAll()">
+                        <input type="checkbox" name="checkbox-all" v-model="checkboxAll">
+                        <span>全选</span>
+                    </label>
+                    <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#categoryModal"
+                            v-if="user_type == 0">批量分类
+                    </button>
+                    <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#priceModal"
+                            v-on:click="showPriceModal()">批量改价
+                    </button>
+                    <button type="button" class="btn btn-secondary" v-on:click="showObtainedModal()">批量下架</button>
+                    <!--<button type="button" class="btn btn-secondary">批量删除</button>-->
+                </div>
+            </nav>
+        </div>
+
+        <div class="goods">
+            <!-- 商品标题 -->
+            <nav class="navbar navbar-default" role="navigation">
+                <div class="item">
+                    <span class="first-title have-border column-center">商品描述</span>
+                    <span class="second-title have-border column-center">价格</span>
+                    <span class="second-title have-border column-center">销量</span>
+                    <span class="second-title have-border column-center">库存</span>
+                    <span class="second-title have-border column-center">排序</span>
+                    <span class="second-title have-border column-center">限购量</span>
+                    <span class="second-title have-border column-center" v-if="navTwoId == 0">分类</span>
+                    <span class="second-title have-border column-center" v-if="navTwoId == 1">购买积分</span>
+                    <span class="second-title have-border column-center">创建时间</span>
+                    <span class="second-title column-center">操作</span>
+                </div>
+            </nav>
+
+            <!-- 商品详情 -->
+            <div class="goods-container" v-for="item,index in goodsList">
+                <div class="m">
+                    <div class="first-title">
+                        <label class="form-check-label row-center">
+                            <div class="a" v-on:change="checkOne()">
+                                <input type="checkbox" name="checkGoods" v-model="item.checked">
+                                <img :src="item.image[0]">
+                            </div>
+                            <div class="b">
+                                <span>{{item.name}}</span>
+                                <div v-if="item.label">
+                                    <img :src="item.label[0]" style="width: 110px;height: 40px">
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="second-title column-center">
+                        <!--{{item.price}}-->
+                        <!--<input class="form-control" v-bind:value="item.price"-->
+                               <!--v-model="item.price" v-on:keyUp.enter="updateGoods(item.id,item.price,'price')"-->
+                               <!--oninput="value=value.replace(/[^\d.]/g,'')" style="min-width: 70px"/>-->
+                        <input class="form-control" v-bind:value="item.price"
+                               v-model="item.price" oninput="value=value.replace(/[^\d.]/g,'')" style="min-width: 70px"/>
+                    </div>
+                    <div class="second-title column-center">
+                        {{item.volume}}
+                    </div>
+                    <div class="second-title column-center">
+                        <!--{{item.stock}}-->
+                        <!--<input class="form-control" v-bind:value="item.stock"-->
+                               <!--v-model="item.stock" v-on:keyUp.enter="updateGoods(item.id,item.stock,'stock')"-->
+                               <!--oninput="value=value.replace(/[^\d]/g,'')" style="min-width: 70px"/>-->
+                        <input class="form-control" v-bind:value="item.stock"
+                               v-model="item.stock" oninput="value=value.replace(/[^\d]/g,'')" style="min-width: 70px"/>
+                    </div>
+                    <div class="second-title column-center">
+                        <!--{{item.sort2}}-->
+                        <!--<input class="form-control" v-bind:value="item.sort2"-->
+                               <!--v-model="item.sort2" v-on:keyUp.enter="updateGoods(item.id,item.sort2,'sort2')"-->
+                               <!--oninput="value=value.replace(/[^\d]/g,'')" style="min-width: 70px"/>-->
+                        <input class="form-control" v-bind:value="item.sort2"
+                               v-model="item.sort2" oninput="value=value.replace(/[^\d]/g,'')" style="min-width: 70px"/>
+                    </div>
+                    <div class="second-title column-center">
+                        <!--{{item.limit}}-->
+                        <!--<input class="form-control" v-bind:value="item.limit"-->
+                               <!--v-model="item.limit" v-on:keyUp.enter="updateGoods(item.id,item.limit,'limit')"-->
+                               <!--oninput="value=value.replace(/[^\d]/g,'')" style="min-width: 70px"/>-->
+                        <input class="form-control" v-bind:value="item.limit"
+                               v-model="item.limit" oninput="value=value.replace(/[^\d]/g,'')" style="min-width: 70px"/>
+                    </div>
+                    <div class="second-title column-center" v-if="navTwoId == 0">
+                        {{item.category_name_1}}
+                    </div>
+                    <div class="second-title column-center" v-if="navTwoId == 1">
+                        {{item.integral_price}}
+                    </div>
+                    <div class="second-title column-center">
+                        {{item.create_time}}
+                    </div>
+                    <div class="second-title column-center">
+                        <button type="button" class="btn btn-link" v-on:click="updateGoods(item.id)">
+                            确定
+                        </button>
+                        <button type="button" class="btn btn-link" v-on:click="editGoods(item.id)">编辑</button>
+                        <!--<button type="button" class="btn btn-link" v-on:click="reviewGoods(item.id)" v-if="user_type == 0">评价-->
+                        <!--</button>-->
+                        <button type="button" class="btn btn-link" v-on:click="changeGoodsState(item.id,item.state)">
+                            {{item.state == 0 ? '下架' : '上架'}}
+                        </button>
+                        <!--<button type="button" class="btn btn-link">删除</button>-->
+                        <button type="button" class="btn btn-link" v-on:click="changeGoodsState(item.id,2)">
+                            删除
+                        </button>
+                    </div>
+                </div>
+                <!--<div class="p borderBotm" v-if="item.param.length > 0">-->
+                <!--<div class="param" v-for="paramItem,paramIndex in item.param"-->
+                <!--:class="(paramIndex >= 2 && !item.showMoreParam ? 'none' : '')">-->
+                <!--<div style="text-align: end;flex:2">-->
+                <!--<span style="padding-right: 20px">{{paramItem.param_1}}，{{paramItem.param_2}}</span>-->
+                <!--</div>-->
+                <!--<div class="column-center" style="flex:1">-->
+                <!--{{paramItem.price}}-->
+                <!--</div>-->
+                <!--<div class="column-center" style="flex:1">-->
+                <!--{{paramItem.volume}}-->
+                <!--&lt;!&ndash;暂无数据&ndash;&gt;-->
+                <!--</div>-->
+                <!--<div class="column-center" style="flex:1">-->
+                <!--{{paramItem.stock}}-->
+                <!--</div>-->
+                <!--</div>-->
+                <!--<div class="param">-->
+                <!--<div style="text-align: center;flex:2">-->
+                <!--<span style="margin-left: 160px;color: #337ab7;cursor: pointer"-->
+                <!--v-on:click="showMoreParam(item.id)" v-if="item.param.length >= 2">{{item.showMoreParam ? '收起' : '查看更多'}}</span>-->
+                <!--</div>-->
+                <!--</div>-->
+
+                <!--</div>-->
+            </div>
+
+        </div>
+
+        <!-- 分页栏 -->
+        <!--<ul class="pagination">-->
+        <!--<li><a href="#">&laquo;</a></li>-->
+        <!--<li class="active"><a href="#">1</a></li>-->
+        <!--<li class="disabled"><a href="#">2</a></li>-->
+        <!--<li><a href="#">3</a></li>-->
+        <!--<li><a href="#">4</a></li>-->
+        <!--<li><a href="#">5</a></li>-->
+        <!--<li><a href="#">&raquo;</a></li>-->
+        <!--</ul>-->
+        <!-- <ul class="pagination"> -->
+            <!-- <li v-on:click="getPage(last_id-1 >= 0 ? last_id-1 : last_id)"><a href="javascript:;">&laquo;</a></li> -->
+            <!-- <li v-for="item,index in pageList" v-on:click="getPage(index)" -->
+                <!-- v-bind:class="(item == last_id+1 ? 'active' : '')"><a -->
+                    <!-- href="javascript:;">{{item}}</a></li> -->
+            <!-- <li v-on:click="getPage(last_id+1 < pageList[pageList.length-1] ? last_id+1 : last_id)"><a -->
+                    <!-- href="javascript:;">&raquo;</a> -->
+            <!-- </li> -->
+        <!-- </ul> -->
+		<ul class="pagination">
+			<li v-on:click="getPage(0)"><a href="javascript:;">首页</a></li>
+            <li v-on:click="getPage(last_id-1 >= 0 ? last_id-1 : last_id)"><a href="javascript:;">&laquo;</a></li>
+            <li v-if="index >= last_id-5  && index < last_id+11" v-for="item,index in pageList" v-on:click="getPage(index)"
+                v-bind:class="(item == last_id+1 ? 'active' : '')"><a
+                    href="javascript:;">{{item}}</a></li>
+			<li v-if="pageList.length-1 != last_id && pageList.length-12 > last_id"><a href="javascript:;">...</a></li>
+			<li v-if="pageList.length-1 != last_id && pageList.length-11 > last_id" v-on:click="getPage(pageList.length-1)">
+			<a href="javascript:;">{{pageList.length}}</a></li>
+            <li v-on:click="getPage(last_id+1 < pageList[pageList.length-1] ? last_id+1 : last_id)"><a
+                    href="javascript:;">&raquo;</a>
+            </li>
+			<li v-on:click="getPage(pageList.length-1)"><a href="javascript:;">尾页</a></li>
+        </ul>
+
+        <!--用于导出excel-->
+        <table id="tableExcel" style="display: none">
+            <tr>
+                <td>商品描述</td>
+                <td>价格</td>
+                <td>销量</td>
+                <td>库存</td>
+                <td>分类</td>
+                <td>创建时间</td>
+                <td>图片</td>
+            </tr>
+            <tr v-for="item in goodsList">
+                <td>{{item.name}}</td>
+                <td>{{item.price}}</td>
+                <td>{{item.volume}}</td>
+                <td>{{item.total_stock}}</td>
+                <td>{{item.category_name_1}}</td>
+                <td>{{item.create_time}}</td>
+                <td><img :src='item.image[0]'/></td>
+            </tr>
+        </table>
+
+        <!--下架-->
+        <div id="obtained" class="none"
+             style="position: fixed;z-index: 9;width: 100%;height: 100%;top:0;left:0;font-size: 16px">
+            <div style="z-index: 9;width: 100%;height: 100%;background-color: black;opacity: 0"></div>
+            <div class="alert alert-danger"
+                 style="position: absolute;transform: translate(-50%,50%);margin-left: 50%;top:30%;padding-bottom: 0">
+                <div style="display: flex;flex-direction:column;align-items: center;border-bottom: 1px solid #EBD6D6">
+                    <div href="javascript:;" class="alert-link" style="display:block">下架后，店铺内将不再展示这些商品</div>
+                    <div href="javascript:;" class="alert-link" style="margin: 6px 0;">确认下架？</div>
+                </div>
+                <div style="display: flex;flex-direction: row;align-items: center;">
+                    <div style="cursor: pointer;width:50%;border-right: 1px solid #EBD6D6;flex:1;text-align: center;padding: 10px 0"
+                         v-on:click="hideObtainedModal()">取消
+                    </div>
+                    <div style="cursor: pointer;width: 50%;flex:1;text-align: center;padding: 10px 0"
+                         v-on:click="submitObtained()">确认
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--批量分类-->
+        <div class="modal fade" id="categoryModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title" id="categoryModalLabel"></h4>
+                    </div>
+                    <div class="modal-body">
+                        <form role="form">
+                            <div class="form-group">
+                                <select class="form-control" v-model="category_parent_id_select"
+                                        v-on:change="haveCategoryParent(category_parent_id_select)">
+                                    <option disabled="" value="" selected="selected">请选择大分类</option>
+                                    <option v-for="item in category_parent" v-bind:value="item.id">{{item.name}}
+                                    </option>
+                                </select>
+                            </div>
+                        </form>
+                        <form role="form">
+                            <div class="form-group">
+                                <select class="form-control" v-model="category_id_select">
+                                    <option disabled="" value="" selected="selected">请选择小分类</option>
+                                    <option v-for="item in category" v-bind:value="item.id">{{item.name}}</option>
+                                </select>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                        <button type="button" class="btn btn-primary" v-on:click="submitCategoty()">确定</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal -->
+        </div>
+
+        <!--批量改价-->
+        <div class="modal fade" id="priceModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content" style="width: 200%;transform: translateX(-25%)">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title" id="priceModalLabel"></h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="goods" style="border-top: 1px solid #e4e4e4;margin-bottom: 10px">
+                            <!-- 商品标题 -->
+                            <nav class="navbar navbar-default" role="navigation">
+                                <div class="item">
+                                    <span class="first-title have-border column-center">商品描述</span>
+                                    <span class="second-title have-border column-center">原价</span>
+                                    <span class="second-title column-center">修改后价格</span>
+                                </div>
+                            </nav>
+
+                            <!-- 商品详情 -->
+                            <div class="goods-container" v-for="item,index in previewGoodsPrice">
+                                <div class="m" style="padding: 10px 0">
+                                    <div class="first-title">
+                                        <span>{{item.name}}</span>
+                                    </div>
+                                    <div class="second-title column-center">
+                                        {{item.price}} ~ {{item.price_max}}
+                                    </div>
+                                    <div class="second-title column-center" v-if="choose_type == 1">
+                                        {{item.price_latest}}
+                                    </div>
+                                    <div class="second-title column-center" v-if="choose_type == 2">
+                                        {{item.price_latest}} ~ {{item.price_max_latest}}
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <!--第一种选择-->
+                        <div style="display: flex;flex-direction: row;align-items: center;margin-bottom: 10px">
+                            <label class="form-check-label" v-for="item,index in radioList" v-if="index == 0"
+                                   style="margin-right: 10px">
+                                <input class="form-check-input" type="radio" name="type" v-bind:value="item.id"
+                                       v-model="choose_type">
+                                {{item.text}}
+                            </label>
+                            <input v-model="calc_number_one" oninput="value=value.replace(/[^\d.]/g,'')" type="text"
+                                   class="form-control" style="width: 50%" name=""/>
+                        </div>
+                        <!--第二种选择-->
+                        <div style="display: flex;flex-direction: row;align-items: center">
+                            <label class="form-check-label" v-for="item,index in radioList" v-if="index == 1"
+                                   style="margin-right: 10px">
+                                <input class="form-check-input" type="radio" name="type" v-bind:value="item.id"
+                                       v-model="choose_type">
+                                {{item.text}}
+                            </label>
+                            <form role="form">
+                                <div class="form-group" style="margin-bottom:0;margin-right: 10px">
+                                    <select class="form-control" v-model="calc_type"
+                                            style="min-width: 80px;width: 80px">
+                                        <!--<option disabled="" value="" selected="selected">请选择计算方式</option>-->
+                                        <option v-for="item in calcList" v-bind:value="item.id">{{item.name}}</option>
+                                    </select>
+                                </div>
+                            </form>
+                            <input v-model="calc_number_two" oninput="value=value.replace(/[^\d.]/g,'')" type="text"
+                                   class="form-control" style="width: 50%" name=""/>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                        <button type="button" class="btn btn-primary" v-on:click="submitPrice()">确定</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal -->
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="../js/voiceReminder.js"></script>
+<script type="text/javascript" src="../js/menu.js"></script>
+<script type="text/javascript" src="../js/goods.js"></script>
+</body>
+</html>

@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!--适配移动端 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
+    <title>订单详情</title>
+    <script type="text/javascript" src="../node_modules/vue/dist/vue.min.js"></script>
+    <script type="text/javascript" src="../jquery-3.3.1/jquery-3.3.1.min.js"></script>
+    <link rel="stylesheet" type="text/css"
+          href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script type="text/javascript" src="../bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../layDate-v5.0.9/laydate/laydate.js"></script> <!--时间控件-->
+    <script type="text/javascript" src="../js/utils/apis.js"></script>
+    <script type="text/javascript" src="../js/utils/http.js"></script> <!--封装接口请求-->
+    <script type="text/javascript" src="../js/utils/formatTime.js"></script> <!--时间格式化-->
+    <script type="text/javascript" src='https://unpkg.com/qiniu-js@2.5.3/dist/qiniu.min.js'></script> <!--七牛云图片上传所需-->
+    <script type="text/javascript" src="../js/utils/qiniuUpload.js"></script> <!--封装的七牛云图片上传-->
+    <link href="../css/style.css" rel="stylesheet">
+    <link href="../css/menu.css" rel="stylesheet">
+    <link href="../css/orderDetail.css" rel="stylesheet">
+</head>
+
+<body>
+<div id="LoadMenu" class="left">
+    <load-menu></load-menu>
+</div>
+
+<div id="LoadVoice" style="position: fixed">
+    <load-voice></load-voice>
+</div>
+
+<div class="right">
+    <div class="jumbotron" id="orderDetail">
+        <!-- 类目 搜索栏 -->
+        <div class="title row-center">
+            <h4><span v-on:click="window.location.href = 'order'">订单管理</span><span
+                    class="glyphicon glyphicon-menu-right"></span><span>订单详情</span></h4>
+        </div>
+
+        <div class="order-title">
+            <nav role="navigation" class="navbar navbar-default">
+                <div class="select">
+                    <h2 v-if="orderDetail.state == 0">{{orderDetail.waitPay ? '待付款' : '已取消'}}</h2>
+                    <h2 v-if="orderDetail.after_sale_state == 0">{{orderDetail.state == -1 ? '已取消' : ''}}
+                        {{orderDetail.state == 1 ? '待发货' : ''}}
+                        {{orderDetail.state == 2 ? '已发货' : ''}}
+                        {{orderDetail.state == 3 ? '待评价' : ''}}
+                        {{orderDetail.state == 4 ? '已完成' : ''}}
+                        {{orderDetail.state == 5 ? '用户已删除订单' : ''}}</h2>
+                    <h2 v-if="orderDetail.after_sale_state != 0">{{orderDetail.after_sale_state == 1 ? '退款中' : ''}}
+                        {{orderDetail.after_sale_state == 2 ? '退货退款中' : ''}}
+                        {{orderDetail.after_sale_state == 3 ? '换货中' : ''}}
+                        {{orderDetail.after_sale_state == 4 ? '已退款' : ''}}
+                        {{orderDetail.after_sale_state == 5 ? '已退货退款' : ''}}
+                        {{orderDetail.after_sale_state == 6 ? '已换货' : ''}}
+                        {{orderDetail.after_sale_state == 7 ? '已拒绝退款' : ''}}</h2>
+                </div>
+            </nav>
+
+            <nav role="navigation" class="navbar navbar-default">
+                <div class="row">
+                    <div>
+                        <div><span>买家信息：</span></div>
+                    </div>
+                    <div class="second-title column" style="margin-left: 10px">
+                        <div><span>{{orderDetail.receiver}}</span></div>
+                        <div><span>{{orderDetail.tel}}</span></div>
+                        <div>{{orderDetail.address_text}}</div>
+                    </div>
+                </div>
+
+            </nav>
+        </div>
+
+
+        <!-- 导航栏选择 -->
+        <div class="nav-1">
+            <ul class="nav nav-tabs">
+                <!--<li class="active"><a href="javascript:;">订单详情</a></li>-->
+                <!--<li><a href="javascript:;">物流信息</a></li>-->
+                <li v-bind:class="(index == navId ? 'active' : '')" v-for="item,index in navList"
+                    v-on:click="changeNav(index)"><a href="javascript:;">{{item}}</a></li>
+            </ul>
+        </div>
+
+        <div class="goods" v-if="navId == 0">
+            <!-- 商品标题 -->
+            <nav class="navbar navbar-default" role="navigation">
+                <div class="item">
+                    <span class="first-title have-border column-center">商品名称</span>
+                    <span class="third-title have-border column-center">型号</span>
+                    <span class="third-title have-border column-center">发货状态</span>
+                    <span class="third-title have-border column-center">退款状态</span>
+                    <span class="third-title column-center">单价/数量</span>
+                </div>
+            </nav>
+
+            <!--for循环-->
+            <!--<div v-for="item in orderDetail">-->
+            <!-- 商品详情 -->
+            <div class="goods-container1">
+                <!--图片和商品名-->
+                <div class="first-title">
+                    <label class="form-check-label row">
+                        <div class="a">
+                            <!-- <input type="checkbox" name=""> -->
+                            <img :src="orderDetail.image">
+                        </div>
+                        <div class="b">
+                            <span>{{orderDetail.name}}</span>
+                        </div>
+
+                    </label>
+                </div>
+                <!--型号-->
+                <div class="third-title column">
+                    <div class="c"><span>{{orderDetail.param_1}}</span></div>
+                    <div class="c"><span>{{orderDetail.param_2}}</span></div>
+                </div>
+                <!--发货状态-->
+                <div class="third-title column">
+                    <div class="c" v-if="orderDetail.state == 0">
+                        <span>{{orderDetail.payInterval ? '待付款' : '已取消'}}</span>
+                    </div>
+                    <div class="c"><span>{{orderDetail.state == -1 ? '已取消' : ''}}
+                        {{orderDetail.state == 1 ? '待发货' : ''}}
+                        {{orderDetail.state == 2 ? '已发货' : ''}}
+                        {{orderDetail.state == 3 ? '待评价' : ''}}
+                        {{orderDetail.state == 4 ? '已完成' : ''}}</span></div>
+                </div>
+                <!--退款状态-->
+                <div class="third-title column">
+                    <div class="c"><span>{{orderDetail.after_sale_state == 0 ? '无' : ''}}
+                        {{orderDetail.after_sale_state == 1 ? '退款中' : ''}}
+                        {{orderDetail.after_sale_state == 2 ? '退货退款中' : ''}}
+                        {{orderDetail.after_sale_state == 3 ? '换货中' : ''}}
+                        {{orderDetail.after_sale_state == 4 ? '已退款' : ''}}
+                        {{orderDetail.after_sale_state == 5 ? '已退货退款' : ''}}
+                        {{orderDetail.after_sale_state == 6 ? '已换货' : ''}}
+                        {{orderDetail.after_sale_state == 7 ? '已拒绝退款' : ''}}</span></div>
+                </div>
+                <!--单价/数量-->
+                <div class="third-title column">
+                    <div class="c">
+                        <div>￥{{orderDetail.single_price}}</div>
+                        <div>x {{orderDetail.number}}</div>
+                    </div>
+                </div>
+            </div>
+            <!--</div>-->
+
+            <div class="goods-container">
+                <div class="first-title">
+                    <label class="form-check-label row" style="justify-content: space-between">
+                        <div class="a" style="width: 50%">
+                            <span>订单编号：{{orderDetail.tradeId}}</span>
+                        </div>
+                        <div class="b" style="width: 50%;text-align: end">
+                            <span>商品金额：￥{{orderDetail.total_price}}</span>
+                        </div>
+                    </label>
+                </div>
+            </div>
+            <div class="goods-container">
+                <div class="first-title">
+                    <label class="form-check-label row" style="justify-content: space-between">
+                        <div class="a" style="width: 50%">
+                            <span>下单时间：{{orderDetail.create_time}}</span>
+                        </div>
+                        <div class="b" style="width: 50%;text-align: end">
+                            <span>运费：￥{{orderDetail.postage}}</span>
+                        </div>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!--售后详情-->
+        <div class="goods" v-if="orderDetail.after_sale_state > 0 && orderDetail.after_sale_state < 4">
+            <!--<h4>售后操作：</h4>-->
+            <!--仅退款-->
+            <div class="first-title" v-if="orderDetail.after_sale_state == 1 || orderDetail.after_sale_state == 4">
+                <!--<div><span>退款 (钱款直接原路退回)</span></div>-->
+                <label class="form-check-label row" style="justify-content: space-between">
+                    <div class="a" style="width: 50%">
+                        <span>货物状态：{{orderDetail.aftersale[0].goods_state == 0 ? '未收到货' : '已收到货'}}</span>
+                    </div>
+                    <div class="b" style="width: 50%;text-align: end">
+                        <span>退款金额：￥{{orderDetail.aftersale[0].refund}}</span>
+                    </div>
+                </label>
+                <label class="form-check-label row" style="justify-content: space-between;align-items: center">
+                    <div class="a column" style="width: 50%">
+                        <span>退款原因：{{orderDetail.aftersale[0].reason}}</span>
+                    </div>
+                    <div class="b" style="width: 50%;text-align: end">
+                        <span>退款数量：x{{orderDetail.aftersale[0].number}}</span>
+                    </div>
+                </label>
+                <div class="form-check-label row" style="justify-content: space-between;align-items: center">
+                    <div class="a column" style="width: 50%">
+                        <span>退款说明：{{orderDetail.aftersale[0].description}}</span>
+                        <span>售后凭证：</span>
+                    </div>
+                    <div style="width: 50%;margin-top: 10px;text-align: end" v-if="orderDetail.after_sale_state == 1">
+                        <button type="button" class="btn btn-danger" v-on:click="refund()">确认退款</button>
+                        <button type="button" class="btn btn-secondary" v-on:click="rejectRefund()">拒绝退款</button>
+                    </div>
+                </div>
+                <label class="form-check-label row">
+                    <div class="afterSaleImg">
+
+                        <img class="proof" v-for="item in orderDetail.aftersale[0].image" :src="item">
+                    </div>
+                </label>
+            </div>
+            <!--退货退款-->
+            <div class="first-title" v-if="orderDetail.after_sale_state == 2 || orderDetail.after_sale_state == 5">
+                <label class="form-check-label row" style="justify-content: space-between">
+                    <div class="a" style="width: 50%">
+                        <span>退货退款原因：{{orderDetail.aftersale[0].reason}}</span>
+                    </div>
+                    <div class="b" style="width: 50%;text-align: end">
+                        <span>退款金额：￥{{orderDetail.aftersale[0].refund}}</span>
+                    </div>
+                </label>
+                <label class="form-check-label row" style="justify-content: space-between;align-items: center">
+                    <div class="a" style="width: 50%">
+                        <span>退款说明：{{orderDetail.aftersale[0].description}}</span>
+                    </div>
+                    <div class="b" style="width: 50%;text-align: end">
+                        <span>退款数量：x{{orderDetail.aftersale[0].number}}</span>
+                    </div>
+                </label>
+                <div class="form-check-label row" style="justify-content: space-between;align-items: center">
+                    <div class="a" style="width: 50%">
+                        <span>售后凭证：</span>
+                    </div>
+                    <div style="width: 50%;margin-top: 10px;text-align: end" v-if="orderDetail.after_sale_state == 2">
+                        <button type="button" class="btn btn-danger" v-on:click="refund()">确认退款</button>
+                        <button type="button" class="btn btn-secondary" v-on:click="rejectRefund()">拒绝退款</button>
+                    </div>
+                </div>
+                <label class="form-check-label row">
+                    <div class="afterSaleImg">
+                        <img class="proof" v-for="item in orderDetail.aftersale[0].image" :src="item">
+                    </div>
+                </label>
+            </div>
+            <!--换货-->
+            <div class="column" v-if="orderDetail.after_sale_state == 3">
+                <label class="form-check-label row" style="justify-content: space-between">
+                    <div class="a" style="width: 50%">
+                        <span>换货原因：{{orderDetail.aftersale[0].reason}}</span>
+                    </div>
+                    <div class="b" style="width: 50%;text-align: end">
+                        <span style="border-right: 1px solid black;padding-right: 6px">收货人：{{orderDetail.aftersale[0].address[0].receiver}}</span>
+                        <span style="border-right: 1px solid black;padding-right: 6px">收货地址：{{orderDetail.aftersale[0].address[0].address_text}}</span>
+                        <span>收货电话：{{orderDetail.aftersale[0].address[0].tel}}</span>
+                    </div>
+                </label>
+                <label class="form-check-label row" style="justify-content: space-between;align-items: center">
+                    <div class="a" style="width: 50%">
+                        <span>换货说明：{{orderDetail.aftersale[0].description}}</span>
+                    </div>
+                    <div class="b" style="width: 50%;text-align: end">
+                        <span>换货数量：x{{orderDetail.aftersale[0].number}}</span>
+                    </div>
+                </label>
+                <label class="form-check-label row">
+                    <div class="a" style="width: 50%">
+                        <span>售后凭证：</span>
+                    </div>
+                    <div style="width: 50%;margin-top: 10px;text-align: end" v-if="orderDetail.after_sale_state == 3">
+                        <button type="button" class="btn btn-danger" v-on:click="changeGoodsState()">确认售后完成</button>
+                        <!--<button type="button" class="btn btn-secondary">拒绝</button>-->
+                    </div>
+                </label>
+                <label class="form-check-label row">
+                    <div class="afterSaleImg">
+                        <img class="proof" v-for="item in orderDetail.aftersale[0].image" :src="item">
+                    </div>
+                </label>
+                <!--<div><span>换货 (货物收到后按客户要求给予更换)</span></div>-->
+                <!--<div><span>更换型号：</span></div>-->
+                <!--<div><span>接收地址：</span></div>-->
+                <!--<div style="margin-top: 10px">-->
+                <!--<button type="button" class="btn btn-danger btn-margin-right">接受</button>-->
+                <!--<button type="button" class="btn btn-secondary btn-margin-right">拒绝</button>-->
+                <!--</div>-->
+            </div>
+        </div>
+
+        <div class="goods"  v-if="navId == 1">
+            <div>
+                <span>订单号：{{logisticsCode}}</span>
+            </div>
+            <div>
+                <span>下单时间：{{orderDetail.create_time}}</span>
+            </div>
+            <div>
+                物流公司：{{logisticsName}}
+            </div>
+            <div v-for="item in logistics">
+                <div>时间：{{item.time}}，信息：{{item.status}}</div>
+            </div>
+        </div>
+
+        <div id="myModal" class="modal fade" data-keyboard="false"
+             data-backdrop="static" data-role="dialog"
+             aria-labelledby="myModalLabel" aria-hidden="true">
+            <div id="loading" class="loading">请稍后...</div>
+        </div>
+
+    </div>
+</div>
+
+<script type="text/javascript" src="../js/voiceReminder.js"></script>
+<script type="text/javascript" src="../js/menu.js"></script>
+<script type="text/javascript" src="../js/orderDetail.js"></script>
+</body>
+</html>

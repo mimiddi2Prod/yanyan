@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!--适配移动端 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
+    <title>首页</title>
+    <script type="text/javascript" src="../node_modules/vue/dist/vue.min.js"></script>
+    <script type="text/javascript" src="../jquery-3.3.1/jquery-3.3.1.min.js"></script>
+    <!--<link rel="stylesheet" type="text/css"-->
+    <!--href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">-->
+    <link rel="stylesheet" type="text/css" href="../bootstrap/css/bootstrap.min.css">
+    <script type="text/javascript" src="../bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../layDate-v5.0.9/laydate/laydate.js"></script> <!--时间控件-->
+    <script type="text/javascript" src="../js/utils/apis.js"></script>
+    <script type="text/javascript" src="../js/utils/http.js"></script> <!--封装接口请求-->
+    <script type="text/javascript" src="../js/utils/formatTime.js"></script> <!--时间格式化-->
+    <link href="../css/style.css" rel="stylesheet">
+    <link href="../css/menu.css" rel="stylesheet">
+    <link href="../css/home.css" rel="stylesheet">
+
+    <script type="text/javascript" src="../jqplot/jQuery.js"></script>
+    <script type="text/javascript" src="../jqplot/jqplot.js"></script>
+</head>
+
+<body>
+<div id="LoadMenu" class="left">
+    <load-menu></load-menu>
+</div>
+
+<div id="LoadVoice" style="position: fixed">
+    <load-voice></load-voice>
+</div>
+
+<div class="right">
+    <div class="jumbotron" id="home">
+        <!-- 类目 搜索栏 -->
+        <div class="home-title">
+            <nav role="navigation" class="navbar navbar-default">
+                <div class="item">
+                    <div class="column-center" v-on:click="toOrder(2)" style="cursor: pointer">
+                        <div><h1>{{waitShipNum}}</h1></div>
+                        <div><h5>待送达订单</h5></div>
+                    </div>
+                    <div class="column-center" v-on:click="toOrder(3)" style="cursor: pointer">
+                        <div><h1>{{afterSaleNum}}</h1></div>
+                        <div><h5>退款售后订单</h5></div>
+                    </div>
+                    <div class="column-center">
+                        <div><h1>{{todayOrder}}</h1></div>
+                        <div><h5>今日订单数</h5></div>
+                    </div>
+                    <div class="column-center">
+                        <div><h1>{{totalOrder}}</h1></div>
+                        <div><h5>订单总数</h5></div>
+                    </div>
+                    <div class="column-center">
+                        <div><h1>{{orderAmount}}</h1></div>
+                        <div><h5>订单微信支付金额</h5></div>
+                    </div>
+                    <div class="column-center">
+                        <div><h1>{{orderBalanceAmount}}</h1></div>
+                        <div><h5>订单积分支付金额</h5></div>
+                    </div>
+                    <div class="column-center">
+                        <div><h1>{{refundAmount}}</h1></div>
+                        <div><h5>退款金额</h5></div>
+                    </div>
+                </div>
+            </nav>
+        </div>
+
+        <!--第一表-->
+        <div style="margin: 10px 0;">销售</div>
+        <div style="display: flex;flex-direction: row;">
+            <div style="margin-right: 30px">
+                <button type="button" class="btn btn-secondary" style="margin-left: 0;margin-right: 6px"
+                        :style="index == active ? 'color:#fff;background-color:red' : ''" v-for="item,index in dayList"
+                        v-on:click="getSales(item)">{{item}}天
+                </button>
+            </div>
+            <div style="display: flex;flex-direction: row;">
+                <input type="text" class="form-control" id="test5_1"
+                       style="width: auto;display: inline-block;margin-right: 6px"
+                       placeholder="选择起始时间">
+                <div class="line"></div>
+                <input type="text" class="form-control" id="test5_2"
+                       style="width: auto;display: inline-block;margin-right: 6px"
+                       placeholder="选择截止时间">
+                <button type="button" class="btn btn-secondary" style="margin-left: 0" v-on:click="getSales()"
+                        :style="2 == active ? 'color:#fff;background-color:red' : ''">确定
+                </button>
+            </div>
+        </div>
+        <!--线性图-->
+        <div id="chart_1"></div>
+
+        <!--第三表-->
+        <div style="margin: 10px 0;">每日余额订单</div>
+        <div style="display: flex;flex-direction: row;">
+            <div style="margin-right: 30px">
+                <button type="button" class="btn btn-secondary" style="margin-left: 0;margin-right: 6px"
+                        :style="index == balance_active ? 'color:#fff;background-color:red' : ''"
+                        v-for="item,index in balance_dayList"
+                        v-on:click="getBalanceShop(item)">{{item}}天
+                </button>
+            </div>
+            <div style="display: flex;flex-direction: row;">
+                <input type="text" class="form-control" id="test5_15"
+                       style="width: auto;display: inline-block;margin-right: 6px"
+                       placeholder="选择起始时间">
+                <div class="line"></div>
+                <input type="text" class="form-control" id="test5_25"
+                       style="width: auto;display: inline-block;margin-right: 6px"
+                       placeholder="选择截止时间">
+                <button type="button" class="btn btn-secondary" style="margin-left: 0" v-on:click="getBalanceShop()"
+                        :style="2 == active ? 'color:#fff;background-color:red' : ''">确定
+                </button>
+            </div>
+        </div>
+        <div id="chart_5"></div>
+
+
+        <!--第二表-->
+        <div style="margin: 10px 0;">每日新增用户</div>
+        <div style="display: flex;flex-direction: row;">
+            <div style="margin-right: 30px">
+                <button type="button" class="btn btn-secondary" style="margin-left: 0;margin-right: 6px"
+                        :style="index == people_shop_active ? 'color:#fff;background-color:red' : ''"
+                        v-for="item,index in people_shop_dayList"
+                        v-on:click="getPeopleShop(item)">{{item}}天
+                </button>
+            </div>
+            <div style="display: flex;flex-direction: row;">
+                <input type="text" class="form-control" id="test5_13"
+                       style="width: auto;display: inline-block;margin-right: 6px"
+                       placeholder="选择起始时间">
+                <div class="line"></div>
+                <input type="text" class="form-control" id="test5_23"
+                       style="width: auto;display: inline-block;margin-right: 6px"
+                       placeholder="选择截止时间">
+                <button type="button" class="btn btn-secondary" style="margin-left: 0" v-on:click="getPeopleShop()"
+                        :style="2 == active ? 'color:#fff;background-color:red' : ''">确定
+                </button>
+            </div>
+        </div>
+        <div id="chart_3"></div>
+    </div>
+</div>
+</div>
+
+<script type="text/javascript" src="../js/utils/check_login.js"></script>
+<script type="text/javascript" src="../js/voiceReminder.js"></script>
+<script type="text/javascript" src="../js/menu.js"></script>
+<script type="text/javascript" src="../js/home.js"></script>
+
+</body>
+</html>

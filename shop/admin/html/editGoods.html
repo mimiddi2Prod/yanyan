@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!--适配移动端 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
+    <title>编辑商品</title>
+    <script type="text/javascript" src="../node_modules/vue/dist/vue.min.js"></script>
+    <script type="text/javascript" src="../jquery-3.3.1/jquery-3.3.1.min.js"></script>
+    <!--<link rel="stylesheet" type="text/css"-->
+    <!--href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">-->
+    <link rel="stylesheet" type="text/css" href="../bootstrap/css/bootstrap.min.css">
+    <script type="text/javascript" src="../bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../layDate-v5.0.9/laydate/laydate.js"></script> <!--时间控件-->
+    <script type="text/javascript" src="../js/utils/apis.js"></script>
+    <script type="text/javascript" src="../js/utils/http.js"></script> <!--封装接口请求-->
+    <script type="text/javascript" src="../js/utils/formatTime.js"></script> <!--时间格式化-->
+    <!--<script type="text/javascript" src='https://unpkg.com/qiniu-js@2.5.3/dist/qiniu.min.js'></script> &lt;!&ndash;七牛云图片上传所需&ndash;&gt;-->
+    <script type="text/javascript" src="./../qiniu-js/qiniu.min.js"></script> <!--七牛云图片上传所需-->
+    <script type="text/javascript" src="../js/utils/qiniuUpload.js"></script> <!--封装的七牛云图片上传-->
+    <link href="../css/style.css" rel="stylesheet">
+    <link href="../css/menu.css" rel="stylesheet">
+    <link href="../css/editGoods.css" rel="stylesheet">
+</head>
+
+<body>
+<div id="LoadMenu" class="left">
+    <load-menu></load-menu>
+</div>
+
+<div id="LoadVoice" style="position: fixed">
+    <load-voice></load-voice>
+</div>
+
+<div class="right">
+    <div id="editGoods">
+        <div class="jumbotron">
+            <!-- 类目 添加分类 -->
+            <div class="title row-center">
+                <h4><span v-on:click="window.location.href = 'goods'">商品管理</span><span
+                        class="glyphicon glyphicon-menu-right"></span><span>编辑商品</span></h4>
+            </div>
+
+            <!-- 添加商品信息分栏 -->
+            <!-- 基础信息 -->
+            <div class="subtitle">
+                <div>基础信息</div>
+
+                <!--<div class="sort row-center">-->
+                <!--<div class="index">标题图片</div>-->
+                <!--<div class="item">-->
+                <!--<div class="row-center">-->
+                <!--<div class="goods-img">-->
+                <!--<input id="inputImg1" class="getImg" type="file" accept="image/*"-->
+                <!--v-on:change="getImg('inputImg1')"/>-->
+                <!--<em class="img-r abs">&nbsp;</em>-->
+                <!--<em class="img-c abs">&nbsp;</em>-->
+                <!--</div>-->
+                <!--<div class="imgShow" v-if="mainImg.length > 0">-->
+                <!--&lt;!&ndash;<input :id="'replaceImg'+index" class="getImg" type="file" accept="image/*" v-on:change="replaceImg(index)"/>&ndash;&gt;-->
+                <!--<img class="imgSrc" :src='mainImg'>-->
+                <!--&lt;!&ndash;<img class="imgDel" src="/images/del.png">&ndash;&gt;-->
+                <!--</div>-->
+                <!--</div>-->
+                <!--<div class="text">建议尺寸：800×800；拖拽图片可更换顺序。</div>-->
+                <!--</div>-->
+                <!--</div>-->
+
+                <div class="sort row-center">
+                    <div class="index">商品图片</div>
+                    <div class="item">
+                        <div class="row-center">
+                            <div class="goods-img">
+                                <input id="inputImg1" class="getImg" type="file" accept="image/*"
+                                       v-on:change="getImg('inputImg1')" multiple/> <!-- multiple能够选择多张图片 -->
+                                <em class="img-r abs">&nbsp;</em>
+                                <em class="img-c abs">&nbsp;</em>
+                            </div>
+                            <div class="imgShow" v-if="imgList.length > 0" v-for="item,index in imgList">
+                                <input :id="'replaceImg'+index" class="getImg" type="file" accept="image/*"
+                                       v-on:change="replaceImg(index)"/>
+                                <img class="imgSrc" :src='item.tempFilePath'>
+                                <img class="imgDel" src="/images/del.png" v-on:click="delImg(index)">
+                            </div>
+                        </div>
+                        <div class="text">选择的第一张图将作为商品封面图。</div>
+                    </div>
+                </div>
+
+                <div class="sort row-center">
+                    <div class="index">商品标签</div>
+                    <div class="item">
+                        <div class="row-center">
+                            <div class="goods-img">
+                                <input id="inputImg2" class="getImg" type="file" accept="image/*"
+                                       v-on:change="getImg2('inputImg2')" multiple/> <!-- multiple能够选择多张图片 -->
+                                <em class="img-r abs">&nbsp;</em>
+                                <em class="img-c abs">&nbsp;</em>
+                            </div>
+                            <div class="imgShow" v-if="imgLabelList.length > 0" v-for="item,index in imgLabelList">
+                                <input :id="'replaceImg2'+index" class="getImg" type="file" accept="image/*"
+                                       v-on:change="replaceImg2(index)"/>
+                                <img class="imgSrc" style="width: 110px;height: 40px" :src='item.tempFilePath'>
+                                <img class="imgDel" src="/images/del.png" v-on:click="delImg2(index)">
+                            </div>
+                        </div>
+                        <div class="text">非必选</div>
+                    </div>
+                </div>
+
+                <div class="sort row-center">
+                    <div class="index">商品标题</div>
+                    <div class="item"><input v-model="goods_title" type="text" class="form-control" name=""/></div>
+                </div>
+
+                <div class="sort row-center">
+                    <div class="index">商品描述</div>
+                    <div class="item"><input v-model="goods_desc" type="text" class="form-control" name=""/></div>
+                </div>
+                <div class="sort row-center">
+                    <div class="index">排序</div>
+                    <div class="item"><input v-model="goods_sort2" type="text" class="form-control" name="" oninput="value=value.replace(/[^\d]/g,'')"/></div>
+                </div>
+                <div class="sort row-center">
+                    <div class="index">限购数量</div>
+                    <div class="item"><input v-model="goods_limit" type="text" class="form-control" name="" oninput="value=value.replace(/[^\d]/g,'')"/></div>
+                </div>
+                <!--<div class="sort row-center">-->
+                    <!--<div class="index">商品品牌</div>-->
+                    <!--<div class="item">-->
+                        <!--<div class="select">-->
+                            <!--<form role="form">-->
+                                <!--<div class="form-group">-->
+                                    <!--<select class="form-control" v-model="goods_brand_id">-->
+                                        <!--<option disabled="" value="" selected="selected">请选择品牌</option>-->
+                                        <!--<option v-for="item in brandList" v-bind:value="item.id">{{item.name}}</option>-->
+                                    <!--</select>-->
+                                <!--</div>-->
+                            <!--</form>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
+
+                <!--<div class="sort row-center">-->
+                <!--<div class="index">商品等级</div>-->
+                <!--<div class="item">-->
+                <!--<div class="select">-->
+                <!--<form role="form">-->
+                <!--<div class="form-group">-->
+                <!--<select class="form-control" v-model="qcl_id">-->
+                <!--<option disabled="" value="" selected="selected">请选择级别</option>-->
+                <!--<option v-for="item in qcl" v-bind:value="item.id">{{item.name}}</option>-->
+                <!--</select>-->
+                <!--</div>-->
+                <!--</form>-->
+                <!--</div>-->
+
+                <!--<div class="text">(质量等级：A,B,C A最佳,B次之,c最差)</div>-->
+                <!--</div>-->
+                <!--</div>-->
+
+                <div class="sort row-center">
+                    <div class="index">商品类目</div>
+                    <div class="item">
+                        <div class="select">
+                            <form role="form">
+                                <div class="form-group">
+                                    <select class="form-control" v-model="category_parent_id_select"
+                                            v-on:change="haveCategoryParent(category_parent_id_select)">
+                                        <option disabled="" value="" selected="selected">请选择大分类</option>
+                                        <option v-for="item in category_parent" v-bind:value="item.id">{{item.name}}
+                                        </option>
+                                    </select>
+                                </div>
+                            </form>
+                            <form role="form" v-if="category_parent_id_select">
+                                <div class="form-group">
+                                    <select class="form-control" v-model="category_id_select">
+                                        <option disabled="" value="" selected="selected">请选择小分类</option>
+                                        <option v-for="item in category" v-bind:value="item.id">{{item.name}}</option>
+                                    </select>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="text">(请务必选对类目)</div>
+                    </div>
+                </div>
+
+                <!--<div class="sort row-center" v-if="user_type == 0">-->
+                    <!--<div class="index">设置积分</div>-->
+                    <!--<div class="item row-center">-->
+                        <!--<label class="form-check-label" v-for="item in integralList">-->
+                            <!--<input class="form-check-input" type="radio" name="integral" v-bind:value="item.id"-->
+                                   <!--v-model="integralSelect">-->
+                            <!--{{item.name}}-->
+                        <!--</label>-->
+                        <!--&lt;!&ndash;<div style="width: 20%" v-if="integralSelect"><input v-model="integralValue" type="text" class="form-control" name="" placeholder="请填写购买所需积分"/></div>&ndash;&gt;-->
+                    <!--</div>-->
+                <!--</div>-->
+
+                <div v-if="user_type == 0">
+                    <div class="sort row-center" v-if="integralSelect == 0">
+                        <div class="index">商品推荐</div>
+                        <div class="item">
+                            <label class="form-check-label" v-for="item in typeList">
+                                <input class="form-check-input" type="radio" name="type" v-bind:value="item.id"
+                                       v-model="typeValue">
+                                {{item.name}}
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sort row-center" v-if="integralSelect == 1">
+                    <div class="index">积分数目</div>
+                    <div class="item"><input v-model="integralValue" type="text"
+                                             oninput="value=value.replace(/[^\d]/g,'')" class="form-control" name=""
+                                             placeholder="请填写购买所需积分"/></div>
+                </div>
+
+                <div class="sort row-center">
+                    <div class="index">库存</div>
+                    <div class="item"><input v-model="goods_stock" type="text" class="form-control" name="" oninput="value=value.replace(/[^\d]/g,'')"/></div>
+                </div>
+
+                <div class="sort row-center">
+                    <div class="index">价格</div>
+                    <div class="item"><input v-model="goods_price" type="text" class="form-control" name="" oninput="value=value.replace(/[^\d.]/g,'')"/></div>
+                </div>
+            </div>
+            <!-- 型号/价格 -->
+            <!--<div class="subtitle">-->
+                <!--<div>型号/价格</div>-->
+
+                <!--&lt;!&ndash;<div class="sort row-center">&ndash;&gt;-->
+                <!--&lt;!&ndash;<div class="index">商品价格</div>&ndash;&gt;-->
+                <!--&lt;!&ndash;<div class="item"><input v-model="goods_price" type="text" class="form-control" name=""/></div>&ndash;&gt;-->
+                <!--&lt;!&ndash;</div>&ndash;&gt;-->
+
+                <!--&lt;!&ndash;<div class="sort row-center">&ndash;&gt;-->
+                <!--&lt;!&ndash;<div class="index">商品库存</div>&ndash;&gt;-->
+                <!--&lt;!&ndash;<div class="item"><input type="text" class="form-control" name=""/></div>&ndash;&gt;-->
+                <!--&lt;!&ndash;</div>&ndash;&gt;-->
+
+                <!--&lt;!&ndash;<div class="sort row-center">&ndash;&gt;-->
+                <!--&lt;!&ndash;<div class="index">商品编码</div>&ndash;&gt;-->
+                <!--&lt;!&ndash;<div class="item"><input type="text" class="form-control" name=""/></div>&ndash;&gt;-->
+                <!--&lt;!&ndash;</div>&ndash;&gt;-->
+
+                <!--<div class="sort row-center" style="align-items: unset">-->
+                    <!--<div class="index">商品型号</div>-->
+                    <!--<div class="item">-->
+                        <!--&lt;!&ndash;添加商品型号&ndash;&gt;-->
+                        <!--<button type="button" class="btn btn-danger" style="margin-left: 0" data-toggle="modal"-->
+                                <!--data-target="#sortModal" v-on:click="addSort()">自定义型号分类-->
+                        <!--</button>-->
+                        <!--<div class="sort-title1">-->
+                            <!--&lt;!&ndash;型号选择标题&ndash;&gt;-->
+                            <!--<div v-for="item,index in SortItem">-->
+                                <!--<nav class="navbar navbar-default row-center" role="navigation"-->
+                                     <!--style="justify-content: space-between">-->
+                                    <!--<div class="select" style="width: 50%">-->
+                                        <!--<form role="form" class="formWidth">-->
+                                            <!--<div class="form-group">-->
+                                                <!--<select class="form-control" :id="'sortId'+index"-->
+                                                        <!--v-on:change="getSelectSort(index)" v-if="index == 0"-->
+                                                        <!--v-model="selectId0">-->
+                                                    <!--<option disabled="" value="" selected="selected">请选择型号分类</option>-->
+                                                    <!--<option v-for="typeItem,typeIndex in item.specificationList"-->
+                                                            <!--v-bind:value="typeItem.id">{{typeItem.name}}-->
+                                                    <!--</option>-->
+                                                <!--</select>-->
+                                                <!--<select class="form-control" :id="'sortId'+index"-->
+                                                        <!--v-on:change="getSelectSort(index)" v-if="index == 1"-->
+                                                        <!--v-model="selectId1">-->
+                                                    <!--<option disabled="" value="" selected="selected">请选择型号分类</option>-->
+                                                    <!--<option v-for="typeItem,typeIndex in item.specificationList"-->
+                                                            <!--v-bind:value="typeItem.id">{{typeItem.name}}-->
+                                                    <!--</option>-->
+                                                <!--</select>-->
+                                            <!--</div>-->
+                                        <!--</form>-->
+                                        <!--<label class="form-check-label">-->
+                                            <!--<input class="form-check-input" type="radio" name="sortsImg"-->
+                                                   <!--v-on:change="getParamImgIndex(index)" :checked="item.haveParamImg">-->
+                                            <!--图片-->
+                                        <!--</label>-->
+                                        <!--&lt;!&ndash;错误提示&ndash;&gt;-->
+                                        <!--<div class="alert alert-danger none" :id="'alert'+index"-->
+                                             <!--style="margin-bottom: 0;position: absolute;z-index: 9;transform: translate(-10%,50%)">-->
+                                            <!--<span href="javascript:;" class="alert-link">错误！商品型号不能重复。</span>-->
+                                        <!--</div>-->
+                                    <!--</div>-->
+                                    <!--<div style="width: 50%;text-align: end;cursor: pointer">-->
+                                        <!--<img class="imgDel" src="/images/del.png" v-on:click="delSortItem(index)">-->
+                                    <!--</div>-->
+                                <!--</nav>-->
+                                <!--&lt;!&ndash;添加型号&ndash;&gt;-->
+                                <!--<nav class="navbar navbar-default" role="navigation"-->
+                                     <!--style="background-color: #fff;border: 1px solid #F7F7F7;display: flex;flex-direction: row;flex-wrap:wrap;">-->
+                                    <!--&lt;!&ndash;展示选择的尺寸&ndash;&gt;-->
+                                    <!--<div v-for="sizeItem,sizeIndex in item.size"-->
+                                         <!--style="display: flex;flex-direction: column;align-items: center">-->
+                                        <!--&lt;!&ndash;参数&ndash;&gt;-->
+                                        <!--<div class="sizeCard">-->
+                                            <!--<span style="width: 80px; display: -webkit-box;-webkit-box-orient: vertical;-webkit-line-clamp: 1;overflow: hidden;text-overflow: ellipsis;">{{sizeItem.name}}</span>-->
+                                            <!--<img src="/images/del.png" v-on:click="delSize(index,sizeItem.name)">-->
+                                        <!--</div>-->
+                                        <!--&lt;!&ndash;参数图片&ndash;&gt;-->
+                                        <!--<div class="row-center" v-if="item.haveParamImg" style="margin-bottom: 6px">-->
+                                            <!--<div class="goods-img" v-if="sizeItem.img.length <= 0">-->
+                                                <!--<input :id="'paramImg'+sizeIndex" class="getImg" type="file"-->
+                                                       <!--accept="image/*"-->
+                                                       <!--v-on:change="getParamImg(index,sizeIndex)"/>-->
+                                                <!--&lt;!&ndash; multiple能够选择多张图片 &ndash;&gt;-->
+                                                <!--<em class="img-r abs">&nbsp;</em>-->
+                                                <!--<em class="img-c abs">&nbsp;</em>-->
+                                            <!--</div>-->
+                                            <!--<div class="imgShow" v-if="sizeItem.img.length > 0"-->
+                                                 <!--v-for="paramItem,paramIndex in sizeItem.img">-->
+                                                <!--<input :id="'reParamImg'+sizeIndex" class="getImg" type="file"-->
+                                                       <!--accept="image/*"-->
+                                                       <!--v-on:change="replaceParamImg(index,sizeIndex)"/>-->
+                                                <!--<img class="imgSrc" :src='paramItem.tempFilePath'-->
+                                                     <!--style="margin-left: 0">-->
+                                                <!--&lt;!&ndash;<img class="imgDel" src="/images/del.png" v-on:click="delParamImg(index,sizeIndex)">&ndash;&gt;-->
+                                            <!--</div>-->
+                                        <!--</div>-->
+                                    <!--</div>-->
+
+                                    <!--<button v-if="item.select" type="button" class="btn btn-link" style="margin-left: 0"-->
+                                            <!--data-toggle="modal"-->
+                                            <!--data-target="#sizeModal" v-on:click="addSize(item.select,index)">+添加型号-->
+                                    <!--</button>-->
+                                <!--</nav>-->
+                            <!--</div>-->
+
+                            <!--&lt;!&ndash;添加分类&ndash;&gt;-->
+                            <!--&lt;!&ndash; 限制参数选择 最多为2 &ndash;&gt;-->
+                            <!--<nav class="navbar navbar-default row-center" role="navigation" v-if="SortItem.length <= 1">-->
+                                <!--<button type="button" class="btn btn-secondary" v-on:click="addSortItem()">添加型号分类-->
+                                <!--</button>-->
+                            <!--</nav>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
+
+                <!--<div class="sort row-center" style="align-items: unset" v-if="SortItem.length > 0">-->
+                    <!--<div class="index">价格与库存</div>-->
+                    <!--<div class="item">-->
+                        <!--&lt;!&ndash;添加商品型号&ndash;&gt;-->
+                        <!--<div class="sort-title" style="margin-top: 0">-->
+                            <!--<nav class="navbar navbar-default" role="navigation">-->
+                                <!--<div class="item">-->
+                                    <!--<span class="first-title column-center" v-if="SortItem.length <= 0"></span>-->
+                                    <!--<span class="first-title column-center" v-else-->
+                                          <!--v-for="item in SortItem" v-if="item.size.length>0">{{item.select}}</span>-->
+                                    <!--<span class="second-title column-center">价格</span>-->
+                                    <!--<span class="second-title column-center">库存</span>-->
+                                    <!--<span class="second-title column-center">商品编号</span>-->
+                                <!--</div>-->
+                            <!--</nav>-->
+                        <!--</div>-->
+
+                        <!--<div class="sort-title" style="margin-top: 0">-->
+                            <!--<nav class="navbar navbar-default" role="navigation"-->
+                                 <!--style="background-color: #fff;border-left: 1px solid #F7F7F7;border-right: 1px solid #F7F7F7;margin-bottom:0;">-->
+                                <!--<div class="item" style="height: auto;">-->
+                                    <!--&lt;!&ndash;尺寸 两两相配 填写价位&ndash;&gt;-->
+                                    <!--<div class="first-title row-center" style="justify-content: space-around;">-->
+                                        <!--<div class="first-title column-center" style="width: 100%"-->
+                                             <!--v-if="SortItem.length >= 1">-->
+                                            <!--&lt;!&ndash; 里面开始是内容 &ndash;&gt;-->
+                                            <!--<div class="row-center a" v-for="item in SortItem[0].size">-->
+                                                <!--&lt;!&ndash;1-1&ndash;&gt;-->
+                                                <!--<span>{{item.name}}</span>-->
+                                                <!--<div class="column-center" style="width: 100%"-->
+                                                     <!--v-bind:style="{ flex: SortItem.length-1 }"-->
+                                                     <!--v-if="SortItem.length >= 2 && SortItem[1].size.length > 0">-->
+                                                    <!--&lt;!&ndash;1-1-1&ndash;&gt;-->
+                                                    <!--<div class="row-center b" v-for="item1 in SortItem[1].size">-->
+                                                        <!--<span>{{item1.name}}</span>-->
+                                                        <!--<div class="column-center" style="flex:1;width: 100%"-->
+                                                             <!--v-if="SortItem.length >= 3 && SortItem[2].size.length > 0">-->
+                                                            <!--<div class="row-center c" v-for="item2 in SortItem[2].size">-->
+                                                                <!--<span>{{item2.name}}</span>-->
+                                                            <!--</div>-->
+                                                        <!--</div>-->
+                                                    <!--</div>-->
+                                                <!--</div>-->
+                                            <!--</div>-->
+                                            <!--&lt;!&ndash; 里面开始是内容 &ndash;&gt;-->
+                                        <!--</div>-->
+                                    <!--</div>-->
+
+                                    <!--<div class="second-title row-center" style="width: 24%;"-->
+                                         <!--style="justify-content: space-around;">-->
+                                        <!--<div class="first-title column-center" style="width: 100%"-->
+                                             <!--v-if="SortItem.length >= 1">-->
+                                            <!--&lt;!&ndash; 里面开始是内容 &ndash;&gt;-->
+                                            <!--<div class="row-center aa" v-for="item,index in SortItem[0].size">-->
+                                                <!--&lt;!&ndash;1-1&ndash;&gt;-->
+                                                <!--&lt;!&ndash;单项参数价格&ndash;&gt;-->
+                                                <!--<span class="column-center" v-if="SortItem.length == 1"><input-->
+                                                        <!--class="form-control" style="width: 90%"/></span>-->
+                                                <!--<span class="column-center" v-if="SortItem.length == 1"><input-->
+                                                        <!--class="form-control" oninput="value=value.replace(/[^\d]/g,'')"-->
+                                                        <!--style="width: 90%"/></span>-->
+                                                <!--<span class="column-center" v-if="SortItem.length == 1"><input-->
+                                                        <!--class="form-control" style="width: 90%"/></span>-->
+                                                <!--<div class="column-center" style="width: 100%"-->
+                                                     <!--v-bind:style="{ flex: SortItem.length-1 }"-->
+                                                     <!--v-if="SortItem.length >= 2 && SortItem[1].size.length > 0">-->
+                                                    <!--&lt;!&ndash;1-1-1&ndash;&gt;-->
+                                                    <!--<div class="row-center b" v-for="item1,index1 in SortItem[1].size">-->
+                                                        <!--&lt;!&ndash;双项参数价格&ndash;&gt;-->
+                                                        <!--<span class="column-center" v-if="SortItem.length == 2"><input-->
+                                                                <!--class="form-control"-->
+                                                                <!--oninput="value=value.replace(/[^\d.]/g,'')"-->
+                                                                <!--style="width: 90%"-->
+                                                                <!--:id="'paramPrice_'+item.name+'_'+item1.name"-->
+                                                                <!--v-on:change="getParamPriceAndPrice('paramPrice',index,index1,item.name,item1.name)"/></span>-->
+                                                        <!--<span class="column-center" v-if="SortItem.length == 2"><input-->
+                                                                <!--class="form-control"-->
+                                                                <!--oninput="value=value.replace(/[^\d]/g,'')"-->
+                                                                <!--style="width: 90%"-->
+                                                                <!--:id="'paramStock_'+item.name+'_'+item1.name"-->
+                                                                <!--v-on:change="getParamPriceAndPrice('paramStock',index,index1,item.name,item1.name)"/></span>-->
+                                                        <!--<span class="column-center" v-if="SortItem.length == 2"><input-->
+                                                                <!--class="form-control" style="width: 90%"/></span>-->
+                                                        <!--<div class="column-center" style="flex:1;width: 100%"-->
+                                                             <!--v-if="SortItem.length >= 3 && SortItem[2].size.length > 0">-->
+                                                            <!--<div class="row-center c" v-for="item2 in SortItem[2].size">-->
+                                                            <!--<span class="column-center"-->
+                                                                  <!--v-if="SortItem.length == 3"><input-->
+                                                                    <!--class="form-control" style="width: 90%"/></span>-->
+                                                                <!--<span class="column-center"-->
+                                                                      <!--v-if="SortItem.length == 3"><input-->
+                                                                        <!--class="form-control"-->
+                                                                        <!--oninput="value=value.replace(/[^\d]/g,'')"-->
+                                                                        <!--style="width: 90%"/></span>-->
+                                                                <!--<span class="column-center"-->
+                                                                      <!--v-if="SortItem.length == 3"><input-->
+                                                                        <!--class="form-control" style="width: 90%"/></span>-->
+                                                            <!--</div>-->
+                                                        <!--</div>-->
+                                                    <!--</div>-->
+                                                <!--</div>-->
+                                            <!--</div>-->
+                                            <!--&lt;!&ndash; 里面开始是内容 &ndash;&gt;-->
+                                        <!--</div>-->
+                                    <!--</div>-->
+                                    <!--&lt;!&ndash;<div class="second-title column-center" style="width: 24%;" v-if="SortItem.length == 1">&ndash;&gt;-->
+                                    <!--&lt;!&ndash;<div class="row-center" v-for="item in SortItem[0].size"&ndash;&gt;-->
+                                    <!--&lt;!&ndash;style="width: 100%;height:63px;line-height: 63px;border-bottom: 1px solid #f3f3f3;border-left: 1px solid #f3f3f3">&ndash;&gt;-->
+                                    <!--&lt;!&ndash;<span class="column-center"><input class="form-control" style="width: 90%"/></span>&ndash;&gt;-->
+                                    <!--&lt;!&ndash;<span class="column-center"><input class="form-control"&ndash;&gt;-->
+                                    <!--&lt;!&ndash;style="width: 90%"/></span>&ndash;&gt;-->
+                                    <!--&lt;!&ndash;<span class="column-center"><input class="form-control"&ndash;&gt;-->
+                                    <!--&lt;!&ndash;style="width: 90%"/></span>&ndash;&gt;-->
+                                    <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                                    <!--&lt;!&ndash;</div>&ndash;&gt;-->
+
+                                    <!--&lt;!&ndash;<div class="second-title column-center" style="width: 24%;" v-if="SortItem.length == 2">&ndash;&gt;-->
+                                    <!--&lt;!&ndash;<div v-for="item in SortItem[0].size" style="width: 100%">&ndash;&gt;-->
+                                    <!--&lt;!&ndash;<div class="row-center" v-for="item in SortItem[1].size"&ndash;&gt;-->
+                                    <!--&lt;!&ndash;style="width: 100%;height:63px;line-height: 63px;border-bottom: 1px solid #f3f3f3;border-left: 1px solid #f3f3f3">&ndash;&gt;-->
+                                    <!--&lt;!&ndash;<span class="column-center"><input class="form-control"&ndash;&gt;-->
+                                    <!--&lt;!&ndash;style="width: 90%"/></span>&ndash;&gt;-->
+                                    <!--&lt;!&ndash;<span class="column-center"><input class="form-control"&ndash;&gt;-->
+                                    <!--&lt;!&ndash;style="width: 90%"/></span>&ndash;&gt;-->
+                                    <!--&lt;!&ndash;<span class="column-center"><input class="form-control"&ndash;&gt;-->
+                                    <!--&lt;!&ndash;style="width: 90%"/></span>&ndash;&gt;-->
+                                    <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                                    <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                                    <!--&lt;!&ndash;</div>&ndash;&gt;-->
+
+                                    <!--&lt;!&ndash;<div class="second-title column-center" style="width: 24%;" v-if="SortItem.length == 3">&ndash;&gt;-->
+                                    <!--&lt;!&ndash;<div v-for="item in SortItem[0].size" style="width: 100%">&ndash;&gt;-->
+                                    <!--&lt;!&ndash;<div v-for="item in SortItem[1].size" style="width: 100%">&ndash;&gt;-->
+                                    <!--&lt;!&ndash;<div class="row-center" v-for="item in SortItem[2].size"&ndash;&gt;-->
+                                    <!--&lt;!&ndash;style="width: 100%;height:63px;line-height: 63px;border-bottom: 1px solid #f3f3f3;border-left: 1px solid #f3f3f3">&ndash;&gt;-->
+                                    <!--&lt;!&ndash;<span class="column-center"><input class="form-control"&ndash;&gt;-->
+                                    <!--&lt;!&ndash;style="width: 90%"/></span>&ndash;&gt;-->
+                                    <!--&lt;!&ndash;<span class="column-center"><input class="form-control"&ndash;&gt;-->
+                                    <!--&lt;!&ndash;style="width: 90%"/></span>&ndash;&gt;-->
+                                    <!--&lt;!&ndash;<span class="column-center"><input class="form-control"&ndash;&gt;-->
+                                    <!--&lt;!&ndash;style="width: 90%"/></span>&ndash;&gt;-->
+                                    <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                                    <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                                    <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                                    <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                                <!--</div>-->
+                            <!--</nav>-->
+                        <!--</div>-->
+
+                        <!--<div class="sort-title" style="margin-top: 0">-->
+                            <!--<nav class="navbar navbar-default" role="navigation">-->
+                                <!--<div class="item">-->
+                                    <!--<span class="first-title column-center">批量修改价格</span>-->
+                                    <!--<span class="second-title column-center"><input class="form-control"-->
+                                                                                    <!--style="width: 90%"-->
+                                                                                    <!--v-model="batchPrice"-->
+                                                                                    <!--oninput="value=value.replace(/[^\d.]/g,'')"-->
+                                                                                    <!--v-on:keyUp.enter="batchChangePrice"/></span>-->
+                                    <!--<span class="second-title column-center"><input class="form-control"-->
+                                                                                    <!--style="width: 90%"-->
+                                                                                    <!--v-model="batchStock"-->
+                                                                                    <!--oninput="value=value.replace(/[^\d]/g,'')"-->
+                                                                                    <!--v-on:keyUp.enter="batchChangeStock"/></span>-->
+                                    <!--<span class="second-title column-center"><input class="form-control"-->
+                                                                                    <!--style="width: 90%"/></span>-->
+                                <!--</div>-->
+                            <!--</nav>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
+            <!--</div>-->
+            <!-- 运费/其他 -->
+            <!--<div class="subtitle">-->
+            <!--<div>运费/其他（暂时不用选）</div>-->
+
+            <!--<div class="sort row-center">-->
+            <!--<div class="index">商品分类</div>-->
+            <!--<div class="item">-->
+            <!--<label class="form-check-label">-->
+            <!--<input class="form-check-input" type="checkbox" name=""> 22-->
+            <!--</label>-->
+            <!--<label class="form-check-label">-->
+            <!--<input class="form-check-input" type="checkbox" name=""> 44-->
+            <!--</label>-->
+            <!--</div>-->
+            <!--</div>-->
+
+            <!--<div class="sort row-center">-->
+            <!--<div class="index">运费设置</div>-->
+            <!--<div class="item">-->
+            <!--<div class="select">-->
+            <!--<form role="form">-->
+            <!--<div class="form-group">-->
+            <!--<select class="form-control">-->
+            <!--<option>1</option>-->
+            <!--<option>2</option>-->
+            <!--<option>3</option>-->
+            <!--<option>4</option>-->
+            <!--<option>5</option>-->
+            <!--</select>-->
+            <!--</div>-->
+            <!--</form>-->
+            <!--</div>-->
+            <!--</div>-->
+            <!--</div>-->
+
+            <!--<div class="sort row-center">-->
+            <!--<div class="index">可配送区域</div>-->
+            <!--<div class="item">wwwwww</div>-->
+            <!--</div>-->
+
+            <!--<div class="sort row-center">-->
+            <!--<div class="index">开售时间</div>-->
+            <!--<div class="item">-->
+            <!--<label class="form-check-label">-->
+            <!--<input class="form-check-input" type="radio" name="Shelf"-->
+            <!--id="exampleRadios3" value="option2">-->
+            <!--立刻开售-->
+            <!--</label>-->
+            <!--<label class="form-check-label">-->
+            <!--<input class="form-check-input" type="radio" name="Shelf"-->
+            <!--id="exampleRadios4" value="option2">-->
+            <!--定时开售-->
+            <!--<input type="text" class="form-control" id="test5" style="width: auto;display: inline-block;"-->
+            <!--placeholder="选择开售时间">-->
+            <!--</label>-->
+            <!--</div>-->
+            <!--</div>-->
+            <!--</div>-->
+            <!-- 商品详情 -->
+            <div class="subtitle">
+                <div class="row-center">
+                    <div class="goods-detail">商品详情</div>
+                    <!--<div>根据商品图片和标题</div>-->
+                </div>
+
+                <div class="sort row-center">
+                    <div class="index">商品图片</div>
+                    <div class="item">
+                        <div class="row-center">
+                            <div class="goods-img">
+                                <input id="infoImg" class="getImg" type="file" accept="image/*"
+                                       v-on:change="getInfoImg('infoImg')" multiple/> <!-- multiple能够选择多张图片 -->
+                                <em class="img-r abs">&nbsp;</em>
+                                <em class="img-c abs">&nbsp;</em>
+                            </div>
+                        </div>
+                        <!--<div class="text">选择的第一张图将作为商品封面图。</div>-->
+                    </div>
+                </div>
+
+                <div class="sort row-center">
+                    <div class="index"></div>
+                    <div class="item">
+                        <div class="column-center">
+                            <div class="imgShow infoShow" v-if="goodsInfoImgList.length > 0"
+                                 v-for="item,index in goodsInfoImgList">
+                                <img class="imgSrc" :src='item.tempFilePath'
+                                     style="width: 700px;height: auto;margin-left: 0;">
+                                <img class="infoImgDel" src="/images/del.png" v-on:click="delInfoImg(index)">
+                                <img class="infoImgReplc" src="/images/replace.png">
+                                <input :id="'replaceInfoImg'+index" class="infoIpt" type="file" accept="image/*"
+                                       v-on:change="replaceInfoImg(index)"/>
+                            </div>
+                        </div>
+                        <!--<div class="text">选择的第一张图将作为商品封面图。</div>-->
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="subtitle">
+                <div class="row-center">
+                    <button type="button" class="btn btn-secondary" v-on:click="submitGoods(1)">放入仓库</button>
+                    <button type="button" class="btn btn-danger" v-on:click="submitGoods(0)">上架出售</button>
+                </div>
+            </div>
+        </div>
+
+
+        <!--添加类别弹窗-->
+        <!-- <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">开始演示模态框</button> -->
+        <!--<div class="modal fade" id="sortModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"-->
+             <!--aria-hidden="true">-->
+            <!--<div class="modal-dialog">-->
+                <!--<div class="modal-content">-->
+                    <!--<div class="modal-header">-->
+                        <!--<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>-->
+                        <!--<h4 class="modal-title" id="sortModalLabel"></h4>&lt;!&ndash;标题 &ndash;&gt;-->
+                    <!--</div>-->
+                    <!--<div class="modal-body"><input type="text" class="form-control" id="sortModalText" type="text"-->
+                                                   <!--name=""-->
+                                                   <!--v-model="sortModalText"/></div>-->
+                    <!--<div class="modal-footer">-->
+                        <!--<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>-->
+                        <!--<button type="button" class="btn btn-primary" v-on:click="submitSortBtn()">确定</button>-->
+                    <!--</div>-->
+                <!--</div>&lt;!&ndash; /.modal-content &ndash;&gt;-->
+            <!--</div>&lt;!&ndash; /.modal &ndash;&gt;-->
+        <!--</div>-->
+
+        <!--添加尺寸弹窗-->
+        <!--<div class="modal fade" id="sizeModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"-->
+             <!--aria-hidden="true">-->
+            <!--<div class="modal-dialog">-->
+                <!--<div class="modal-content">-->
+                    <!--<div class="modal-header">-->
+                        <!--<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>-->
+                        <!--<h4 class="modal-title" id="sizeModalLabel"></h4>&lt;!&ndash;标题 &ndash;&gt;-->
+                    <!--</div>-->
+                    <!--<div class="modal-body">-->
+                        <!--<div class="row-center" style="display: block">-->
+                            <!--<label class="form-check-label" v-for="item,index in sizeModalList">-->
+                                <!--<input type="checkbox" name="sizeCheckbox">-->
+                                <!--<span>{{item}}</span>-->
+                            <!--</label>-->
+                        <!--</div>-->
+                        <!--<div style="margin:8px 0 4px 0">添加型号</div>-->
+                        <!--<input id="sizeModalText" type="text" class="form-control" name="" v-model="sizeModalText"/>-->
+                        <!--<button type="button" class="btn btn-secondary" style="margin: 4px 0 0 0;width: 200px"-->
+                                <!--v-on:click="addOneSize()">添加-->
+                        <!--</button>-->
+                    <!--</div>-->
+                    <!--<div class="modal-footer">-->
+                        <!--<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>-->
+                        <!--<button type="button" class="btn btn-primary" v-on:click="submitSizeBtn()">确定</button>-->
+                    <!--</div>-->
+                <!--</div>&lt;!&ndash; /.modal-content &ndash;&gt;-->
+            <!--</div>&lt;!&ndash; /.modal &ndash;&gt;-->
+        <!--</div>-->
+
+    </div>
+</div>
+
+<script type="text/javascript" src="../js/voiceReminder.js"></script>
+<script type="text/javascript" src="../js/menu.js"></script>
+<script type="text/javascript" src="../js/editGoods.js"></script>
+</body>
+</html>

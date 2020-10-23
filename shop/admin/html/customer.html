@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!--适配移动端 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
+    <title>用户列表</title>
+    <script type="text/javascript" src="../node_modules/vue/dist/vue.min.js"></script>
+    <script type="text/javascript" src="../jquery-3.3.1/jquery-3.3.1.min.js"></script>
+    <!--<link rel="stylesheet" type="text/css"-->
+    <!--href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">-->
+    <link rel="stylesheet" type="text/css" href="../bootstrap/css/bootstrap.min.css">
+    <script type="text/javascript" src="../bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../layDate-v5.0.9/laydate/laydate.js"></script> <!--时间控件-->
+    <script type="text/javascript" src="../js/utils/apis.js"></script>
+    <script type="text/javascript" src="../js/utils/http.js"></script> <!--封装接口请求-->
+    <script type="text/javascript" src="../js/utils/formatTime.js"></script> <!--时间格式化-->
+    <!--<script type="text/javascript" src='https://unpkg.com/qiniu-js@2.5.3/dist/qiniu.min.js'></script> &lt;!&ndash;七牛云图片上传所需&ndash;&gt;-->
+    <script type="text/javascript" src="./../qiniu-js/qiniu.min.js"></script> <!--七牛云图片上传所需-->
+    <script type="text/javascript" src="../js/utils/qiniuUpload.js"></script> <!--封装的七牛云图片上传-->
+    <link href="../css/style.css" rel="stylesheet">
+    <link href="../css/menu.css" rel="stylesheet">
+    <link href="../css/customer.css" rel="stylesheet">
+</head>
+
+<body>
+<div id="LoadMenu" class="left">
+    <load-menu></load-menu>
+</div>
+
+<div id="LoadVoice" style="position: fixed">
+    <load-voice></load-voice>
+</div>
+
+<div class="right">
+    <div class="jumbotron" id="customer">
+        <!-- 类目 搜索栏 -->
+        <!--<div class="title item">-->
+            <!--<h4>用户管理</h4>-->
+            <!--&lt;!&ndash;<button type="button" class="btn btn-danger" v-on:click="changePage('brand-add')">添加品牌</button>&ndash;&gt;-->
+            <!--<input type="text" class="form-control" v-model="searchString">-->
+            <!--<span class="input-group-btn">-->
+ 								<!--<button class="btn btn-default" type="button" v-on:click="searchUser">搜索</button>-->
+ 							<!--</span>-->
+        <!--</div>-->
+        <div class="title item">
+            <h4>用户管理</h4>
+            <div class="search">
+                <!--<form class="bs-example bs-example-form" role="form">-->
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="input-group">
+                            <input type="text" class="form-control" v-model="searchString">
+                            <span class="input-group-btn">
+ 								<button class="btn btn-default" type="button" v-on:click="searchUser">搜索</button>
+ 							</span>
+                        </div><!-- /input-group -->
+                    </div><!-- /.col-lg-6 -->
+                </div><!-- /.row -->
+                <!--</form>-->
+            </div>
+
+        </div>
+
+        <div class="goods">
+            <!-- 商品标题 -->
+            <nav class="navbar navbar-default" role="navigation">
+                <div class="item">
+                    <span class="second-title have-border column-center">id</span>
+                    <span class="first-title have-border column-center">用户头像</span>
+                    <span class="second-title have-border column-center">用户昵称</span>
+                    <!--<span class="second-title have-border column-center">积分</span>-->
+                    <span class="second-title have-border column-center">当前积分</span>
+                    <span class="second-title have-border column-center">积分增量</span>
+                    <!--<span class="first-title have-border column-center">用户openid</span>-->
+                    <span class="second-title have-border column-center">注册时间</span>
+                    <span class="second-title column-center">最后登录时间</span>
+                    <!--<span class="second-title column-center">操作</span>-->
+                </div>
+            </nav>
+
+            <div class="goods-container" v-for="item,index in userList">
+                <div class="second-title column-center">
+                    <!--<label class="form-check-label row-center">-->
+                    <!--<div class="a">-->
+                    <span>{{item.id}}</span>
+                    <!--</div>-->
+                    <!--</label>-->
+                </div>
+                <div class="first-title column-center">
+                    <label class="form-check-label row-center">
+                        <div class="a">
+                            <img :src="item.avatar">
+                        </div>
+                    </label>
+                </div>
+                <div class="second-title column-center">
+                    <span>{{item.user_name}}</span>
+                </div>
+                <div class="second-title column-center">
+                    <span>{{item.integral}}</span>
+                </div>
+                <div class="second-title column-center">
+                    减少<input type="checkbox" name="neg" v-model="item.isNegative">
+                    <input class="form-control" v-bind:value="item.IncrementPoint" type="number"
+                           v-model="item.IncrementPoint" oninput="value=value.replace(/[^\d.]/g,'')"
+                           style="min-width: 70px"/>
+                    <button class="btn btn-default" v-on:click="IncrementPoints(item.id)">确定</button>
+                </div>
+                <!--<div class="first-title column-center">-->
+                <!--{{item.open_id}}-->
+                <!--</div>-->
+                <div class="second-title column-center">
+                    {{item.register_time}}
+                </div>
+                <div class="second-title column-center">
+                    {{item.last_login_time}}
+                </div>
+                <!--<div class="second-title column-center">-->
+                <!--<button type="button" class="btn " :class="item.state == 0 ? 'btn-danger' : 'btn-secondary'"-->
+                <!--v-on:click="changeStatus(item.id,item.state)">{{item.state == 0 ? "点击禁用" : "点击开启"}}-->
+                <!--</button>-->
+                <!--<button type="button" class="btn btn-link" v-on:click="changePage('brand-edit',item.id)">编辑</button>-->
+                <!--<button type="button" class="btn btn-link" v-on:click="delItem(index)" data-toggle="modal"-->
+                <!--data-target="#myModal">删除-->
+                <!--</button>-->
+                <!--</div>-->
+            </div>
+
+        </div>
+
+        <!-- 分页栏 -->
+        <ul class="pagination">
+			<li v-on:click="getPage(0)"><a href="javascript:;">首页</a></li>
+            <li v-on:click="getPage(last_id-1 >= 0 ? last_id-1 : last_id)"><a href="javascript:;">&laquo;</a></li>
+            <li v-if="index >= last_id-5  && index < last_id+11" v-for="item,index in pageList" v-on:click="getPage(index)"
+                v-bind:class="(item == last_id+1 ? 'active' : '')"><a
+                    href="javascript:;">{{item}}</a></li>
+			<li v-if="pageList.length-1 != last_id && pageList.length-12 > last_id"><a href="javascript:;">...</a></li>
+			<li v-if="pageList.length-1 != last_id && pageList.length-11 > last_id" v-on:click="getPage(pageList.length-1)">
+			<a href="javascript:;">{{pageList.length}}</a></li>
+            <li v-on:click="getPage(last_id+1 < pageList[pageList.length-1] ? last_id+1 : last_id)"><a
+                    href="javascript:;">&raquo;</a>
+            </li>
+			<li v-on:click="getPage(pageList.length-1)"><a href="javascript:;">尾页</a></li>
+        </ul>
+
+
+    </div>
+</div>
+
+<script type="text/javascript" src="../js/voiceReminder.js"></script>
+<script type="text/javascript" src="../js/menu.js"></script>
+<script type="text/javascript" src="../js/customer.js"></script>
+</body>
+</html>
